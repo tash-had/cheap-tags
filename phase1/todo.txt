@@ -1,0 +1,7 @@
+Todo list:
+
+1: Figure out runtime cheap image identifier system
+2: Figure out image class attributes and functions
+3: File manager class handles all system operations; fetching files, saving 
+files, editing names
+4: Implement
