@@ -25,4 +25,8 @@ public class Tag {
         _images.remove(image);
     }
 
+
+    public String toString() {
+        return _name;
+    }
 }
