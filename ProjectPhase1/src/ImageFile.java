@@ -10,5 +10,6 @@ public class ImageFile{
     public void change_image_name(String newName){
         oldName =  currentName;
         currentName = newName;
+
     }
 }
