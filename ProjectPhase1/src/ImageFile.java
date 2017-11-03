@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+
 public class ImageFile{
     private String currentName;
     private String oldName;
