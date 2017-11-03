@@ -5,3 +5,5 @@ Todo list:
 3: File manager class handles all system operations; fetching files, saving 
 files, editing names
 4: Implement
+
+
