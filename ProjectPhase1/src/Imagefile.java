@@ -11,5 +11,4 @@ public class ImageFile{
         oldName =  currentName;
         currentName = newName;
     }
-    public
 }
