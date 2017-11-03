@@ -8,4 +8,18 @@ public class Tag {
 
     }
 
+    public void addImage(ImageFile image){
+        _images.add(image);
+
+    }
+
+    public void deleteImage(ImageFile image){
+        _images.remove(image);
+    }
+
+    
+
+
+
+
 }
