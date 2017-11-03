@@ -10,7 +10,7 @@ public class TagManager {
     /**
      * Add a new tag.
      *
-     * @param Tag newTag
+     * @param newTag the tag to be added to the list of tags.
      */
     public static void addTag(Tag newTag){
         tagList.add(newTag);
