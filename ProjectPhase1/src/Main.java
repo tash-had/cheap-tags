@@ -5,35 +5,65 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.DirectoryChooser;
+
+import java.io.File;
 
 public class Main extends Application{
+
+    private Scene home, tagScreen, images;
+    private Stage window;
+
     @Override
     public void start(Stage primaryStage) {
+        window = primaryStage;
 
-        // Create two buttons to open image, or view my tags.
-        Button openBtn = new Button();
-        Button tagsBtn = new Button();
-        openBtn.setText("Open");
-        tagsBtn.setText("My Tags");
-
-        openBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
+        // Button to choose directory
+        Button chooseDirectoryButton = new Button();
+        chooseDirectoryButton.setText("Choose a directory");
+        chooseDirectoryButton.setOnAction(e -> {
+            DirectoryChooser directoryChooser=  new DirectoryChooser();
+            directoryChooser.setTitle("Select a directory");
+            File selectedFile = directoryChooser.showDialog(primaryStage);
+            if (selectedFile != null) {
+//                ImageFileManager.fetchFiles(selectedFile);
+                window.setScene(images);
+            }
+            else {
+                window.setScene(home);
             }
         });
 
-        StackPane root = new StackPane();
-        root.getChildren().add(openBtn);
-        root.getChildren().add(tagsBtn);
-        openBtn.setTranslateY(0);
-        tagsBtn.setTranslateY(80);
+        // Button to view my tags
+        Button tagButton = new Button();
+        tagButton.setText("My Tags");
+        tagButton.setOnAction(e -> window.setScene(tagScreen));
 
-        Scene scene = new Scene(root, 300, 250);
+        // Back button
+        Button back = new Button();
+        back.setText("Back");
+        back.setOnAction(e -> window.setScene(home));
 
-        primaryStage.setTitle("Main");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        // constructs home layout
+        StackPane homeLayout = new StackPane();
+        homeLayout.getChildren().add(chooseDirectoryButton);
+        homeLayout.getChildren().add(tagButton);
+        chooseDirectoryButton.setTranslateY(0);
+        tagButton.setTranslateY(50);
+
+        // constructs home scene
+        home = new Scene(homeLayout, 300, 250);
+
+        window.setTitle("Main");
+        window.setScene(home);
+        window.show();
+
+        // constructs images layout
+        StackPane imagesLayout = new StackPane();
+        imagesLayout.getChildren().add(back);
+
+        // constructs images scene;
+        images = new Scene(imagesLayout, 300, 250);
     }
     public static void main(String[] args) {
         launch(args);
