@@ -9,6 +9,12 @@ import javafx.stage.DirectoryChooser;
 
 import java.io.File;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.HashMap;
+
 public class Main extends Application{
 
     private Scene home, tagScreen, images;
@@ -65,7 +71,19 @@ public class Main extends Application{
         // constructs images scene;
         images = new Scene(imagesLayout, 300, 250);
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         launch(args);
+
+        File file = new File("todo.txt");
+        ImageFile imf = new ImageFile("todo.txt");
+        HashMap <String, ImageFile> hm = new HashMap<>();
+        for (ImageFile myFile : hm.values()){
+            if (myFile.currentName.equals("todo.txt")){
+                // this image exists alread
+            }
+        }
+
+
+        BufferedReader fileInput = new BufferedReader(new FileReader(file.getAbsolutePath()));
     }
 }
