@@ -8,10 +8,11 @@ public class ImageFile{
     private ArrayList<String[]> oldName;
     private String UUID;
 
-    public ImageFile(String actual_file_name){
+    public ImageFile(String actual_file_name) {
         currentName = actual_file_name;
         oldName = new ArrayList<String[]>();
         UUID = FileManager.getNewId(); //what parameter does FileManager.getNewId take???
+    }
 
     public void change_image_name(String newName){
         Long timestamp = System.currentTimeMillis();
