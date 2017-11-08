@@ -1,9 +1,15 @@
-Todo list:
+- Ensure design follows Model-View-Controller structure 
+- Create a digital flow chart with ALL functions of the program all possible things that can occur, including specifically how each occurence is handled.
 
-1: Figure out runtime cheap image identifier system
-2: Figure out image class attributes and functions
-3: File manager class handles all system operations; fetching files, saving 
-files, editing names
-4: Implement
+*** Phase 1 Clarifications from Portal ***
+For phase 1, please push (as always, using the exact file names we ask for, including capitalization):
 
+Your working code
+phase1/help.txt
+This file should contain a concise and clear set of instructions for how to compile and run your code from the command line. Note that we should not have to move any files or do any special setup. You will create this in the lab after Reading Week, so you can wait until then to think about it if you like. We should be able to copy and paste your instructions into a Teaching Labs terminal all at once and see your program compile and run. We should also be able to create our own IntelliJ project, in directory phase1, in IntelliJ.
+phase1/duties.txt
+each group member should describe what they contributed to phase 1 in 100 words or less. Bullet points are fine. You should discuss this with your group. Note that all group members will be editing the same document. We will be checking git logs to make sure that each person is the one that commits a description of their contributions. Part of your individual mark will depend on how much you contribute and the quality of your contributions. (If you feel harassed in any way, please let Lindsey or Paul know right away that you're having difficulty. We'll meet with each team member individually, including you, and try to help your group work through their issues. If necessary, we'll dissolve the group and help you find another one.)
+phase1/design.pdf: a UML diagram of your project. You can create this however you like, including using automated tools. Your final version should reflect exactly what is in the code when you do your final push. Your design should reflect the problem domain and follow the same principles as explored in A2, and you will be marked on this. Make sure the layout is reasonably readable — we don't want to see a spiderweb of arrows.
+You are welcome to add a directory containing small image files to your repository as a way to test your code. Please keep them under 1024x768 — 640x480 might be even better — and don't include a ton of them. Nothing NSFW, please.
+As a heads up for phase 2, you'll be expected to apply design patterns to your code and write JUnit tests for as much of your code as you can. (You will not required to test the GUI code, but do think about MVC.) You're welcome to start early on these. :-)
 
