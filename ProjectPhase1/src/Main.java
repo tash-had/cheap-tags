@@ -11,12 +11,17 @@ import java.io.File;
 
 public class Main extends Application{
 
-    private Scene home, tagScreen, images;
-    private Stage window;
+    public Scene home, tagScreen, images;
+    public Stage window;
 
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
+
+        // Back button
+        Button back = new Button();
+        back.setText("Back");
+        back.setOnAction(e -> window.setScene(home));
 
         // Button to choose directory
         Button chooseDirectoryButton = new Button();
@@ -27,7 +32,7 @@ public class Main extends Application{
             File selectedFile = directoryChooser.showDialog(primaryStage);
             if (selectedFile != null) {
 //                ImageFileManager.fetchFiles(selectedFile);
-                window.setScene(images);
+                window.setScene(ImageScene.constructImageScene(back));
             }
             else {
                 window.setScene(home);
@@ -39,10 +44,6 @@ public class Main extends Application{
         tagButton.setText("My Tags");
         tagButton.setOnAction(e -> window.setScene(tagScreen));
 
-        // Back button
-        Button back = new Button();
-        back.setText("Back");
-        back.setOnAction(e -> window.setScene(home));
 
         // constructs home layout
         StackPane homeLayout = new StackPane();
@@ -58,12 +59,12 @@ public class Main extends Application{
         window.setScene(home);
         window.show();
 
-        // constructs images layout
-        StackPane imagesLayout = new StackPane();
-        imagesLayout.getChildren().add(back);
-
-        // constructs images scene;
-        images = new Scene(imagesLayout, 300, 250);
+//        // constructs images layout
+//        StackPane imagesLayout = new StackPane();
+//        imagesLayout.getChildren().add(back);
+//
+//        // constructs images scene;
+//        images = new Scene(imagesLayout, 300, 250);
     }
     public static void main(String[] args){
         launch(args);
