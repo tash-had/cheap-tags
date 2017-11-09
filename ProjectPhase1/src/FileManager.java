@@ -21,7 +21,7 @@ public class FileManager {
         return imageNameToId.get(imageName);
     }
 
-    public FileManager{
+    public FileManager(){
         myUUIDs = new HashMap<>();
         myImageFiles = new HashMap<>();
     }

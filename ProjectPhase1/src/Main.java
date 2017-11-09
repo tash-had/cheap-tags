@@ -5,55 +5,72 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.DirectoryChooser;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.HashMap;
 
 public class Main extends Application{
+
+    public Scene home, tagScreen, images;
+    public Stage window;
+
     @Override
     public void start(Stage primaryStage) {
+        window = primaryStage;
 
-        // Create two buttons to open image, or view my tags.
-        Button openBtn = new Button();
-        Button tagsBtn = new Button();
-        openBtn.setText("Open");
-        tagsBtn.setText("My Tags");
+        // Back button
+        Button back = new Button();
+        back.setText("Back");
+        back.setOnAction(e -> window.setScene(home));
 
-        openBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
+        // Button to choose directory
+        Button chooseDirectoryButton = new Button();
+        chooseDirectoryButton.setText("Choose a directory");
+        chooseDirectoryButton.setOnAction(e -> {
+            DirectoryChooser directoryChooser=  new DirectoryChooser();
+            directoryChooser.setTitle("Select a directory");
+            File selectedFile = directoryChooser.showDialog(primaryStage);
+            if (selectedFile != null) {
+//                ImageFileManager.fetchFiles(selectedFile);
+                window.setScene(ImageScene.constructImageScene(back));
+            }
+            else {
+                window.setScene(home);
             }
         });
 
-        StackPane root = new StackPane();
-        root.getChildren().add(openBtn);
-        root.getChildren().add(tagsBtn);
-        openBtn.setTranslateY(0);
-        tagsBtn.setTranslateY(80);
+        // Button to view my tags
+        Button tagButton = new Button();
+        tagButton.setText("My Tags");
+//        tagButton.setOnAction(e -> window.setScene(DisplayTagsView.getScene(back));
 
-        Scene scene = new Scene(root, 300, 250);
+        Button back2 = new Button("go back!");
+        tagButton.setOnAction(e -> window.setScene(DisplayTagsView.getScene(back2)));
+        back2.setOnAction(e -> window.setScene(home));
 
-        primaryStage.setTitle("Main");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
+        // constructs home layout
+        StackPane homeLayout = new StackPane();
+        homeLayout.getChildren().add(chooseDirectoryButton);
+        homeLayout.getChildren().add(tagButton);
+        chooseDirectoryButton.setTranslateY(0);
+        tagButton.setTranslateY(50);
+
+        // constructs home scene
+        home = new Scene(homeLayout, 300, 250);
+
+        window.setTitle("Main");
+        window.setScene(home);
+        window.show();
+
+//        // constructs images layout
+//        StackPane imagesLayout = new StackPane();
+//        imagesLayout.getChildren().add(back);
+//
+//        // constructs images scene;
+//        images = new Scene(imagesLayout, 300, 250);
     }
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args){
         launch(args);
-
-        File file = new File("todo.txt");
-        ImageFile imf = new ImageFile("todo.txt");
-        HashMap <String, ImageFile> hm = new HashMap<>();
-        for (ImageFile myFile : hm.values()){
-            if (myFile.currentName.equals("todo.txt")){
-                // this image exists alread
-            }
-        }
-
-
-        BufferedReader fileInput = new BufferedReader(new FileReader(file.getAbsolutePath()));
     }
 }

@@ -20,6 +20,7 @@ public class ImageFile{
     private boolean movingSuccess; //a boolean indicator which shows whether the moving is successful
     private String imageType; //the type of the string(eg. ".jpeg")
 
+<<<<<<< HEAD
     /**
      * Construct a new ImageFile object.
      * @param one_image_file is the actual imagefile(eg.image.jpeg)
@@ -55,6 +56,12 @@ public class ImageFile{
         File tempfile = new File (targetName);
         this.reNameSuccess = this.getthisFile().renameTo(tempfile);
         this.thisFile = tempfile;
+=======
+    public ImageFile(String actual_file_name) {
+        currentName = actual_file_name;
+        oldName = new ArrayList<String[]>();
+        UUID = FileManager.getNewId(); //what parameter does FileManager.getNewId take???
+>>>>>>> a3b76cd51f30273207d0cfeeef482e9d9aa8ae0b
     }
 
     /**
