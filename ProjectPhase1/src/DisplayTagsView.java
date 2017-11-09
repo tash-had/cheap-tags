@@ -16,6 +16,7 @@ public class DisplayTagsView {
     
     public static Scene getScene(Button back){
 
+        //Comment
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(5));
         grid.setHgap(5);
