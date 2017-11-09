@@ -48,7 +48,7 @@ public class DisplayTagsView {
         tagInput.setPromptText("Example: @May");
         tagInput.setMinWidth(100);
 
-        //Botton
+        //Button
         Button addButton = new Button("Add");
         Button deleteButton = new Button("Delete");
 
@@ -62,9 +62,7 @@ public class DisplayTagsView {
         StackPane layout = new StackPane();
         layout.getChildren().addAll(table, hBox);
 
-        Scene s = new Scene(layout, 375, 400);
-
-        return s;
+        return new Scene(layout, 375, 400);
     }
 
 
