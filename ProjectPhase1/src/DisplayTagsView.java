@@ -13,11 +13,19 @@ import java.util.ArrayList;
 
 public class DisplayTagsView {
 
-    public static ScrollPane constructTagScene(){
+    
+    public static Scene getScene(Button back){
+
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(5));
         grid.setHgap(5);
         grid.setVgap(5);
+
+//        StackPane layout = new StackPane();
+//        layout.getChildren().add(back);
+//        Scene s = new Scene(layout, 300,250);
+//        return s;
+
 
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
@@ -27,7 +35,8 @@ public class DisplayTagsView {
         }
 
         ScrollPane scrollPane = new ScrollPane(grid);
-        return scrollPane;
+        Scene s = new Scene(scrollPane);
+        return s;
     }
 
 }
