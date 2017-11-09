@@ -54,7 +54,7 @@ public class ImageFile{
         String targetName = this.underWhichDirectory+previousName+this.imageType;
         File tempfile = new File (targetName);
         this.reNameSuccess = this.getthisFile().renameTo(tempfile);
-        this.thisFile = tempfile;
+        this.thisFile = tempfile;}
 
 
         /**
