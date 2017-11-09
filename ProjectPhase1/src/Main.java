@@ -42,7 +42,7 @@ public class Main extends Application{
         // Button to view my tags
         Button tagButton = new Button();
         tagButton.setText("My Tags");
-        tagButton.setOnAction(e -> window.setScene(tagScreen));
+        tagButton.setOnAction(e -> window.setScene(new Scene(DisplayTagsView.constructTagScene())));
 
 
         // constructs home layout
