@@ -13,15 +13,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+import java.util.ArrayList;
 
 import java.util.Observable;
 
 public class DisplayTagsView {
 
     public DisplayTagsView(){
+
     }
 
-    public static Scene getScene(Button back){
+    public static Scene getScene(Button back) {
 
 
         TableView<String> table;
@@ -48,7 +54,7 @@ public class DisplayTagsView {
 
 
         HBox hBox = new HBox();
-        hBox.setPadding(new Insets(360,10,10,10));
+        hBox.setPadding(new Insets(360, 10, 10, 10));
         hBox.setSpacing(10);
         hBox.getChildren().addAll(tagInput, addButton, deleteButton, back);
 
@@ -56,11 +62,13 @@ public class DisplayTagsView {
         StackPane layout = new StackPane();
         layout.getChildren().addAll(table, hBox);
 
-        Scene s = new Scene(layout, 375,400);
+        Scene s = new Scene(layout, 375, 400);
 
         return s;
-
     }
+
+
+
 
     public static ObservableList<String> tagslist() {
         ObservableList<String> tags = FXCollections.observableArrayList();
