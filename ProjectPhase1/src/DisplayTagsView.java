@@ -8,6 +8,18 @@ import javafx.stage.Stage;
 
 public class DisplayTagsView {
 
+    public DisplayTagsView(){
+    }
+    
+    public static Scene getScene(Button back){
+
+        StackPane layout = new StackPane();
+        layout.getChildren().add(back);
+        Scene s = new Scene(layout, 300,250);
+        return s;
+
+    }
+
 
 
 
