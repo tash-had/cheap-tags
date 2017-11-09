@@ -1,4 +1,4 @@
-- Ensure design follows Model-View-Controller structure 
+﻿- Ensure design follows Model-View-Controller structure 
 - Create a digital flow chart with ALL functions of the program all possible things that can occur, including specifically how each occurence is handled.
 
 *** Phase 1 Clarifications from Portal ***
@@ -13,3 +13,5 @@ phase1/design.pdf: a UML diagram of your project. You can create this however yo
 You are welcome to add a directory containing small image files to your repository as a way to test your code. Please keep them under 1024x768 — 640x480 might be even better — and don't include a ton of them. Nothing NSFW, please.
 As a heads up for phase 2, you'll be expected to apply design patterns to your code and write JUnit tests for as much of your code as you can. (You will not required to test the GUI code, but do think about MVC.) You're welcome to start early on these. :-)
 
+
+Also,we need add citation.
