@@ -37,7 +37,7 @@ public class ImageFile{
         String c= one_image_file.getName();
         String[] split = c.split("\\.");
         imageType = ("."+split[split.length-1]);
-}
+    }
 
     /**
      * Change the name
@@ -57,11 +57,11 @@ public class ImageFile{
         this.thisFile = tempfile;
 
 
-    /**
-     * Change the name
-     * @param oldTag is the old tag which will be added to the file name)
-     * but this one is just to remove tag not deleting tag!!!!!!!
-     */
+        /**
+         * Change the name
+         * @param oldTag is the old tag which will be added to the file name)
+         * but this one is just to remove tag not deleting tag!!!!!!!
+         */
     public void remove_tag_onimage(Tag oldTag){
         String temptag = oldTag.toString();
         Long timestamp = System.currentTimeMillis();
