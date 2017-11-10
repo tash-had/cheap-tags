@@ -140,6 +140,7 @@ public class ImageFile{
     public File getThisFile(){
         return this.thisFile;
     }
+    public ArrayList<String> getTagList(){return this.tagList;}
 
 
 }
