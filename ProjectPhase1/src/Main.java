@@ -11,7 +11,7 @@ import java.io.File;
 
 public class Main extends Application{
 
-    public Scene home, tagScreen, images;
+    public Scene home;
     public Stage window;
 
     @Override
@@ -30,10 +30,12 @@ public class Main extends Application{
             DirectoryChooser directoryChooser=  new DirectoryChooser();
             directoryChooser.setTitle("Select a directory");
             File selectedFile = directoryChooser.showDialog(primaryStage);
+            // if a file is selected, go to single image scene
             if (selectedFile != null) {
-//                ImageFileManager.fetchFiles(selectedFile);
-                window.setScene(ImageScene.constructImageScene(back));
+                //ImageFileManager.fetchFiles(selectedFile);
+                window.setScene(ImageScene.getImageScene(back));
             }
+            // else, if nothing is selected, go back to home scene
             else {
                 window.setScene(home);
             }
@@ -42,6 +44,7 @@ public class Main extends Application{
         // Button to view my tags
         Button tagButton = new Button();
         tagButton.setText("My Tags");
+<<<<<<< HEAD
 
         Button back2 = new Button("Back");
 
@@ -49,9 +52,13 @@ public class Main extends Application{
         tagButton.setOnAction(e -> window.setScene(DisplayTagsView.getScene(back2)));
         back2.setOnAction(e -> window.setScene(home));
 
+=======
+        tagButton.setOnAction(e -> window.setScene(DisplayTagsView.getScene(back)));
+>>>>>>> 2793fc8f77935592fe88adfad28c8e28435f65dd
 
         // constructs home layout
         StackPane homeLayout = new StackPane();
+        // adding directory and tag buttons
         homeLayout.getChildren().add(chooseDirectoryButton);
         homeLayout.getChildren().add(tagButton);
         chooseDirectoryButton.setTranslateY(0);
@@ -59,17 +66,9 @@ public class Main extends Application{
 
         // constructs home scene
         home = new Scene(homeLayout, 300, 250);
-
-        window.setTitle("Main");
+        window.setTitle("Home");
         window.setScene(home);
         window.show();
-
-//        // constructs images layout
-//        StackPane imagesLayout = new StackPane();
-//        imagesLayout.getChildren().add(back);
-//
-//        // constructs images scene;
-//        images = new Scene(imagesLayout, 300, 250);
     }
     public static void main(String[] args){
         launch(args);

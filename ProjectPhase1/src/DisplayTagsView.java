@@ -56,9 +56,13 @@ public class DisplayTagsView {
         tagInput.setPromptText("Example: Tag");
         tagInput.setMinWidth(100);
 
+<<<<<<< HEAD
 
 
         //AddButton
+=======
+        //Button
+>>>>>>> 2793fc8f77935592fe88adfad28c8e28435f65dd
         Button addButton = new Button("Add");
         addButton.setOnAction(e -> addButtonClicked());
 
@@ -84,9 +88,7 @@ public class DisplayTagsView {
         StackPane layout = new StackPane();
         layout.getChildren().addAll(tagsView, hBox);
 
-        Scene s = new Scene(layout, 375, 400);
-
-        return s;
+        return new Scene(layout, 375, 400);
     }
 
     public static void addButtonClicked(){
