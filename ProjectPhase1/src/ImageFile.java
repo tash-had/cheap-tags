@@ -42,9 +42,11 @@ public class ImageFile{
     /**
      * Change the name
      * @param newTag is the new tag which will be added to the file name)
-     * but this one is just to add tag not deleting tag!!!!!!!
+     * but this one is just to add tag not deleting tag!
+     * Also,the image would also be added to the arraylist in Tag class
      */
     public void addTagOnImage(Tag newTag){
+        newTag.addImage(this);
         String tempTag = newTag.toString();
         Long timeStamp = System.currentTimeMillis();
         currentName.insert(0,(tempTag+" "));
@@ -61,8 +63,10 @@ public class ImageFile{
          * Change the name
          * @param oldTag is the old tag which will be added to the file name)
          * but this one is just to remove tag not deleting tag!!!!!!!
+         * Also,the image would also be removed from the arraylist in Tag class
          */
     public void removeTagOnImage(Tag oldTag){
+        oldTag.deleteImage(this);
         String tempTag = oldTag.toString();
         Long timeStamp = System.currentTimeMillis();
         String[] currentNameSplit = previousName.split("\\b");
