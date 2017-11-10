@@ -34,7 +34,7 @@ public abstract class UserDataManager {
     }
 
     public static void addImageFileToMap(ImageFile imageFile){
-        getNameToImageFileMap().put(imageFile.get_currentName(), imageFile);
+        getNameToImageFileMap().put(imageFile.getCurrentName(), imageFile);
     }
 
     public static HashMap<String, ImageFile> getNameToImageFileMap() {
