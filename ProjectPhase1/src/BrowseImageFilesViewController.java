@@ -1,16 +1,60 @@
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Button;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+
 
 public class BrowseImageFilesViewController implements Initializable {
     private static File targetDirectory;
 
+
+    @FXML
+    ListView<String> allTagsListView;
+
+    @FXML
+    ListView<String> existingTags;
+
+    @FXML
+    Button ChangedDirectory;
+
+    @FXML
+    ImageView selecetedImageView;
+
+    @FXML
+    Button back;
+
+    @FXML
+    Label Tags;
+
+    @FXML
+    Label NameOfFile;
+
+    ArrayList<String> a = new ArrayList<>();
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        a.add("a");
+        a.add("b");
+
         System.out.println(targetDirectory.getPath());
+        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
+        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, a);
+
+
+
     }
 
     public static File getTargetDirectory() {
@@ -22,34 +66,10 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
 
-    /**
-     * This method is used by "Move To" button in browse image files view.
-     * @param targetParentPath: this function takes the string to target parent path;
-     * @param theImage: the imagefile object which would be moved
-     */
-    public static void changeDirector(ImageFile theImage, Path targetParentPath){
-        theImage.changeImageDirectory(targetParentPath);
+
+    public void backButtonClick(){
+        PrimaryStageManager.setScreen("Cheap Tags", "home_screen_view.fxml");
     }
-
-
-    /**
-     * This method is used by "Uncheck" action of "Checkbox" in browse image files view.
-     * @param theImage: the imagefile object which would be moved
-     * @param removeThisTag: the tag which would be removed
-     */
-    public static void removeTag(ImageFile theImage, Tag removeThisTag){
-        theImage.removeTagOnImage(removeThisTag);
-    }
-
-    /**
-     * This method is used by "Check" action of "Checkbox" in browse image files view.
-     * @param theImage: the imagefile object which would be moved
-     * @param addThisTag: the tag which would be removed
-     */
-    public static void addTag(ImageFile theImage, Tag addThisTag){
-        theImage.addTagOnImage(addThisTag);
-    }
-
 
 
 
