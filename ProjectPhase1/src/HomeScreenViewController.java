@@ -91,8 +91,8 @@ public class HomeScreenViewController implements Initializable{
 
     }
 
-    public void openWindow(){
-        PrimaryStageManager.setScreen("New Window Title", "new_window.fxml");
+    public void openTagScreen(){
+        PrimaryStageManager.setScreen("My Tags", "tag_screen_view.fxml");
     }
 
 }
