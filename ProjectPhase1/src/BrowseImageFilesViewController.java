@@ -2,36 +2,60 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Button;
 
-import javax.swing.text.html.ImageView;
+import java.io.BufferedReader;
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+
 
 public class BrowseImageFilesViewController implements Initializable {
     private static File targetDirectory;
 
-    @FXML
-    ListView<Hyperlink> allImagefilesListView;
 
     @FXML
     ListView<String> allTagsListView;
 
     @FXML
+    ListView<String> existingTags;
+
+    @FXML
+    Button ChangedDirectory;
+
+    @FXML
     ImageView selecetedImageView;
+
+    @FXML
+    Button back;
+
+    @FXML
+    Label Tags;
+
+    @FXML
+    Label NameOfFile;
+
+    ArrayList<String> a = new ArrayList<>();
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        System.out.println(targetDirectory.getPath());
-        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView,DisplayTagsView.myData);
+        a.add("a");
+        a.add("b");
 
+        System.out.println(targetDirectory.getPath());
+        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
+        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, a);
 
 
     }
+
     public static File getTargetDirectory() {
         return targetDirectory;
     }
@@ -39,5 +63,6 @@ public class BrowseImageFilesViewController implements Initializable {
     public static void setTargetDirectory(File directory) {
         targetDirectory = directory;
     }
+
 
 }

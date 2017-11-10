@@ -91,8 +91,4 @@ public class HomeScreenViewController implements Initializable{
 
     }
 
-    public void openWindow(){
-        PrimaryStageManager.setScreen("New Window Title", "new_window.fxml");
-    }
-
 }

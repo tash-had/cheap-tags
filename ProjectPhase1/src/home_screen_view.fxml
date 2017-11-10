@@ -29,7 +29,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="addTagsButton" mnemonicParsing="false" onAction="#openWindow" text="My Tags">
+                              <Button fx:id="addTagsButton" mnemonicParsing="false" text="My Tags">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
