@@ -11,7 +11,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * This class delegates all communication with the primary stage of the application.
+ * This class consists exclusively of static methods, and delegates all communication with the
+ * primary stage of the application.
  */
 public abstract class PrimaryStageManager {
     private static Stage primaryStage;

@@ -44,15 +44,13 @@ public class HomeScreenViewController implements Initializable{
         homeScreenImageView.setImage(logoImage);
 
         ConfigureJFXControl.populateListViewWithArrayList(homeScreenListView,
-                getHyperlinkArrayList(UserDataManager.getPreviousPathsVisited())).add(getHyperlinkWithPathName("Users/tash-had/Pictures"));
+                getHyperlinkArrayList(UserDataManager.getPreviousPathsVisited()));
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf",
                 15, previouslyViewedLabel);
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Light.ttf",
                 15, openDirectoryButton, addTagsButton);
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196fe"),
                 Color.BLACK, openDirectoryButton, addTagsButton);
-
-
     }
 
     public void openDirectoryClick(){
