@@ -54,6 +54,7 @@ public class BrowseImageFilesViewController implements Initializable {
         ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, a);
 
 
+
     }
 
     public static File getTargetDirectory() {
@@ -63,6 +64,14 @@ public class BrowseImageFilesViewController implements Initializable {
     public static void setTargetDirectory(File directory) {
         targetDirectory = directory;
     }
+
+
+
+    public void backButtonClick(){
+        PrimaryStageManager.setScreen("Cheap Tags", "home_screen_view.fxml");
+    }
+
+
 
 
 }
