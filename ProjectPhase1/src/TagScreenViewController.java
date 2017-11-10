@@ -12,8 +12,6 @@ import java.util.ResourceBundle;
 
 public class TagScreenViewController implements Initializable {
 
-    public static ArrayList<String> myData = new ArrayList<>();
-
     @FXML
     Button add;
 
@@ -27,21 +25,30 @@ public class TagScreenViewController implements Initializable {
     TextField tagInput;
 
     @FXML
-    ListView<String> tagView;
+    ListView<Tag> tagView;
 
     @FXML
     Pane pane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tagView.getItems().add("Example");
+        Tag tag1 = new Tag("June");
+        TagManager.addTag(tag1);
+        for (Tag tag : TagManager.getTagList()) {
+            tagView.getItems().add(tag);
+        }
     }
 
     @FXML
     public void addButtonClicked(){
         if (tagInput.getText() != null){
-            tagView.getItems().add(tagInput.getText());
+            Tag newTag = new Tag(tagInput.getText());
+            TagManager.addTag(newTag);
+            tagView.getItems().add(newTag);
             tagInput.clear();
+            for (Tag t : TagManager.getTagList()){
+                System.out.println(t);
+            }
         }
     }
 
@@ -49,7 +56,8 @@ public class TagScreenViewController implements Initializable {
     public void deleteButtonClicked(){
         int index = tagView.getSelectionModel().getSelectedIndex();
         if (index > -1){
-            tagView.getItems().remove(index);
+            Tag thisTag = tagView.getItems().remove(index);
+            TagManager.getTagList().remove(thisTag);
         }
     }
 
