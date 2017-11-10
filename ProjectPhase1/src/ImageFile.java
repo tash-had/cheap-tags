@@ -11,13 +11,12 @@ import java.lang.StringBuilder;
 public class ImageFile{
     private StringBuilder currentName; //the most current name of this image
     private String previousName; //the last version of image name
+    private ArrayList<String> tagList; //the list of tag this image has.
     //oldName keeps track of all of the revision histories in the format of array [newname,previous name,timestamp]
     private ArrayList<String[]> oldName;
     private String originalName; //the original name of this image without any tag.
     private String underWhichDirectory; //the path for the parent folder of this image.
     private File thisFile;
-    private boolean reNameSuccess; //a boolean indicator which shows whether the renaming is successful
-    private boolean movingSuccess; //a boolean indicator which shows whether the moving is successful
     private String imageType; //the type of the string(eg. ".jpeg")
 
 
@@ -33,7 +32,6 @@ public class ImageFile{
         oldName = new ArrayList<String[]>();
         underWhichDirectory = oneImageFile.getParent();
         thisFile = oneImageFile;
-        reNameSuccess = true;
         String c= oneImageFile.getName();
         String[] split = c.split("\\.");
         imageType = ("."+split[split.length-1]);
@@ -44,8 +42,9 @@ public class ImageFile{
      * @param newTag is the new tag which will be added to the file name)
      * but this one is just to add tag not deleting tag!
      * Also,the image would also be added to the arraylist in Tag class
+     *
      */
-    public void addTagOnImage(Tag newTag){
+    public boolean addTagOnImage(Tag newTag){
         newTag.addImage(this);
         String tempTag = newTag.toString();
         Long timeStamp = System.currentTimeMillis();
@@ -55,8 +54,9 @@ public class ImageFile{
         previousName = currentName.toString();
         String targetName = this.underWhichDirectory+previousName+this.imageType;
         File tempFile = new File (targetName);
-        this.reNameSuccess = this.getThisFile().renameTo(tempFile);
-        this.thisFile = tempFile;}
+        this.thisFile = tempFile;
+        return this.getThisFile().renameTo(tempFile);
+    }
 
 
         /**
@@ -65,7 +65,7 @@ public class ImageFile{
          * but this one is just to remove tag not deleting tag!!!!!!!
          * Also,the image would also be removed from the arraylist in Tag class
          */
-    public void removeTagOnImage(Tag oldTag){
+    public boolean removeTagOnImage(Tag oldTag){
         oldTag.deleteImage(this);
         String tempTag = oldTag.toString();
         Long timeStamp = System.currentTimeMillis();
@@ -84,8 +84,8 @@ public class ImageFile{
         previousName = currentName.toString();
         String targetName = this.underWhichDirectory+previousName+this.imageType;
         File tempFile = new File (targetName);
-        this.reNameSuccess = this.getThisFile().renameTo(tempFile);
         this.thisFile = tempFile;
+        return this.getThisFile().renameTo(tempFile);
     }
 
 
@@ -93,7 +93,7 @@ public class ImageFile{
      * Change the directory to image
      * @param newDirectory is the new directory where we will move file to)
      */
-    public void changeImageDirectory(Path newDirectory){
+    public boolean changeImageDirectory(Path newDirectory){
         StringBuilder targetDirectory = new StringBuilder();
         char tempChar = '\\';
         String tempDirectory = newDirectory.toString();
@@ -107,9 +107,9 @@ public class ImageFile{
         }
         tempDirectory = targetDirectory.toString() +"/" + this.previousName;
         File tempFile = new File (tempDirectory);
-        this.movingSuccess=this.getThisFile().renameTo(tempFile);
         this.thisFile = tempFile;
         this.underWhichDirectory = tempFile.getParent();
+        return this.getThisFile().renameTo(tempFile);//Check the sequence here.
 
     }
 
