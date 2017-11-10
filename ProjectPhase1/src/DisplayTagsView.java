@@ -23,58 +23,87 @@ import java.util.Observable;
 
 public class DisplayTagsView {
 
+    public static TextField tagInput;
+
+    public static ArrayList<String> myData;
+
+    public static ListView<String> tagsView;
+
+    public static TagManager allMyTags = new TagManager();
+
+
     public DisplayTagsView(){
 
     }
 
     public static Scene getScene(Button back) {
 
+        // Create an arrayList store all user input and visualize it.
 
-        TableView<String> table;
-        TextField tagInput;
-
-        TableColumn<String, String> nameColumn = new TableColumn<>("Tag");
-        nameColumn.setMinWidth(370);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("tag"));
+        myData = new ArrayList<>();
 
 
-        table = new TableView<>();
-        table.setItems(tagslist());
-        table.getColumns().add(nameColumn);
+        myData.add("May");
+        myData.add("June");
 
-        //Tag Input
+        tagsView = new ListView<>();
 
+
+        tagsView.setItems(ConfigureJFXControl.populateListViewWithArrayList(tagsView,myData));
+
+        //Catch User Input
         tagInput = new TextField();
-        tagInput.setPromptText("Example: @May");
+        tagInput.setPromptText("Example: Tag");
         tagInput.setMinWidth(100);
 
-        //Botton
-        Button addButton = new Button("Add");
-        Button deleteButton = new Button("Delete");
 
+
+        //AddButton
+        Button addButton = new Button("Add");
+        addButton.setOnAction(e -> addButtonClicked());
+
+        //DeleteButton
+        Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(e -> deleteButtonClicked());
+
+        //Store UserInput in a tagManager
+        for (String s: myData){
+            Tag myTag = new Tag(s);
+            allMyTags.addTag(myTag);
+        }
+
+
+        //Set a row for user to do all the operations.
 
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(360, 10, 10, 10));
         hBox.setSpacing(10);
-        hBox.getChildren().addAll(tagInput, addButton, deleteButton, back);
+        hBox.getChildren().addAll(tagInput,addButton, deleteButton, back);
 
-
+        // Set the layout of the scene.
         StackPane layout = new StackPane();
-        layout.getChildren().addAll(table, hBox);
+        layout.getChildren().addAll(tagsView, hBox);
 
         Scene s = new Scene(layout, 375, 400);
 
         return s;
     }
 
+    public static void addButtonClicked(){
+        String userInput = tagInput.getText();
+        ArrayList<String> newData = new ArrayList<>();
+        myData.add(userInput);
+        newData.add(userInput);
+        tagsView.setItems(ConfigureJFXControl.populateListViewWithArrayList(tagsView,newData));
+        tagInput.clear();
 
-
-
-    public static ObservableList<String> tagslist() {
-        ObservableList<String> tags = FXCollections.observableArrayList();
-        tags.add("May");
-        return tags;
     }
+
+    public static void deleteButtonClicked(){
+
+    }
+
+
 
 
 

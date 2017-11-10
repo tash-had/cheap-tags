@@ -42,13 +42,10 @@ public class Main extends Application{
         // Button to view my tags
         Button tagButton = new Button();
         tagButton.setText("My Tags");
-<<<<<<< HEAD
-        Button back2 = new Button("Back");
-=======
-//        tagButton.setOnAction(e -> window.setScene(DisplayTagsView.getScene(back));
 
-        Button back2 = new Button("go back!");
->>>>>>> a506fd4ebe770c821136eec98b9a0ee9e3307376
+        Button back2 = new Button("Back");
+
+
         tagButton.setOnAction(e -> window.setScene(DisplayTagsView.getScene(back2)));
         back2.setOnAction(e -> window.setScene(home));
 
