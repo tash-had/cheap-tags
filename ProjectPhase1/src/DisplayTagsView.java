@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,8 +31,6 @@ public class DisplayTagsView {
 
     public static ListView<String> tagsView;
 
-    public static TagManager allMyTags = new TagManager();
-
 
     public DisplayTagsView(){
 
@@ -58,8 +58,6 @@ public class DisplayTagsView {
 
 
         //AddButton
-
-        //Button
         Button addButton = new Button("Add");
         addButton.setOnAction(e -> addButtonClicked());
 
@@ -70,7 +68,7 @@ public class DisplayTagsView {
         //Store UserInput in a tagManager
         for (String s: myData){
             Tag myTag = new Tag(s);
-            allMyTags.addTag(myTag);
+            TagManager.addTag(myTag);
         }
 
 
@@ -95,16 +93,9 @@ public class DisplayTagsView {
         newData.add(userInput);
         tagsView.setItems(ConfigureJFXControl.populateListViewWithArrayList(tagsView,newData));
         tagInput.clear();
-
     }
 
     public static void deleteButtonClicked(){
-
     }
 
-
-
-
-
-
-}
+    }
