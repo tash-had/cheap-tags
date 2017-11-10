@@ -44,17 +44,8 @@ public class Main extends Application{
         // Button to view my tags
         Button tagButton = new Button();
         tagButton.setText("My Tags");
-<<<<<<< HEAD
 
-        Button back2 = new Button("Back");
-
-
-        tagButton.setOnAction(e -> window.setScene(DisplayTagsView.getScene(back2)));
-        back2.setOnAction(e -> window.setScene(home));
-
-=======
         tagButton.setOnAction(e -> window.setScene(DisplayTagsView.getScene(back)));
->>>>>>> 2793fc8f77935592fe88adfad28c8e28435f65dd
 
         // constructs home layout
         StackPane homeLayout = new StackPane();

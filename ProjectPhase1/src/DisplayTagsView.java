@@ -56,13 +56,10 @@ public class DisplayTagsView {
         tagInput.setPromptText("Example: Tag");
         tagInput.setMinWidth(100);
 
-<<<<<<< HEAD
-
 
         //AddButton
-=======
+
         //Button
->>>>>>> 2793fc8f77935592fe88adfad28c8e28435f65dd
         Button addButton = new Button("Add");
         addButton.setOnAction(e -> addButtonClicked());
 
