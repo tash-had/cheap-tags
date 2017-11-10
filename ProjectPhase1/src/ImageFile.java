@@ -47,6 +47,9 @@ public class ImageFile{
     public boolean addTagOnImage(Tag newTag){
         newTag.addImage(this);
         String tempTag = newTag.toString();
+        if(!tagList.contains(tempTag)){
+            this.tagList.add(tempTag);
+        }
         Long timeStamp = System.currentTimeMillis();
         currentName.insert(0,(tempTag+" "));
         String[] tempLog = {currentName.toString(),previousName,timeStamp.toString()};
@@ -68,6 +71,14 @@ public class ImageFile{
     public boolean removeTagOnImage(Tag oldTag){
         oldTag.deleteImage(this);
         String tempTag = oldTag.toString();
+        if(!tagList.contains(tempTag)){
+            this.tagList.add(tempTag);
+        }
+        for(int i = 0;i<this.tagList.size();i++){
+            if(this.tagList.get(i)==tempTag){
+                this.tagList.remove(i);
+            }
+        }
         Long timeStamp = System.currentTimeMillis();
         String[] currentNameSplit = previousName.split("\\b");
         currentName = new StringBuilder();
@@ -110,7 +121,6 @@ public class ImageFile{
         this.thisFile = tempFile;
         this.underWhichDirectory = tempFile.getParent();
         return this.getThisFile().renameTo(tempFile);//Check the sequence here.
-
     }
 
 
