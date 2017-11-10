@@ -24,30 +24,30 @@ public class BrowseImageFilesViewController implements Initializable {
 
     /**
      * This method is used by "Move To" button in browse image files view.
-     * @param target_parent_path: this function takes the string to target parent path;
-     * @param the_image: the imagefile object which would be moved
+     * @param targetParentPath: this function takes the string to target parent path;
+     * @param theImage: the imagefile object which would be moved
      */
-    public static void changeDirector(ImageFile the_image, Path target_parent_path){
-        the_image.change_image_directory(target_parent_path);
+    public static void changeDirector(ImageFile theImage, Path targetParentPath){
+        theImage.changeImageDirectory(targetParentPath);
     }
 
 
     /**
      * This method is used by "Uncheck" action of "Checkbox" in browse image files view.
-     * @param the_image: the imagefile object which would be moved
-     * @param remove_this_tag: the tag which would be removed
+     * @param theImage: the imagefile object which would be moved
+     * @param removeThisTag: the tag which would be removed
      */
-    public static void removeTag(ImageFile the_image, Tag remove_this_tag){
-        the_image.remove_tag_onimage(remove_this_tag);
+    public static void removeTag(ImageFile theImage, Tag removeThisTag){
+        theImage.removeTagOnImage(removeThisTag);
     }
 
     /**
      * This method is used by "Check" action of "Checkbox" in browse image files view.
-     * @param the_image: the imagefile object which would be moved
-     * @param add_this_tag: the tag which would be removed
+     * @param theImage: the imagefile object which would be moved
+     * @param addThisTag: the tag which would be removed
      */
-    public static void addTag(ImageFile the_image, Tag add_this_tag){
-        the_image.add_tag_onimage(add_this_tag);
+    public static void addTag(ImageFile theImage, Tag addThisTag){
+        theImage.addTagOnImage(addThisTag);
     }
 
 

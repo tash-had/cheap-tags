@@ -23,18 +23,18 @@ public class ImageFile{
 
     /**
      * Construct a new ImageFile object.
-     * @param one_image_file is the actual imagefile(eg.image.jpeg)
+     * @param oneImageFile is the actual imagefile(eg.image.jpeg)
      */
-    public ImageFile(File one_image_file){
+    public ImageFile(File oneImageFile){
         currentName = new StringBuilder();
-        originalName = one_image_file.getName();
+        originalName = oneImageFile.getName();
         currentName.append(originalName);
-        previousName = one_image_file.getName();
+        previousName = oneImageFile.getName();
         oldName = new ArrayList<String[]>();
-        underWhichDirectory = one_image_file.getParent();
-        thisFile = one_image_file;
+        underWhichDirectory = oneImageFile.getParent();
+        thisFile = oneImageFile;
         reNameSuccess = true;
-        String c= one_image_file.getName();
+        String c= oneImageFile.getName();
         String[] split = c.split("\\.");
         imageType = ("."+split[split.length-1]);
     }
@@ -44,17 +44,17 @@ public class ImageFile{
      * @param newTag is the new tag which will be added to the file name)
      * but this one is just to add tag not deleting tag!!!!!!!
      */
-    public void add_tag_onimage(Tag newTag){
-        String temptag = newTag.toString();
-        Long timestamp = System.currentTimeMillis();
-        currentName.insert(0,(temptag+" "));
-        String[] templog = {currentName.toString(),previousName,timestamp.toString()};
-        this.oldName.add(templog);
+    public void addTagOnImage(Tag newTag){
+        String tempTag = newTag.toString();
+        Long timeStamp = System.currentTimeMillis();
+        currentName.insert(0,(tempTag+" "));
+        String[] tempLog = {currentName.toString(),previousName,timeStamp.toString()};
+        this.oldName.add(tempLog);
         previousName = currentName.toString();
         String targetName = this.underWhichDirectory+previousName+this.imageType;
-        File tempfile = new File (targetName);
-        this.reNameSuccess = this.getthisFile().renameTo(tempfile);
-        this.thisFile = tempfile;}
+        File tempFile = new File (targetName);
+        this.reNameSuccess = this.getThisFile().renameTo(tempFile);
+        this.thisFile = tempFile;}
 
 
         /**
@@ -62,26 +62,26 @@ public class ImageFile{
          * @param oldTag is the old tag which will be added to the file name)
          * but this one is just to remove tag not deleting tag!!!!!!!
          */
-    public void remove_tag_onimage(Tag oldTag){
-        String temptag = oldTag.toString();
-        Long timestamp = System.currentTimeMillis();
+    public void removeTagOnImage(Tag oldTag){
+        String tempTag = oldTag.toString();
+        Long timeStamp = System.currentTimeMillis();
         String[] currentNameSplit = previousName.split("\\b");
         currentName = new StringBuilder();
         for(String i:currentNameSplit){
-            if(i.equals(temptag)){
+            if(i.equals(tempTag)){
                 continue;
             }
             else{
                 currentName.append(i);
             }
         }
-        String[] templog = {currentName.toString(),previousName,timestamp.toString()};
-        this.oldName.add(templog);
+        String[] tempLog = {currentName.toString(),previousName,timeStamp.toString()};
+        this.oldName.add(tempLog);
         previousName = currentName.toString();
         String targetName = this.underWhichDirectory+previousName+this.imageType;
-        File tempfile = new File (targetName);
-        this.reNameSuccess = this.getthisFile().renameTo(tempfile);
-        this.thisFile = tempfile;
+        File tempFile = new File (targetName);
+        this.reNameSuccess = this.getThisFile().renameTo(tempFile);
+        this.thisFile = tempFile;
     }
 
 
@@ -89,12 +89,12 @@ public class ImageFile{
      * Change the directory to image
      * @param newDirectory is the new directory where we will move file to)
      */
-    public void change_image_directory(Path newDirectory){
+    public void changeImageDirectory(Path newDirectory){
         StringBuilder targetDirectory = new StringBuilder();
-        char tempchar = '\\';
+        char tempChar = '\\';
         String tempDirectory = newDirectory.toString();
         for(int i=0;i<tempDirectory.length();i++){
-            if(tempDirectory.charAt(i)==tempchar){
+            if(tempDirectory.charAt(i)==tempChar){
                 targetDirectory.append("/");
             }
             else {
@@ -102,28 +102,28 @@ public class ImageFile{
             }
         }
         tempDirectory = targetDirectory.toString() +"/" + this.previousName;
-        File tempfile = new File (tempDirectory);
-        this.movingSuccess=this.getthisFile().renameTo(tempfile);
-        this.thisFile = tempfile;
-        this.underWhichDirectory = tempfile.getParent();
+        File tempFile = new File (tempDirectory);
+        this.movingSuccess=this.getThisFile().renameTo(tempFile);
+        this.thisFile = tempFile;
+        this.underWhichDirectory = tempFile.getParent();
 
     }
 
 
     //some getters
-    public String get_currentName(){
+    public String getCurrentName(){
         return this.currentName.toString();
     }
-    public String get_original_name(){
+    public String getOriginalName(){
         return this.originalName;
     }
-    public ArrayList<String[]> get_oldName(){
+    public ArrayList<String[]> getOldName(){
         return this.oldName;
     }
-    public String get_the_parentpath(){
+    public String getTheParentpath(){
         return this.underWhichDirectory;
     }
-    public File getthisFile(){
+    public File getThisFile(){
         return this.thisFile;
     }
 
