@@ -72,6 +72,11 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
 
+    @FXML
+    public void changeDirectoryButtonClicked(){
+    }
+
+
 
 
 }
