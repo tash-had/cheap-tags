@@ -139,4 +139,9 @@ public class ImageFile{
     public void setFile(File newFile){
         this.thisFile = newFile;
     }
+    public void setUnderWhichDirectory(String underWhichDirectory) {
+        this.underWhichDirectory = underWhichDirectory;
+    }
+
+
 }
