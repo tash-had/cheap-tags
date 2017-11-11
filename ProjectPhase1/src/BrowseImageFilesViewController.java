@@ -82,13 +82,17 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     @FXML
-    public void addButtonClick(){
+    public void addButtonClick() {
         String selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (allTagsListView.getItems().indexOf(selectedTag) > -1)
             allTagsListView.getItems().remove(selectedTag);
-            existingTags.getItems().add(selectedTag);
+        existingTags.getItems().add(selectedTag);
+    }
 
-        }
+    @FXML
+    public void changeDirectoryButtonClicked(){
+    }
+
 
 
 }
