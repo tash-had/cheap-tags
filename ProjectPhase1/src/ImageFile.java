@@ -46,7 +46,7 @@ public class ImageFile{
      */
     public boolean addTagOnImage(Tag newTag){
         newTag.addImage(this);
-        String tempTag = newTag.toString();
+        String tempTag ="@"+newTag.toString();
         if(!tagList.contains(tempTag)){
             this.tagList.add(tempTag);
         }
@@ -106,16 +106,8 @@ public class ImageFile{
      */
     public boolean changeImageDirectory(Path newDirectory){
         StringBuilder targetDirectory = new StringBuilder();
-        char tempChar = '\\';
         String tempDirectory = newDirectory.toString();
-        for(int i=0;i<tempDirectory.length();i++){
-            if(tempDirectory.charAt(i)==tempChar){
-                targetDirectory.append("/");
-            }
-            else {
-                targetDirectory.append(tempDirectory.charAt(i));
-            }
-        }
+        targetDirectory.append(tempDirectory.replace('\\','/'));
         tempDirectory = targetDirectory.toString() +"/" + this.previousName;
         File tempFile = new File (tempDirectory);
         this.thisFile = tempFile;
@@ -141,6 +133,9 @@ public class ImageFile{
         return this.thisFile;
     }
     public ArrayList<String> getTagList(){return this.tagList;}
+    public String getImageType(){
+        return this.imageType;
+    }
 
 
 }
