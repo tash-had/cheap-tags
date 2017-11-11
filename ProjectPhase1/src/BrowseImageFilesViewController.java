@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import javafx.scene.image.ImageView;
 
 public class BrowseImageFilesViewController implements Initializable {
     private static File targetDirectory;
-
+    private static File currentDisplayedImage;
 
     @FXML
     ListView<String> allTagsListView;
@@ -28,7 +29,7 @@ public class BrowseImageFilesViewController implements Initializable {
     Button ChangedDirectory;
 
     @FXML
-    ImageView selecetedImageView;
+    ImageView selectedImageView;
 
     @FXML
     Button back;
@@ -45,10 +46,25 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label NameOfFile;
 
+    @FXML
+    ListView<String> imageSidePane;
 
+
+    ArrayList<String> allImagePaths = new ArrayList<>();
     ArrayList<String> allTags = new ArrayList<>();
     ArrayList<String> exitingTags = new ArrayList<>();
+    static String[] acceptedExtensions = new String[]{"jpg"};
 
+    static FilenameFilter imgFilter = new FilenameFilter() {
+        @Override
+        public boolean accept(File dir, String name) {
+            for (String ext : acceptedExtensions)
+                if (name.endsWith("." + ext)){
+                return true;
+                }
+            return false;
+        }
+    };
 
 
     @Override
@@ -60,11 +76,19 @@ public class BrowseImageFilesViewController implements Initializable {
 
 
         System.out.println(targetDirectory.getPath());
+
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, allTags);
 
+        if (targetDirectory.isDirectory()){
+            for (File imgFile : targetDirectory.listFiles(imgFilter)){
+                allImagePaths.add(imgFile.getPath());
+            }
+        }
 
-
+        for (String path : allImagePaths){
+            imageSidePane.getItems().add(path);
+        }
     }
 
     public static File getTargetDirectory() {
@@ -93,11 +117,15 @@ public class BrowseImageFilesViewController implements Initializable {
         String selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (allTagsListView.getItems().indexOf(selectedTag) > -1)
             allTagsListView.getItems().remove(selectedTag);
-        existingTags.getItems().add(selectedTag);
+            existingTags.getItems().add(selectedTag);
     }
 
     @FXML
     public void changeDirectoryButtonClicked(){
+//        File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
+//        if (selectedFile != null) {
+//            FileOperationsManager.changeImageDirectory(currentDisplayedImage, selectedFile.getPath());
+//        }
     }
 
 

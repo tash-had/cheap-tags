@@ -34,6 +34,7 @@ public class TagScreenViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Tag tag1 = new Tag("June");
         TagManager.addTag(tag1);
+        tagView.getItems().clear();
         for (Tag tag : TagManager.getTagList()) {
             tagView.getItems().add(tag);
         }
