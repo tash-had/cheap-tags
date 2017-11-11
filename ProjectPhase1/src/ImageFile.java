@@ -133,8 +133,14 @@ public class ImageFile{
         return this.thisFile;
     }
     public ArrayList<String> getTagList(){return this.tagList;}
-    public String getImageType(){
-        return this.imageType;
+    public String getImageType(){ return this.imageType; }
+
+
+    public void setFile(File newFile){
+        this.thisFile = newFile;
+    }
+    public void setUnderWhichDirectory(String underWhichDirectory) {
+        this.underWhichDirectory = underWhichDirectory;
     }
 
 
