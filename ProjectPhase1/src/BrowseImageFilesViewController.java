@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 
 public class BrowseImageFilesViewController implements Initializable {
     private static File targetDirectory;
-
+    private static File currentDisplayedImage;
 
     @FXML
     ListView<String> allTagsListView;
@@ -28,7 +28,7 @@ public class BrowseImageFilesViewController implements Initializable {
     Button ChangedDirectory;
 
     @FXML
-    ImageView selecetedImageView;
+    ImageView selectedImageView;
 
     @FXML
     Button back;
@@ -89,6 +89,10 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @FXML
     public void changeDirectoryButtonClicked(){
+//        File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
+//        if (selectedFile != null) {
+//            FileOperationsManager.changeImageDirectory(currentDisplayedImage, selectedFile.getPath());
+//        }
     }
 
 
