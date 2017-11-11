@@ -133,6 +133,9 @@ public class ImageFile{
         return this.thisFile;
     }
     public ArrayList<String> getTagList(){return this.tagList;}
+    public String getImageType(){
+        return this.imageType;
+    }
 
 
 }
