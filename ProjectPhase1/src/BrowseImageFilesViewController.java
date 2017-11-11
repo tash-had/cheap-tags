@@ -76,10 +76,17 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
 
+    /**
+     * when the user click the back button, it should take users back to the main screen
+     */
     @FXML
     public void backButtonClick(){
         PrimaryStageManager.setScreen("Cheap Tags", "home_screen_view.fxml");
     }
+
+    /**
+     * When the user click the add button under Tags, the selected tag should be removed from Tags and added to exitingTags
+     */
 
     @FXML
     public void addButtonClick() {
