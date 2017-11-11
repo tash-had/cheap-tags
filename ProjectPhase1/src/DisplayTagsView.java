@@ -1,27 +1,15 @@
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import java.util.ArrayList;
+import managers.TagManager;
+import model.Tag;
+import utils.ConfigureJFXControl;
 
-import java.util.Observable;
+import java.util.ArrayList;
 
 public class DisplayTagsView {
 
@@ -53,7 +41,7 @@ public class DisplayTagsView {
 
         //Catch User Input
         tagInput = new TextField();
-        tagInput.setPromptText("Example: Tag");
+        tagInput.setPromptText("Example: model.Tag");
         tagInput.setMinWidth(100);
 
 

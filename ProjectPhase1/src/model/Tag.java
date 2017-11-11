@@ -1,3 +1,7 @@
+package model;
+
+import model.ImageFile;
+
 import java.util.ArrayList;
 public class Tag {
     public String name;

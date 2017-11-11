@@ -1,3 +1,7 @@
+package managers;
+
+import model.Tag;
+
 import java.util.ArrayList;
 
 public class TagManager {

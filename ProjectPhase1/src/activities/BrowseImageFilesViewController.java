@@ -1,18 +1,21 @@
+package activities;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import managers.PrimaryStageManager;
+import managers.TagManager;
+import model.Tag;
+import utils.ConfigureJFXControl;
 
 
 public class BrowseImageFilesViewController implements Initializable {
@@ -98,7 +101,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @FXML
     public void backButtonClick(){
-        PrimaryStageManager.setScreen("Cheap Tags", "home_screen_view.fxml");
+        PrimaryStageManager.setScreen("Cheap Tags", "activities/home_screen_view.fxml");
     }
 
     @FXML
@@ -111,9 +114,9 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @FXML
     public void changeDirectoryButtonClicked(){
-//        File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
+//        File selectedFile = activities.managers.PrimaryStageManager.getDirectoryWithChooser();
 //        if (selectedFile != null) {
-//            FileOperationsManager.changeImageDirectory(currentDisplayedImage, selectedFile.getPath());
+//            managers.FileOperationsManager.changeImageDirectory(currentDisplayedImage, selectedFile.getPath());
 //        }
     }
 

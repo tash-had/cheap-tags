@@ -1,3 +1,7 @@
+package managers;
+
+import model.ImageFile;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
