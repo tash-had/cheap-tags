@@ -37,7 +37,14 @@ public class BrowseImageFilesViewController implements Initializable {
     Label Tags;
 
     @FXML
+    Button Add;
+
+    @FXML
+    Button Delete;
+
+    @FXML
     Label NameOfFile;
+
 
     ArrayList<String> a = new ArrayList<>();
 
@@ -48,6 +55,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         a.add("a");
         a.add("b");
+
 
         System.out.println(targetDirectory.getPath());
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
@@ -66,11 +74,18 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
 
-
+    @FXML
     public void backButtonClick(){
         PrimaryStageManager.setScreen("Cheap Tags", "home_screen_view.fxml");
     }
 
+    @FXML
+    public void addButtonClick() {
+        String selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
+        if (allTagsListView.getItems().indexOf(selectedTag) > -1)
+            allTagsListView.getItems().remove(selectedTag);
+        existingTags.getItems().add(selectedTag);
+    }
 
     @FXML
     public void changeDirectoryButtonClicked(){
@@ -78,5 +93,10 @@ public class BrowseImageFilesViewController implements Initializable {
 
 
 
-
 }
+
+
+
+
+
+
