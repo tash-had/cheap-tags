@@ -50,20 +50,17 @@ public class BrowseImageFilesViewController implements Initializable {
     ListView<String> imageSidePane;
 
 
-    ArrayList<String> allImagePaths = new ArrayList<>();
+    ArrayList<File> allImages = new ArrayList<>();
     ArrayList<String> allTags = new ArrayList<>();
     ArrayList<String> exitingTags = new ArrayList<>();
     static String[] acceptedExtensions = new String[]{"jpg"};
 
-    static FilenameFilter imgFilter = new FilenameFilter() {
-        @Override
-        public boolean accept(File dir, String name) {
-            for (String ext : acceptedExtensions)
-                if (name.endsWith("." + ext)){
-                return true;
-                }
-            return false;
-        }
+    static FilenameFilter imgFilter = (dir, name) -> {
+        for (String ext : acceptedExtensions)
+            if (name.endsWith("." + ext)){
+            return true;
+            }
+        return false;
     };
 
 
@@ -82,12 +79,12 @@ public class BrowseImageFilesViewController implements Initializable {
 
         if (targetDirectory.isDirectory()){
             for (File imgFile : targetDirectory.listFiles(imgFilter)){
-                allImagePaths.add(imgFile.getPath());
+                allImages.add(imgFile);
             }
         }
 
-        for (String path : allImagePaths){
-            imageSidePane.getItems().add(path);
+        for (File file : allImages){
+            imageSidePane.getItems().add(file.getName());
         }
     }
 
