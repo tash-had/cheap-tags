@@ -46,20 +46,22 @@ public class BrowseImageFilesViewController implements Initializable {
     Label NameOfFile;
 
 
-    ArrayList<String> a = new ArrayList<>();
+    ArrayList<String> allTags = new ArrayList<>();
+    ArrayList<String> exitingTags = new ArrayList<>();
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        a.add("a");
-        a.add("b");
+        for (Tag tag: TagManager.getTagList()){
+            allTags.add(tag.toString());
+        }
 
 
         System.out.println(targetDirectory.getPath());
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
-        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, a);
+        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, allTags);
 
 
 
