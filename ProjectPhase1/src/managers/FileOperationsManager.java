@@ -1,14 +1,13 @@
 package managers;
 
+import javafx.scene.control.ButtonType;
 import model.ImageFile;
+import utils.Alerts;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * This class handles all OS-related operations for the ImageFiles and the
@@ -19,11 +18,24 @@ public class FileOperationsManager {
     public static File renameImageFile(ImageFile imageFile, String newName){
         File currentImageFile = imageFile.getThisFile();
         String imageFilePath = imageFile.getThisFile().getAbsolutePath();
-        if (renameFile(currentImageFile, newName) == 1){
+        int renameStatus = renameFile(currentImageFile, newName);
+        if (renameStatus == 1){
             UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
             imageFilePath = currentImageFile.getParentFile().getAbsolutePath() +"/"+newName;
+        }else if (renameStatus == -1){
+            int suffix = 1;
+            String modifiedName = newName;
+            while (UserDataManager.existsInMap(modifiedName)){
+                modifiedName = modifiedName +" ("+Integer.toString(suffix)+")";
+            }
+            ButtonType renameReqResponse = Alerts.showYesNoAlert("Could not rename file",
+                    "Name Taken",
+                    newName +" already exists. Would you like to name it "+modifiedName+"?");
+            if (renameReqResponse == ButtonType.OK){
+                System.out.println("Implement this after ImageFile implements a renameFunction");
+            }
         }else {
-            // Launch alert dialog
+            // Show error alert dialog
         }
         return new File(imageFilePath);
     }
