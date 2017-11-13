@@ -6,7 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -14,8 +16,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 //citing this from JavaFx Tut5th.
-public class WarningWindow{
-    public static void display(String message){
+public class Alerts {
+    public static void displayWarning(String message){
         Stage window = new Stage();
 
         //this one should be taken care of first
@@ -37,5 +39,13 @@ public class WarningWindow{
         window.setScene(scene);
         window.showAndWait();//display this window that needed to be
         //close to further process other things.
+    }
+
+    public static ButtonType showYesNoAlert(String title, String header, String body){
+        Alert nameExistsDialog = new Alert(Alert.AlertType.CONFIRMATION, body, ButtonType.NO, ButtonType.YES);
+        nameExistsDialog.setTitle(title);
+        nameExistsDialog.setHeaderText(header);
+        nameExistsDialog.showAndWait();
+        return nameExistsDialog.getResult();
     }
 }
