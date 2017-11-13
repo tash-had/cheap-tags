@@ -19,7 +19,7 @@ public abstract class ConfigureJFXControl {
      * @param labeledItems one or more instances of Labeled on which the font should be applied
      * */
     public static void setFontOfLabeled(String fontPath, double fontSize, Labeled... labeledItems){
-        Font font = Font.loadFont(ConfigureJFXControl.class.getResourceAsStream("../"+fontPath), fontSize);
+        Font font = Font.loadFont(ConfigureJFXControl.class.getResourceAsStream(fontPath), fontSize);
         for (Labeled labeledItem : labeledItems){
             labeledItem.setFont(font);
         }

@@ -67,6 +67,6 @@ public class TagScreenViewController implements Initializable {
 
     @FXML
     public void backButtonClicked(){
-        PrimaryStageManager.setScreen("Cheap Tags", "activities/home_screen_view.fxml");
+        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 }

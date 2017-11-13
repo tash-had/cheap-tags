@@ -76,7 +76,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
 
         System.out.println(targetDirectory.getPath());
-        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, allTags);
 
         if (targetDirectory.isDirectory()){
@@ -101,7 +101,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @FXML
     public void backButtonClick(){
-        PrimaryStageManager.setScreen("Cheap Tags", "activities/home_screen_view.fxml");
+        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
     @FXML

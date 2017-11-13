@@ -11,9 +11,8 @@ public class Main extends Application{
         PrimaryStageManager.setPrimaryStage(primaryStage);
         PrimaryStageManager.setDefaultStageWidth(1080);
         PrimaryStageManager.setDefaultStageHeight(720);
-        PrimaryStageManager.setScreen("Cheap Tags", "activities/home_screen_view.fxml");
+        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
         PrimaryStageManager.showPrimaryStage();
-
     }
     public static void main(String[] args){
         launch(args);

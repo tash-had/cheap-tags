@@ -95,7 +95,7 @@ public abstract class PrimaryStageManager {
      */
     public static Parent getParentWithFXMLPath(String fxmlPath){
         try {
-            return FXMLLoader.load(PrimaryStageManager.class.getResource("../"+fxmlPath));
+            return FXMLLoader.load(PrimaryStageManager.class.getResource(fxmlPath));
         } catch (IOException e) {
             e.printStackTrace();
         }

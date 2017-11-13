@@ -50,9 +50,9 @@ public class HomeScreenViewController implements Initializable{
 
         ConfigureJFXControl.populateListViewWithArrayList(homeScreenListView,
                 getHyperlinkArrayList(UserDataManager.getPreviousPathsVisited()));
-        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf",
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf",
                 15, previouslyViewedLabel);
-        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Light.ttf",
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Light.ttf",
                 15, openDirectoryButton, addTagsButton);
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196fe"),
                 Color.BLACK, openDirectoryButton, addTagsButton);
@@ -83,19 +83,19 @@ public class HomeScreenViewController implements Initializable{
         hyperlink.setTextFill(Color.BLACK);
         hyperlink.setUnderline(false);
         hyperlink.setVisited(false);
-        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Thin.ttf", 20, hyperlink);
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Thin.ttf", 20, hyperlink);
         return hyperlink;
     }
 
     private void switchToToBrowseImageFilesView(File directoryPath){
         BrowseImageFilesViewController.setTargetDirectory(directoryPath);
         PrimaryStageManager.setScreen("Browse Images - [~" + directoryPath.getPath() + "]",
-                "activities/browse_imagefiles_view.fxml");
+                "/activities/browse_imagefiles_view.fxml");
 
     }
 
     public void openTagScreen(){
-        PrimaryStageManager.setScreen("My Tags", "activities/tag_screen_view.fxml");
+        PrimaryStageManager.setScreen("My Tags", "/activities/tag_screen_view.fxml");
     }
 
 
