@@ -3,7 +3,9 @@ package managers;
 import model.ImageFile;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class UserDataManager {
 
@@ -36,12 +38,25 @@ public abstract class UserDataManager {
             addImageFileToMap(renamedImageFile);
         }
     }
+    public static boolean setNewImageFile(String imageName, ImageFile newImageFile){
+        if (getNameToImageFileMap().containsKey(imageName)){
+            getNameToImageFileMap().put(imageName, newImageFile);
+            return true;
+        }return false;
+    }
+
+    public static Collection getImageFileNames(){
+        return getNameToImageFileMap().keySet();
+    }
+
 
     public static void addImageFileToMap(ImageFile imageFile){
         getNameToImageFileMap().put(imageFile.getCurrentName(), imageFile);
     }
 
-    public static HashMap<String, ImageFile> getNameToImageFileMap() {
+    private static HashMap<String, ImageFile> getNameToImageFileMap() {
         return nameToImageFileMap;
     }
+
+    // prep data
 }
