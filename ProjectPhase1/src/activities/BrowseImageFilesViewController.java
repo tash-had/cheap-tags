@@ -116,7 +116,7 @@ public class BrowseImageFilesViewController implements Initializable {
     public void changeDirectoryButtonClicked(){
 //        File selectedFile = activities.managers.PrimaryStageManager.getDirectoryWithChooser();
 //        if (selectedFile != null) {
-//            managers.FileOperationsManager.changeImageDirectory(currentDisplayedImage, selectedFile.getPath());
+//            managers.ImageFileOperationsManager.changeImageDirectory(currentDisplayedImage, selectedFile.getPath());
 //        }
     }
 
