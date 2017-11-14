@@ -125,7 +125,8 @@ public class FileOperations {
         if (filesInDirectory != null){
             for (File file : filesInDirectory){
                 String fileExtension = FileOperations.getFileExtension(file);
-                if (fileExtension != null && acceptedExtensions.contains(fileExtension)){
+                if ((fileExtension != null) &&
+                        (acceptedExtensions == null || acceptedExtensions.contains(fileExtension))){
                     validFiles.add(file);
                 }
             }
