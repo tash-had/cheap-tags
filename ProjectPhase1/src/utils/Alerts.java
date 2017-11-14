@@ -1,21 +1,15 @@
 package utils;
 
-import com.sun.corba.se.spi.monitoring.LongMonitoredAttributeBase;
 import com.sun.istack.internal.Nullable;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import managers.FileOperationsManager;
 
 import java.io.File;
 import java.util.Collection;
@@ -66,19 +60,19 @@ public class Alerts {
     /**
      * Tell the that they are trying to move/rename a file to/in a directory where a file with that name exists.
      *
-     * @param directory the directory to/in which they are trying to move/rename a file
-     * @param file the file they are trying to move/rename
+     * @param directory the directory in which there is an existing file
+     * @param file the file they are trying to place in the directory
      * @param filter which names to avoid when selecting a suffixed name
-     * @return
+     * @return the file name with a numerical suffix
      */
-    private static String showFileExistsAlert(File directory, File file, @Nullable Collection filter){
+    public static String showFileExistsAlert(File directory, File file, @Nullable Collection filter){
         // Get new file with a suffix
         String directoryPath = directory.getAbsolutePath()+"/";
 
-        String suffixedFileName = FileOperationsManager.getSuffixedFileName(file.getName(), directory);
+        String suffixedFileName = FileOperations.getSuffixedFileName(file.getName(), directory);
 
         while (filter != null && filter.contains(suffixedFileName)){
-            suffixedFileName = FileOperationsManager.getSuffixedFileName(suffixedFileName, directory);
+            suffixedFileName = FileOperations.getSuffixedFileName(suffixedFileName, directory);
         }
         // Ask user if they would like a suffixed name on the image
         ButtonType renameReqResponse = Alerts.showYesNoAlert("Could not rename file",
