@@ -1,9 +1,14 @@
 package utils;
 
+import com.sun.istack.internal.Nullable;
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
+import java.util.Collection;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -45,7 +50,7 @@ public class FileOperations {
      * @return a File object of the
      */
     public static String getSuffixedFileName(String existingFileName, File parentDirectory){
-        String fileExtension = getFileExtension(existingFileName);
+        String fileExtension = getFileExtension(new File(parentDirectory +"/"+existingFileName));
         String nameWithoutExt = existingFileName.substring(0, existingFileName.length() - fileExtension.length());
 
         int suffix = 1;
@@ -65,12 +70,13 @@ public class FileOperations {
     /**
      * Get the extension of a normal file.
      *
-     * @param fileName the name of the file
+     * @param file the file to check
      * @return the extension (includes the dot)
      */
-    public static String getFileExtension(String fileName){
+    public static String getFileExtension(File file){
         String fileExtension = null;
-        if (fileName.contains(".")){
+        String fileName = file.getName();
+        if (!file.isDirectory() && !file.isHidden() && fileName.contains(".")){
             fileExtension = fileName.substring(fileName.lastIndexOf("."));
         }
         return fileExtension;
@@ -99,5 +105,31 @@ public class FileOperations {
             status = -1;
         }
         return status;
+    }
+
+    /**
+     * Fetch files from a given directory
+     *
+     * @param directory the directory to fetch from
+     * @param acceptedExtensions a collection of extensions to filter the files with
+     * @return an arraylist of the fetched files (as File objects)
+     */
+    public static ArrayDeque<File> fetchFromDirectory(File directory, @Nullable Collection acceptedExtensions)
+            throws InvalidArgumentException {
+        if (!directory.isDirectory()){
+            throw new InvalidArgumentException(new String[]{"File passed in is not a directory."});
+        }
+        File[] filesInDirectory = directory.listFiles();
+        ArrayDeque<File> validFiles = new ArrayDeque<>();
+
+        if (filesInDirectory != null){
+            for (File file : filesInDirectory){
+                String fileExtension = FileOperations.getFileExtension(file);
+                if (fileExtension != null && acceptedExtensions.contains(fileExtension)){
+                    validFiles.add(file);
+                }
+            }
+        }
+        return validFiles;
     }
 }
