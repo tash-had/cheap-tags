@@ -1,6 +1,7 @@
 package managers;
 
 import com.sun.istack.internal.Nullable;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.control.ButtonType;
 import model.ImageFile;
 import utils.Alerts;
@@ -11,9 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -98,9 +97,42 @@ public class ImageFileOperationsManager {
         return newFile;
     }
 
-    public void fetchFromDirectory() {
-
+    /**
+     * Fetch images in a given directory
+     *
+     * @param directory the directory to fetch from
+     * @return a collection of ImageFile's representing each image fetched
+     */
+    public ArrayDeque<ImageFile> fetchImageFiles(File directory){
+        ArrayDeque<String> acceptedExtensions = new ArrayDeque<>();
+        ArrayDeque<ImageFile> filesToLoad = new ArrayDeque<>();
+        acceptedExtensions.addAll(Arrays.asList(".jpg", ".jpeg", ".png", ".bmp", ".tif"));
+        try {
+            ArrayDeque<File> filesFromDir = FileOperations.fetchFromDirectory(directory, acceptedExtensions);
+            for (File file : filesFromDir){
+                String fileName = file.getName();
+                if (UserDataManager.existsInMap(fileName)){
+                    ImageFile imageFile = UserDataManager.getImageFileWithName(fileName);
+                    if (!imageFile.getThisFile().getParentFile().getAbsolutePath().equals(directory.getAbsolutePath())){
+                        // Image does not match image that exists in directory!
+                        /*
+                        TODO:
+                        Figure out how to deal with this
+                         */
+                    }else {
+                        filesToLoad.add(imageFile);
+                    }
+                }else {
+                    ImageFile imageFile = new ImageFile(file);
+                    UserDataManager.addImageFileToMap(imageFile);
+                }
+            }
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
+        return filesToLoad;
     }
+
 
     // Store data
 
