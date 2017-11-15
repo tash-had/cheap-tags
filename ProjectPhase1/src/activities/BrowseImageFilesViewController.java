@@ -81,8 +81,7 @@ public class BrowseImageFilesViewController implements Initializable {
             allTags.add(tag.toString());
         }
 
-
-        System.out.println(targetDirectory.getPath());
+//        System.out.println(targetDirectory.getPath());
 
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
 
@@ -158,8 +157,6 @@ public class BrowseImageFilesViewController implements Initializable {
             }
         }
     }
-
-
 
 }
 
