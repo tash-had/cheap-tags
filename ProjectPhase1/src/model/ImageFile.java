@@ -1,3 +1,5 @@
+package model;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -6,7 +8,7 @@ import java.io.File;
 import java.lang.StringBuilder;
 
 
-//after the filemanager passes the file to this class, ImageFile will construct an imagefile object
+//after the filemanager passes the file to this class, model.ImageFile will construct an imagefile object
 //on it. But in this class, I haven't associated rename with tag.java
 public class ImageFile{
     private StringBuilder currentName; //the most current name of this image
@@ -21,7 +23,7 @@ public class ImageFile{
 
 
     /**
-     * Construct a new ImageFile object.
+     * Construct a new model.ImageFile object.
      * @param oneImageFile is the actual imagefile(eg.image.jpeg)
      */
     public ImageFile(File oneImageFile){
@@ -41,7 +43,7 @@ public class ImageFile{
      * Change the name
      * @param newTag is the new tag which will be added to the file name)
      * but this one is just to add tag not deleting tag!
-     * Also,the image would also be added to the arraylist in Tag class
+     * Also,the image would also be added to the arraylist in model.Tag class
      *
      */
     public boolean addTagOnImage(Tag newTag){
@@ -66,7 +68,7 @@ public class ImageFile{
          * Change the name
          * @param oldTag is the old tag which will be added to the file name)
          * but this one is just to remove tag not deleting tag!!!!!!!
-         * Also,the image would also be removed from the arraylist in Tag class
+         * Also,the image would also be removed from the arraylist in model.Tag class
          */
     public boolean removeTagOnImage(Tag oldTag){
         oldTag.deleteImage(this);

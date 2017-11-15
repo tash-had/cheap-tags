@@ -1,3 +1,5 @@
+package managers;
+
 import javafx.fxml.FXMLLoader;
 
 import javafx.scene.Parent;
@@ -26,7 +28,7 @@ public abstract class PrimaryStageManager {
      *
      * @param stage the primary stage of this application
      */
-    static void setPrimaryStage(Stage stage){
+    public static void setPrimaryStage(Stage stage){
         if (primaryStage == null){
             primaryStage = stage;
         }
@@ -45,7 +47,7 @@ public abstract class PrimaryStageManager {
      * Show the primary stage window
      *
      */
-    static void showPrimaryStage(){
+    public static void showPrimaryStage(){
         getPrimaryStage().show();
     }
 
@@ -66,7 +68,7 @@ public abstract class PrimaryStageManager {
      * @param windowTitle the title of the new window
      * @param fxmlPath the path of this FXML file relative to this class.
      */
-    static void setScreen(String windowTitle, String fxmlPath){
+    public static void setScreen(String windowTitle, String fxmlPath){
         getPrimaryStage().setTitle(windowTitle);
         getPrimaryStage().setScene(new Scene(getParentWithFXMLPath(fxmlPath),
                 getDefaultStageWidth(), getDefaultStageHeight()));
@@ -115,7 +117,7 @@ public abstract class PrimaryStageManager {
      *
      * @param width the width to set as default.
      * */
-    static void setDefaultStageWidth(double width) {
+    public static void setDefaultStageWidth(double width) {
         defaultStageWidth = width;
     }
 
@@ -134,7 +136,7 @@ public abstract class PrimaryStageManager {
      *
      * @param height the height to set as default
      */
-    static void setDefaultStageHeight(double height) {
+    public static void setDefaultStageHeight(double height) {
         defaultStageHeight = height;
     }
 
@@ -143,7 +145,7 @@ public abstract class PrimaryStageManager {
      *
      * @return the directory chosen by the user.
      */
-    static File getDirectoryWithChooser(){
+    public static File getDirectoryWithChooser(){
         DirectoryChooser directoryChooser=  new DirectoryChooser();
         directoryChooser.setTitle("Select a directory");
         return directoryChooser.showDialog(PrimaryStageManager.getPrimaryStage());

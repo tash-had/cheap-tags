@@ -1,13 +1,16 @@
-import javafx.collections.FXCollections;
+package activities;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import managers.PrimaryStageManager;
+import managers.TagManager;
+import model.Tag;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class TagScreenViewController implements Initializable {
@@ -64,6 +67,6 @@ public class TagScreenViewController implements Initializable {
 
     @FXML
     public void backButtonClicked(){
-        PrimaryStageManager.setScreen("Cheap Tags", "home_screen_view.fxml");
+        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 }

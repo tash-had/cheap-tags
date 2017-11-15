@@ -1,7 +1,10 @@
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import managers.ImageFileOperationsManager;
+import managers.PrimaryStageManager;
+import model.ImageFile;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Main extends Application{
@@ -11,9 +14,9 @@ public class Main extends Application{
         PrimaryStageManager.setPrimaryStage(primaryStage);
         PrimaryStageManager.setDefaultStageWidth(1080);
         PrimaryStageManager.setDefaultStageHeight(720);
-        PrimaryStageManager.setScreen("Cheap Tags", "home_screen_view.fxml");
+        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
         PrimaryStageManager.showPrimaryStage();
-
+        // ImageFileOperationsManager.renameImageFile(new ImageFile(new File("img.jpg")), null);
     }
     public static void main(String[] args){
         launch(args);
