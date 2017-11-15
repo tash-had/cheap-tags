@@ -58,7 +58,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     ArrayList<File> allImages = new ArrayList<>();
     ArrayList<String> allTags = new ArrayList<>();
-    ArrayList<String> exitingTags = new ArrayList<>();
+    ArrayList<String> selectedTags = new ArrayList<>();
     static String[] acceptedExtensions = new String[]{"jpg"};
 
     static FilenameFilter imgFilter = (dir, name) -> {
@@ -98,6 +98,8 @@ public class BrowseImageFilesViewController implements Initializable {
             imageSidePane.getItems().add(file.getName());
 
         }
+
+
 
 
 
@@ -151,6 +153,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 if (selectedImage.equals(allImages.get(i).getName())){
                    Image image = new Image(allImages.get(i).toURI().toString());
                    selectedImageView.setImage(image);
+                   NameOfFile.setText(selectedImage);
                    break;
                 }
             }
