@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -30,11 +31,11 @@ public class ImageFileOperationsManager {
      */
     public static File renameImageFile(ImageFile imageFile, String newName){
         File currentImageFile = imageFile.getThisFile();
-        String imageFilePath = currentImageFile.getParentFile().getAbsolutePath() +"/";
+        Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
         int renameStatus = FileOperations.renameFile(currentImageFile, newName);
         if (renameStatus == 1){
             UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
-            imageFilePath += newName;
+            imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
         }else if (renameStatus == -1){
             String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(),
                     new File(imageFilePath+newName),
@@ -56,7 +57,7 @@ public class ImageFileOperationsManager {
             // Show error alert dialog
             return currentImageFile;
         }
-        return new File(imageFilePath);
+        return imageFilePath.toFile();
     }
 
     /**
@@ -69,7 +70,7 @@ public class ImageFileOperationsManager {
         File oldFile = imageFile.getThisFile();
         File newDirectory = PrimaryStageManager.getDirectoryWithChooser();
         // A file object of the imagefile in the new directory
-        File newFile = new File(newDirectory.getAbsolutePath()+"/"+oldFile.getName());
+        File newFile = new File(newDirectory, oldFile.getName());
         int moveStatus = FileOperations.moveFile(oldFile, newDirectory.toPath());
 
         if (moveStatus == 1){
@@ -83,6 +84,7 @@ public class ImageFileOperationsManager {
                 (ie. setUnderWhichDirectory, imageFile.setFile, ...
                 Take steps to move this iamgeFile to suffixedFile.getParent()
                  */
+                // DO NOT USE THE BELOW "SLASH" IN THE FILE PATH!"
 //                newFile = new File(newDirectory.getAbsolutePath()+"/"+suffixedFileName);
                 // Make sure imageFile is renamed beforehand and its file attribute is reset with the new name before
                 // this line is run!
