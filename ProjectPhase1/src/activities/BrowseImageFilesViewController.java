@@ -148,7 +148,7 @@ public class BrowseImageFilesViewController implements Initializable {
         String selectedImage = imageSidePane.getSelectionModel().getSelectedItem();
         if (imageSidePane.getItems().indexOf(selectedImage) > -1){
             for (int i = 0; i < imageSidePane.getItems().size(); i++){
-                if (imageSidePane.getItems().get(i).equals(allImages.get(i).getName())){
+                if (selectedImage.equals(allImages.get(i).getName())){
                    Image image = new Image(allImages.get(i).toURI().toString());
                    selectedImageView.setImage(image);
                    break;
