@@ -86,6 +86,8 @@ public class BrowseImageFilesViewController implements Initializable {
         for (File file : allImages){
             imageSidePane.getItems().add(file.getName());
         }
+
+        
     }
 
     public static File getTargetDirectory() {

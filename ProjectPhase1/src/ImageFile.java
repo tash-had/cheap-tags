@@ -100,21 +100,6 @@ public class ImageFile{
     }
 
 
-    /**
-     * Change the directory to image
-     * @param newDirectory is the new directory where we will move file to)
-     */
-    public boolean changeImageDirectory(Path newDirectory){
-        StringBuilder targetDirectory = new StringBuilder();
-        String tempDirectory = newDirectory.toString();
-        targetDirectory.append(tempDirectory.replace('\\','/'));
-        tempDirectory = targetDirectory.toString() +"/" + this.previousName;
-        File tempFile = new File (tempDirectory);
-        this.thisFile = tempFile;
-        this.underWhichDirectory = tempFile.getParent();
-        return this.getThisFile().renameTo(tempFile);//Check the sequence here.
-    }
-
 
     //some getters
     public String getCurrentName(){

@@ -10,34 +10,51 @@ import java.util.UUID;
  */
 public class FileOperationsManager {
 
-    public void renameFile(Path path, String newName) throws IOException {
-        Files.move(path, path.resolveSibling(newName));
+    public boolean renameFile(ImageFile imageFile, String newName) {
+        File newFile = new File(imageFile.getTheParentpath() + "/" +
+                newName +imageFile.getImageType());
+        File currentImageFile = imageFile.getThisFile();
+        currentImageFile.renameTo(newFile);
+        if (!currentImageFile.renameTo(newFile)){
+            try{
+                if (!(newFile.exists())){
+                    Path currentFilePath = currentImageFile.toPath();
+                    Files.move(currentFilePath, currentFilePath.resolveSibling(newName));
+                    UserDataManager.resetImageFileKey(currentFilePath.getFileName().toString(), newName);
+                    return true;
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
-//
-//    /**
-//     * Change the directory to image
-//     * @param newDirectory is the new directory where we will move file to)
-//     */
-//    public void changeImageDirectory(File fileToMove, Path newDirectory){
-//        StringBuilder targetDirectory = new StringBuilder();
-//        char tempchar = '\\';
-//        String tempDirectory = newDirectory.toString();
-//        for(int i=0;i<tempDirectory.length();i++){
-//            if(tempDirectory.charAt(i)==tempchar){
-//                targetDirectory.append("/");
-//            }
-//            else {
-//                targetDirectory.append(tempDirectory.charAt(i));
-//            }
-//        }
-//        tempDirectory = targetDirectory.toString() +"/" + this.previousName;
-//        File tempfile = new File (tempDirectory);
-//        this.movingSuccess=this.getthisFile().renameTo(tempfile);
-//        this.thisFile = tempfile;
-//        this.underWhichDirectory = tempfile.getParent();
-//    }
+
+
+    /**
+     * Change the directory to image
+     * @param newDirectory is the new directory where we will move file to)
+     */
+    public boolean changeImageDirectory(ImageFile imageFile, Path newDirectory){
+        StringBuilder targetDirectory = new StringBuilder();
+        String newDirectoryString = newDirectory.toString();
+
+        targetDirectory.append(newDirectoryString.replace('\\','/'));
+
+        newDirectoryString = targetDirectory.toString() +"/" + imageFile.getCurrentName();
+        File newFile = new File (newDirectoryString);
+
+        imageFile.setUnderWhichDirectory(newFile.getPath());
+
+        boolean res = imageFile.getThisFile().renameTo(newFile);
+        imageFile.setFile(newFile);
+        return res;
+    }
+
+
 
     public void fetchFromDirectory(){
+
 
     }
 
