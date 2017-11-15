@@ -25,7 +25,7 @@ public class FileOperations {
      * @return 0 on failure, 1 on success and -1 on failure due to existing file
      */
     public static int renameFile(File file, String newName) {
-        File newFile = new File(file.getParentFile().getAbsolutePath() + "/" + newName);
+        File newFile = new File(file.getParentFile().getAbsolutePath(), newName);
         int status = 0;
         try {
             if (!(newFile.exists())) {
@@ -50,7 +50,7 @@ public class FileOperations {
      * @return a File object of the
      */
     public static String getSuffixedFileName(String existingFileName, File parentDirectory){
-        String fileExtension = getFileExtension(new File(parentDirectory +"/"+existingFileName));
+        String fileExtension = getFileExtension(new File(parentDirectory, existingFileName));
         String nameWithoutExt = existingFileName.substring(0, existingFileName.length() - fileExtension.length());
 
         int suffix = 1;
@@ -90,7 +90,7 @@ public class FileOperations {
      * @return 0 on failure, 1 on success and -1 on failure due to existing file
      */
     public static int moveFile(File file, Path destinationDirectory){
-        File newFile = destinationDirectory.toFile();
+        File newFile = new File(destinationDirectory.toFile(), file.getName());
         int status = 0;
 
         if (!newFile.exists()){
