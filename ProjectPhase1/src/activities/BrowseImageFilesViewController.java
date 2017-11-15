@@ -70,6 +70,8 @@ public class BrowseImageFilesViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        // clear
+        allTags.clear();
         for (Tag tag: TagManager.getTagList()){
             allTags.add(tag.toString());
         }

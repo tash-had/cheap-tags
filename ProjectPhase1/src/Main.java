@@ -16,7 +16,7 @@ public class Main extends Application{
         PrimaryStageManager.setDefaultStageHeight(720);
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
         PrimaryStageManager.showPrimaryStage();
-        ImageFileOperationsManager.renameImageFile(new ImageFile(new File("img.jpg")), null);
+//        ImageFileOperationsManager.renameImageFile(new ImageFile(new File("img.jpg")), null);
     }
     public static void main(String[] args){
         launch(args);
