@@ -10,12 +10,13 @@
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
             <ListView fx:id="imageSidePane" layoutX="-2.0" layoutY="-2.0" prefHeight="723.0" prefWidth="322.0" />
+            <Button fx:id="ChooseImage" layoutX="197.0" layoutY="677.0" mnemonicParsing="false" onAction="#ChooseImageClick" text="Choose Image" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="443.0">
          <children>
             <ImageView fx:id="selectedImageView" fitHeight="292.0" fitWidth="250.0" layoutX="89.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
             <ListView layoutX="74.0" layoutY="417.0" prefHeight="150.0" prefWidth="296.0" />
-            <Button fx:id="ChangedDirectory" layoutX="66.0" layoutY="633.0" mnemonicParsing="false" onAction="#changeDirectoryButtonClicked" prefHeight="40.0" prefWidth="163.0" text="Change Directory" />
+            <Button fx:id="ChangedDirectory" layoutX="66.0" layoutY="633.0" mnemonicParsing="false" onAction="#changeDirectoryButtonClicked" prefHeight="40.0" prefWidth="163.0" text="Move Image" />
             <Button fx:id="back" layoutX="295.0" layoutY="630.0" mnemonicParsing="false" onAction="#backButtonClick" prefHeight="40.0" prefWidth="112.0" text="Back" />
             <Label layoutX="119.0" layoutY="26.0" prefHeight="27.0" prefWidth="215.0" text="Name the image" />
             <Button layoutX="168.0" layoutY="352.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="112.0" text="Revision Log" />

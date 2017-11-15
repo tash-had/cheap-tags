@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import managers.PrimaryStageManager;
 import managers.TagManager;
@@ -52,6 +53,8 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     ListView<String> imageSidePane;
 
+    @FXML
+    Button ChooseImage;
 
     ArrayList<File> allImages = new ArrayList<>();
     ArrayList<String> allTags = new ArrayList<>();
@@ -72,13 +75,19 @@ public class BrowseImageFilesViewController implements Initializable {
 
         // clear
         allTags.clear();
+        // import all tags from taglist to the scene
+
         for (Tag tag: TagManager.getTagList()){
             allTags.add(tag.toString());
         }
 
 
         System.out.println(targetDirectory.getPath());
+
+        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
+
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
+
         ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, allTags);
 
         if (targetDirectory.isDirectory()){
@@ -89,7 +98,12 @@ public class BrowseImageFilesViewController implements Initializable {
 
         for (File file : allImages){
             imageSidePane.getItems().add(file.getName());
+
         }
+
+
+
+        
     }
 
     public static File getTargetDirectory() {
@@ -101,17 +115,26 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
 
+    /**
+     * when the user click the back button, it should take users back to the main screen
+     */
     @FXML
     public void backButtonClick(){
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
+    /**
+     * When the user click the add button under Tags, the selected tag should be removed from Tags and added to exitingTags
+     */
+
     @FXML
     public void addButtonClick() {
         String selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
-        if (allTagsListView.getItems().indexOf(selectedTag) > -1)
+        if (allTagsListView.getItems().indexOf(selectedTag) > -1){
             allTagsListView.getItems().remove(selectedTag);
-        existingTags.getItems().add(selectedTag);
+            existingTags.getItems().add(selectedTag);
+        }
+
     }
 
     @FXML
@@ -120,6 +143,20 @@ public class BrowseImageFilesViewController implements Initializable {
 //        if (selectedFile != null) {
 //            managers.ImageFileOperationsManager.changeImageDirectory(currentDisplayedImage, selectedFile.getPath());
 //        }
+    }
+
+    @FXML
+    public void ChooseImageClick(){
+        String selectedImage = imageSidePane.getSelectionModel().getSelectedItem();
+        if (imageSidePane.getItems().indexOf(selectedImage) > -1){
+            for (int i = 0; i < imageSidePane.getItems().size(); i++){
+                if (selectedImage.equals(allImages.get(i).getName())){
+                   Image image = new Image(allImages.get(i).toURI().toString());
+                   selectedImageView.setImage(image);
+                   break;
+                }
+            }
+        }
     }
 
 
