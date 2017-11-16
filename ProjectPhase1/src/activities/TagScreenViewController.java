@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import managers.PrimaryStageManager;
 import managers.TagManager;
 import model.Tag;
+import utils.Alerts;
 
 import javax.swing.*;
 import java.net.URL;
@@ -58,12 +59,32 @@ public class TagScreenViewController implements Initializable {
 
     @FXML
     public void addButtonClicked(){
-        if (tagInput.getText() != null){
-            Tag newTag = new Tag(tagInput.getText());
-            TagManager.addTag(newTag);
-            tagView.getItems().add(newTag);
-            tagInput.clear();
-            tagInput.requestFocus();
+        // tagInput checks if text box is empty since we cant have a tag with empty string as name.
+        if (tagInput.getText() != null && !tagInput.getText().equals("")) {
+
+            // check if the input matches an already existing tag. If it exists, show an alert. Else, proceed
+            // and add the tag.
+            int duplicateExists = 0;
+            for (Tag eachTag : TagManager.getTagList()) {
+                if (eachTag.name.equals(tagInput.getText())) {
+                    duplicateExists += 1;
+                }
+            }
+
+            // duplicate is not 0, so there was an already existing tag which matched the name.
+            if (duplicateExists != 0) {
+                Alerts.showTagExistsAlert();
+                tagInput.clear();
+            }
+
+            // else there are no duplicates, proceed with adding tag to the tag list.
+            else {
+                Tag newTag = new Tag(tagInput.getText());
+                TagManager.addTag(newTag);
+                tagView.getItems().add(newTag);
+                tagInput.clear();
+                tagInput.requestFocus();
+            }
         }
     }
 
@@ -92,5 +113,6 @@ public class TagScreenViewController implements Initializable {
     TODO: no duplicate tags,
     TODO: no empty tags,
     TODO: set initial focus on tagInput
+    TODO: decide if we want example tag on opening tag screen, if it is empty.
      */
 }

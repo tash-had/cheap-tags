@@ -85,4 +85,10 @@ public class Alerts {
         }
         return null;
     }
+
+    public static void showTagExistsAlert(){
+        Alert tagExistsDialog = new Alert(Alert.AlertType.NONE, "A tag with this name already exists. " +
+                "Please select a different name.", ButtonType.CLOSE);
+        tagExistsDialog.showAndWait();
+    }
 }
