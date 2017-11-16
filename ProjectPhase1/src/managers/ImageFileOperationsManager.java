@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import model.Tag;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -31,11 +32,13 @@ public class ImageFileOperationsManager {
     public static File renameImageFile(ImageFile imageFile, String newName){
         File currentImageFile = imageFile.getThisFile();
         String imageFilePath = currentImageFile.getParentFile().getAbsolutePath() +"/";
+        imageFile.generalReName(newName);//everytime user rename the image, the information inside imagefile will also change.
         int renameStatus = FileOperations.renameFile(currentImageFile, newName);
         if (renameStatus == 1){
             UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
             imageFilePath += newName;
         }else if (renameStatus == -1){
+            //where should we put the suffix inside the filename?
             String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(),
                     new File(imageFilePath+newName),
                     UserDataManager.getImageFileNames());
@@ -44,6 +47,7 @@ public class ImageFileOperationsManager {
                   TODO:
                   Do steps required for a rename in imageFile
                  */
+                //check the imageFile.generalReName(newName) above
                 renameImageFile(imageFile, suffixedFileName);
             }else {
                 /*
@@ -70,13 +74,14 @@ public class ImageFileOperationsManager {
         File newDirectory = PrimaryStageManager.getDirectoryWithChooser();
         // A file object of the imagefile in the new directory
         File newFile = new File(newDirectory.getAbsolutePath()+"/"+oldFile.getName());
-        int moveStatus = FileOperations.moveFile(oldFile, newDirectory.toPath());
-
+        int moveStatus = FileOperations.moveFile(oldFile, newDirectory.toPath());//when we use file.Move, shouldn't the target directory include the image name?
         if (moveStatus == 1){
             return newFile;
         }else if(moveStatus == -1){
             String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile, null);
             if (suffixedFileName != null){
+                //where should we put the suffix inside the filename?
+                //
                 /*
                 TODO:
                 Take steps to rename this imageFile to suffixedFile.getName()
@@ -117,7 +122,7 @@ public class ImageFileOperationsManager {
                         // Image does not match image that exists in directory!
                         /*
                         TODO:
-                        Figure out how to deal with this
+                        Figure out how to deal with this.. show text input dialog askk for new name
                          */
                     }else {
                         filesToLoad.add(imageFile);
