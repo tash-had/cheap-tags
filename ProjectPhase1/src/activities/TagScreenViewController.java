@@ -1,15 +1,20 @@
 package activities;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import managers.PrimaryStageManager;
 import managers.TagManager;
 import model.Tag;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,12 +39,20 @@ public class TagScreenViewController implements Initializable {
     Pane pane;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        Tag tag1 = new Tag("June");
-        TagManager.addTag(tag1);
-        tagView.getItems().clear();
-        for (Tag tag : TagManager.getTagList()) {
-            tagView.getItems().add(tag);
+    public void initialize(URL location, ResourceBundle resources){
+
+        // If TagManager is empty, show example tag
+        if (TagManager.getTagList().isEmpty()){
+            tagView.getItems().clear();
+            tagView.getItems().add(new Tag("June"));
+        }
+
+        // else TagManager isn't empty, display all tags.
+        else {
+            tagView.getItems().clear();
+            for (Tag tag : TagManager.getTagList()) {
+                tagView.getItems().add(tag);
+            }
         }
     }
 
@@ -50,9 +63,7 @@ public class TagScreenViewController implements Initializable {
             TagManager.addTag(newTag);
             tagView.getItems().add(newTag);
             tagInput.clear();
-            for (Tag t : TagManager.getTagList()){
-                System.out.println(t);
-            }
+            tagInput.requestFocus();
         }
     }
 
@@ -69,4 +80,17 @@ public class TagScreenViewController implements Initializable {
     public void backButtonClicked(){
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
+
+    @FXML
+    public void handleEnterPressed(KeyEvent ke){
+        if (ke.getCode() == KeyCode.ENTER){
+            addButtonClicked();
+        }
+    }
+
+    /*
+    TODO: no duplicate tags,
+    TODO: no empty tags,
+    TODO: set initial focus on tagInput
+     */
 }

@@ -13,8 +13,11 @@ import java.util.ResourceBundle;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.TagManager;
+import managers.UserDataManager;
+import model.ImageFile;
 import model.Tag;
 import utils.ConfigureJFXControl;
 
@@ -60,6 +63,7 @@ public class BrowseImageFilesViewController implements Initializable {
     ArrayList<String> allTags = new ArrayList<>();
     ArrayList<String> selectedTags = new ArrayList<>();
     static String[] acceptedExtensions = new String[]{"jpg"};
+    File selectedFile;
 
     static FilenameFilter imgFilter = (dir, name) -> {
         for (String ext : acceptedExtensions)
@@ -69,18 +73,25 @@ public class BrowseImageFilesViewController implements Initializable {
         return false;
     };
 
+    @FXML
+    Button rename;
+
+    @FXML
+    ListView<String> RevisionLog;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        // clear
+        allTags.clear();
         // import all tags from taglist to the scene
 
         for (Tag tag: TagManager.getTagList()){
             allTags.add(tag.toString());
         }
 
-
-        System.out.println(targetDirectory.getPath());
+//        System.out.println(targetDirectory.getPath());
 
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
 
@@ -133,6 +144,7 @@ public class BrowseImageFilesViewController implements Initializable {
         if (allTagsListView.getItems().indexOf(selectedTag) > -1){
             allTagsListView.getItems().remove(selectedTag);
             existingTags.getItems().add(selectedTag);
+            selectedTags.add(selectedTag);
         }
 
     }
@@ -154,13 +166,35 @@ public class BrowseImageFilesViewController implements Initializable {
                    Image image = new Image(allImages.get(i).toURI().toString());
                    selectedImageView.setImage(image);
                    NameOfFile.setText(selectedImage);
+                   selectedFile = allImages.get(i);
                    break;
                 }
             }
         }
     }
 
+    @FXML
+    public void renameButtonClick(){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < selectedTags.size()-1; i++){
+            sb.append("@" + selectedTags.get(i) + " ");
+        }
+        sb.append("@" + selectedTags.get(selectedTags.size()-1) + ".jpg");
 
+        //todo: need to track UDI, instead of name
+        ImageFileOperationsManager.renameImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()), sb.toString());
+    }
+
+    @FXML
+    public void deleteButtonClick(){
+        String selectedTag = existingTags.getSelectionModel().getSelectedItem();
+        if (existingTags.getItems().size() > -1){
+            existingTags.getItems().remove(selectedTag);
+            selectedTags.remove(selectedTag);
+            allTagsListView.getItems().add(selectedTag);
+            allTags.add(selectedTag);
+        }
+    }
 
 }
 
