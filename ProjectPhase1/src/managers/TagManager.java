@@ -40,4 +40,13 @@ public class TagManager {
     public static ArrayList<Tag> getTagList(){
         return tagList;
     }
+
+    public static Tag getTagByString(String stringOfTag){
+        for(Tag i: TagManager.tagList){
+            if(i.toString().equals(stringOfTag)){
+                return i;
+            }
+        }
+        return null;
+    }
 }
