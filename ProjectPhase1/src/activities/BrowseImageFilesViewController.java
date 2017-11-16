@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.DirectoryChooser;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.TagManager;
@@ -24,7 +25,6 @@ import utils.ConfigureJFXControl;
 
 public class BrowseImageFilesViewController implements Initializable {
     private static File targetDirectory;
-    private static File currentDisplayedImage;
 
     @FXML
     ListView<String> allTagsListView;
@@ -63,6 +63,10 @@ public class BrowseImageFilesViewController implements Initializable {
     ArrayList<String> allTags = new ArrayList<>();
     ArrayList<String> selectedTags = new ArrayList<>();
     static String[] acceptedExtensions = new String[]{"jpg"};
+
+    /**
+     * The file object that is the currently displayed image
+     */
     File selectedFile;
 
     static FilenameFilter imgFilter = (dir, name) -> {
@@ -149,13 +153,6 @@ public class BrowseImageFilesViewController implements Initializable {
 
     }
 
-    @FXML
-    public void changeDirectoryButtonClicked(){
-//        File selectedFile = activities.managers.PrimaryStageManager.getDirectoryWithChooser();
-//        if (selectedFile != null) {
-//            managers.ImageFileOperationsManager.changeImageDirectory(currentDisplayedImage, selectedFile.getPath());
-//        }
-    }
 
     @FXML
     public void ChooseImageClick(){
@@ -194,6 +191,14 @@ public class BrowseImageFilesViewController implements Initializable {
             allTagsListView.getItems().add(selectedTag);
             allTags.add(selectedTag);
         }
+    }
+
+    @FXML
+    public void moveImageButtonClick(){
+        ImageFileOperationsManager.moveImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()));
+        /* TODO: after image is moved from this directory, remove its name from image pane on the right.
+
+         */
     }
 
 }
