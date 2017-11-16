@@ -39,24 +39,27 @@ public class TagScreenViewController implements Initializable {
     @FXML
     Pane pane;
 
+    /**
+     * Initializes the tag screen. Fills tagView with Tags in TagManager and displays them.
+     *
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources){
 
-        // If TagManager is empty, show example tag
-        if (TagManager.getTagList().isEmpty()){
-            tagView.getItems().clear();
-            tagView.getItems().add(new Tag("June"));
-        }
-
-        // else TagManager isn't empty, display all tags.
-        else {
+        // clears tagView to prevent duplication after reinitializing the scene and re-adds all the tags from TagManager
             tagView.getItems().clear();
             for (Tag tag : TagManager.getTagList()) {
                 tagView.getItems().add(tag);
             }
-        }
     }
 
+    /**
+     * Handles when add button is clicked. Creates a tag with name = text input and adds it to the tag list on screen.
+     * Empty input cannot be added, also shows alert if user trying to create duplicate tag i.e. create another tag
+     * with same name.
+     */
     @FXML
     public void addButtonClicked(){
         // tagInput checks if text box is empty since we cant have a tag with empty string as name.
@@ -88,6 +91,10 @@ public class TagScreenViewController implements Initializable {
         }
     }
 
+    /**
+     * Handles when delete button is clicked. Removes selected Tag from the list on screen and removes selected Tag
+     * from list in TagManager.
+     */
     @FXML
     public void deleteButtonClicked(){
         int index = tagView.getSelectionModel().getSelectedIndex();
@@ -97,11 +104,19 @@ public class TagScreenViewController implements Initializable {
         }
     }
 
+    /**
+     * Changes scene to home screen.
+     */
     @FXML
     public void backButtonClicked(){
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
+    /**
+     * Calls add button if user presses ENTER key.
+     *
+     * @param ke key that the user has pressed.
+     */
     @FXML
     public void handleEnterPressed(KeyEvent ke){
         if (ke.getCode() == KeyCode.ENTER){
@@ -110,8 +125,6 @@ public class TagScreenViewController implements Initializable {
     }
 
     /*
-    TODO: no duplicate tags,
-    TODO: no empty tags,
     TODO: set initial focus on tagInput
     TODO: decide if we want example tag on opening tag screen, if it is empty.
      */
