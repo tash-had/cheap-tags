@@ -10,6 +10,7 @@ import java.lang.StringBuilder;
 
 //after the filemanager passes the file to this class, model.ImageFile will construct an imagefile object
 //on it. But in this class, I haven't associated rename with tag.java
+//Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
 public class ImageFile{
     private StringBuilder currentName; //the most current name of this image
     private String previousName; //the last version of image name
@@ -30,7 +31,6 @@ public class ImageFile{
         currentName = new StringBuilder();
         originalName = oneImageFile.getName();
         currentName.append(originalName);
-        previousName = oneImageFile.getName();
         oldName = new ArrayList<String[]>();
         underWhichDirectory = oneImageFile.getParent();
         thisFile = oneImageFile;
@@ -45,22 +45,22 @@ public class ImageFile{
      * but this one is just to add tag not deleting tag!
      * Also,the image would also be added to the arraylist in model.Tag class
      *
+     *
      */
-    public boolean addTagOnImage(Tag newTag){
+    public void addTagOnImage(Tag newTag){
+        String tempName = currentName.toString();
         newTag.addImage(this);
         String tempTag ="@"+newTag.toString();
         if(!tagList.contains(tempTag)){
-            this.tagList.add(tempTag);
-        }
+            this.tagList.add(tempTag); }
         Long timeStamp = System.currentTimeMillis();
         currentName.insert(0,(tempTag+" "));
-        String[] tempLog = {currentName.toString(),previousName,timeStamp.toString()};
+        String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
         this.oldName.add(tempLog);
-        previousName = currentName.toString();
-        String targetName = this.underWhichDirectory+previousName+this.imageType;
-        File tempFile = new File (targetName);
-        this.thisFile = tempFile;
-        return this.getThisFile().renameTo(tempFile);
+        tempName = currentName.toString();
+        String targetName = this.underWhichDirectory+tempName+this.imageType;
+        this.thisFile = new File (targetName);
+
     }
 
 
@@ -70,19 +70,20 @@ public class ImageFile{
          * but this one is just to remove tag not deleting tag!!!!!!!
          * Also,the image would also be removed from the arraylist in model.Tag class
          */
-    public boolean removeTagOnImage(Tag oldTag){
+    public void removeTagOnImage(Tag oldTag){
+        String tempName = currentName.toString();
         oldTag.deleteImage(this);
         String tempTag = oldTag.toString();
         if(!tagList.contains(tempTag)){
             this.tagList.add(tempTag);
         }
         for(int i = 0;i<this.tagList.size();i++){
-            if(this.tagList.get(i)==tempTag){
+            if(this.tagList.get(i).equals(tempTag)){
                 this.tagList.remove(i);
             }
         }
         Long timeStamp = System.currentTimeMillis();
-        String[] currentNameSplit = previousName.split("\\b");
+        String[] currentNameSplit = tempName.split("\\b");
         currentName = new StringBuilder();
         for(String i:currentNameSplit){
             if(i.equals(tempTag)){
@@ -92,15 +93,28 @@ public class ImageFile{
                 currentName.append(i);
             }
         }
-        String[] tempLog = {currentName.toString(),previousName,timeStamp.toString()};
+        String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
         this.oldName.add(tempLog);
-        previousName = currentName.toString();
-        String targetName = this.underWhichDirectory+previousName+this.imageType;
-        File tempFile = new File (targetName);
-        this.thisFile = tempFile;
-        return this.getThisFile().renameTo(tempFile);
+        tempName = currentName.toString();
+        String targetName = this.underWhichDirectory+tempName+this.imageType;
+        this.thisFile = new File (targetName);
     }
 
+    /**
+     * Change inner information of an imagefile class based on given String
+     * @param newName
+     */
+    public void generalReName(String newName){
+        String tempName = currentName.toString();
+        currentName = new StringBuilder();
+        currentName.append(newName);
+        currentName.append(this.imageType);
+        Long timeStamp = System.currentTimeMillis();
+        String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
+        this.oldName.add(tempLog);
+        String targetName = this.underWhichDirectory+tempName+this.imageType;
+        this.thisFile = new File(targetName);
+    }
 
 
     //some getters
