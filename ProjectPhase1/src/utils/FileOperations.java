@@ -11,6 +11,7 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static utils.FileOperations.FileOperationsResponse.*;
 
 /**
  * This class contains exclusively of static methods that operate on files or attributes of files.
@@ -18,27 +19,34 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class FileOperations {
 
     /**
+     * Enum class to hold response types
+     */
+    public enum  FileOperationsResponse{
+        SUCCESS, FAILURE, FILENAME_TAKEN
+    }
+
+    private FileOperationsResponse response;
+    /**
      * Rename a given file.
      *
      * @param file the file to rename
      * @param newName the new name for the given file, including extension
      * @return 0 on failure, 1 on success and -1 on failure due to existing file
      */
-    public static int renameFile(File file, String newName) {
+    public static FileOperationsResponse renameFile(File file, String newName) {
         File newFile = new File(file.getParentFile().getAbsolutePath(), newName);
-        int status = 0;
         try {
             if (!(newFile.exists())) {
                 Path currentFilePath = file.toPath();
                 Files.move(currentFilePath, currentFilePath.resolveSibling(newName));
-                status = 1;
+                return SUCCESS;
             }else {
-                status = -1;
+                return FILENAME_TAKEN;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return status;
+        return FAILURE;
     }
 
     /**
@@ -49,7 +57,7 @@ public class FileOperations {
      * @param parentDirectory the parent directory
      * @return a File object of the
      */
-    public static String getSuffixedFileName(String existingFileName, File parentDirectory){
+    public static String getSuffixedFileName(File parentDirectory, String existingFileName){
         String fileExtension = getFileExtension(new File(parentDirectory, existingFileName));
         String nameWithoutExt = existingFileName.substring(0, existingFileName.length() - fileExtension.length());
 
@@ -58,6 +66,7 @@ public class FileOperations {
         String newName = nameWithoutExt + "("+Integer.toString(suffix)+")"+fileExtension;
         File newFile = new File(baseFilePath + newName);
 
+        // Loop to ensure suffixed file name does not exist.
         while(newFile.exists()){
             newName = nameWithoutExt +"("+Integer.toString(suffix)+")"+fileExtension;
             newFile = new File(baseFilePath + newName);
@@ -89,22 +98,21 @@ public class FileOperations {
      * @param destinationDirectory where to move the file
      * @return 0 on failure, 1 on success and -1 on failure due to existing file
      */
-    public static int moveFile(File file, Path destinationDirectory){
+    public static FileOperationsResponse moveFile(File file, Path destinationDirectory){
         File newFile = new File(destinationDirectory.toFile(), file.getName());
-        int status = 0;
 
         if (!newFile.exists()){
             Path sourcePath = file.toPath();
             try {
                 Files.move(sourcePath, destinationDirectory.resolve(sourcePath.getFileName()), REPLACE_EXISTING);
-                status = 1;
+                return SUCCESS;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }else{
-            status = -1;
+            return FILENAME_TAKEN;
         }
-        return status;
+        return FAILURE;
     }
 
     /**
