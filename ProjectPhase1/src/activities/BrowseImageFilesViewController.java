@@ -46,8 +46,6 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label Tags;
 
-    @FXML
-    Button Add;
 
     @FXML
     Button Delete;
@@ -142,7 +140,9 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     /**
-     * When the user click the add button under Tags, the selected tag should be removed from Tags and added to exitingTags
+     * Handle the click on tags
+     * add the tag under the selected image
+     * remove the tag from all tags view
      */
 
     @FXML
@@ -201,7 +201,7 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     /**
-     * Delete the tags from selected tags
+     * Delete the tag from selected tags when user click the button or click the tag
      * Put it back to all tags list
      */
     @FXML
@@ -210,7 +210,7 @@ public class BrowseImageFilesViewController implements Initializable {
         if (selectedFile == null){
             Alerts.chooseFileAlert();
         }
-        else if (existingTags.getItems().size() > -1){
+        else if (existingTags.getItems().size() > 0 && selectedTag != null){
             existingTags.getItems().remove(selectedTag);
             selectedTags.remove(selectedTag);
             allTagsListView.getItems().add(selectedTag);
