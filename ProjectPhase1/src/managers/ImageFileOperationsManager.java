@@ -60,6 +60,37 @@ public class ImageFileOperationsManager {
     }
 
     /**
+     * Rename a given ImageFile but only take two parameters.
+     *
+     * @param imageFile the image to rename
+     * @param newName the new name
+     * @return a File object with the new name if successfully renamed, the old File object otherwise
+     */
+    public static File renameImageFile(ImageFile imageFile, String newName){
+        File currentImageFile = imageFile.getThisFile();
+        Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
+        FileOperationsResponse response =  renameFile(currentImageFile, newName);
+        if (response == SUCCESS){
+            imageFile.generalReName(newName);
+            UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
+            imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
+        }else if (response == FILENAME_TAKEN){
+            String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(), newName,
+                    UserDataManager.getImageFileNames());
+            // User accepted to a suffixed filename
+            if (suffixedFileName != null){
+                renameImageFile(imageFile, suffixedFileName);
+            }else {
+                return currentImageFile;
+            }
+        }else {
+            // Show error alert dialog
+            return currentImageFile;
+        }
+        return currentImageFile;
+    }
+
+    /**
      * Move an image to another directory
      *
      * @param imageFile the imageFile representing the image to move
