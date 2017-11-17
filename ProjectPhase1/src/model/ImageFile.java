@@ -13,14 +13,14 @@ import java.lang.StringBuilder;
 //Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
 public class ImageFile{
     private StringBuilder currentName; //the most current name of this image
-    private String previousName; //the last version of image name
-    private ArrayList<String> tagList; //the list of tag this image has.
+    private ArrayList<Tag> tagList; //the list of tag this image has.
     //oldName keeps track of all of the revision histories in the format of array [newname,previous name,timestamp]
     private ArrayList<String[]> oldName;
     private String originalName; //the original name of this image without any tag.
     private String underWhichDirectory; //the path for the parent folder of this image.
     private File thisFile;
     private String imageType; //the type of the string(eg. ".jpeg")
+    private String suffixForDuplicate; //
 
 
     /**
@@ -37,6 +37,7 @@ public class ImageFile{
         String c= oneImageFile.getName();
         String[] split = c.split("\\.");
         imageType = ("."+split[split.length-1]);
+        suffixForDuplicate = "";
     }
 
     /**
@@ -47,21 +48,21 @@ public class ImageFile{
      *
      *
      */
-    public void addTagOnImage(Tag newTag){
-        String tempName = currentName.toString();
-        newTag.addImage(this);
-        String tempTag ="@"+newTag.toString();
-        if(!tagList.contains(tempTag)){
-            this.tagList.add(tempTag); }
-        Long timeStamp = System.currentTimeMillis();
-        currentName.insert(0,(tempTag+" "));
-        String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
-        this.oldName.add(tempLog);
-        tempName = currentName.toString();
-        String targetName = this.underWhichDirectory+tempName+this.imageType;
-        this.thisFile = new File (targetName);
+    //public void addTagOnImage(Tag newTag){
+      //  String tempName = currentName.toString();
+        //newTag.addImage(this);
+      //  String tempTag ="@"+newTag.toString();
+       // if(!tagList.contains(tempTag)){
+        //    this.tagList.add(tempTag); }
+       // Long timeStamp = System.currentTimeMillis();
+       // currentName.insert(0,(tempTag+" "));
+        //String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
+        //this.oldName.add(tempLog);
+        //tempName = currentName.toString();
+        //String targetName = this.underWhichDirectory+tempName+this.imageType;
+        //this.thisFile = new File (targetName);
 
-    }
+    //}
 
 
         /**
@@ -70,45 +71,46 @@ public class ImageFile{
          * but this one is just to remove tag not deleting tag!!!!!!!
          * Also,the image would also be removed from the arraylist in model.Tag class
          */
-    public void removeTagOnImage(Tag oldTag){
-        String tempName = currentName.toString();
-        oldTag.deleteImage(this);
-        String tempTag = oldTag.toString();
-        if(!tagList.contains(tempTag)){
-            this.tagList.add(tempTag);
-        }
-        for(int i = 0;i<this.tagList.size();i++){
-            if(this.tagList.get(i).equals(tempTag)){
-                this.tagList.remove(i);
-            }
-        }
-        Long timeStamp = System.currentTimeMillis();
-        String[] currentNameSplit = tempName.split("\\b");
-        currentName = new StringBuilder();
-        for(String i:currentNameSplit){
-            if(i.equals(tempTag)){
-                continue;
-            }
-            else{
-                currentName.append(i);
-            }
-        }
-        String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
-        this.oldName.add(tempLog);
-        tempName = currentName.toString();
-        String targetName = this.underWhichDirectory+tempName+this.imageType;
-        this.thisFile = new File (targetName);
-    }
+    //public void removeTagOnImage(Tag oldTag){
+      //  String tempName = currentName.toString();
+        //oldTag.deleteImage(this);
+        //String tempTag = oldTag.toString();
+        //if(!tagList.contains(tempTag)){
+          //  this.tagList.add(tempTag);
+        //}
+        //for(int i = 0;i<this.tagList.size();i++){
+          //  if(this.tagList.get(i).equals(tempTag)){
+            //    this.tagList.remove(i);
+            //}
+        //}
+        //Long timeStamp = System.currentTimeMillis();
+        //String[] currentNameSplit = tempName.split("\\b");
+        //currentName = new StringBuilder();
+        //for(String i:currentNameSplit){
+          //  if(i.equals(tempTag)){
+            //    continue;
+            //}
+            //else{
+             //   currentName.append(i);
+        //    }
+       // }
+        //String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
+        //this.oldName.add(tempLog);
+        //tempName = currentName.toString();
+        //String targetName = this.underWhichDirectory+tempName+this.imageType;
+        //this.thisFile = new File (targetName);
+   //}
 
     /**
      * Change inner information of an imagefile class based on given String
      * @param newName
      */
-    public void generalReName(String newName){
+    public void generalReName(String newName, ArrayList<Tag> newTagList){
         String tempName = currentName.toString();
         currentName = new StringBuilder();
         currentName.append(newName);
         currentName.append(this.imageType);
+        tagList = newTagList;
         Long timeStamp = System.currentTimeMillis();
         String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
         this.oldName.add(tempLog);
@@ -133,7 +135,7 @@ public class ImageFile{
     public File getThisFile(){
         return this.thisFile;
     }
-    public ArrayList<String> getTagList(){return this.tagList;}
+    public ArrayList<Tag> getTagList(){return this.tagList;}
     public String getImageType(){ return this.imageType; }
 
 

@@ -13,9 +13,8 @@ public abstract class UserDataManager {
     TODO: Do not make this all static!
      */
     private static ArrayList<String> previousPathsVisited = new ArrayList<>();
-
-    private static HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>();
-    private static HashMap<String, ImageFile> nameToImageFileSessionMap = new HashMap<>();
+    private static HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>(); // contains all known images
+    private static HashMap<String, ImageFile> nameToImageFileSessionMap = new HashMap<>(); // contains images from this session only
 
     public static String[] getPreviousPathsVisited() {
         return previousPathsVisited.toArray(new String[previousPathsVisited.size()]);
@@ -72,6 +71,21 @@ public abstract class UserDataManager {
     private static HashMap<String, ImageFile> getNameToImageFileMap() {
         return nameToImageFileMap;
     }
+
+    //Some setter and getter used only by UserDataSaver and UserDataGetter
+    public static HashMap<String, ImageFile> getNameToImageFileMapForDataSaver() {
+        return nameToImageFileMap;
+    }
+    public static void NameToImageFileMapSetterForDataGetter(HashMap<String, ImageFile> newOne){
+        nameToImageFileMap = newOne;
+    }
+    public static ArrayList<String> previousPathsVisitedGetterForDataSaver(){
+        return previousPathsVisited;
+    }
+    public static void previousPathsVisitedSetterForDataGetter(ArrayList<String> newList){
+        previousPathsVisited = newList;
+    }
+
 
 
     // prep data

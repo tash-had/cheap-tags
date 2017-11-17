@@ -4,6 +4,7 @@ import com.sun.istack.internal.Nullable;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.control.ButtonType;
 import model.ImageFile;
+import model.Tag;
 import utils.Alerts;
 import utils.FileOperations;
 
@@ -34,12 +35,12 @@ public class ImageFileOperationsManager {
      * @param newName the new name
      * @return a File object with the new name if successfully renamed, the old File object otherwise
      */
-    public static File renameImageFile(ImageFile imageFile, String newName){
+    public static File renameImageFile(ImageFile imageFile, String newName, ArrayList<Tag> newTagList ){
         File currentImageFile = imageFile.getThisFile();
         Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
         FileOperationsResponse response =  renameFile(currentImageFile, newName);
         if (response == SUCCESS){
-            imageFile.generalReName(newName);
+            imageFile.generalReName(newName,newTagList);
             UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
         }else if (response == FILENAME_TAKEN){
@@ -47,7 +48,7 @@ public class ImageFileOperationsManager {
                     UserDataManager.getImageFileNames());
             // User accepted to a suffixed filename
             if (suffixedFileName != null){
-                renameImageFile(imageFile, suffixedFileName);
+                renameImageFile(imageFile, suffixedFileName, newTagList);
             }else {
                 return currentImageFile;
             }
