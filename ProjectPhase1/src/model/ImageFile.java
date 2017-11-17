@@ -119,6 +119,24 @@ public class ImageFile{
     }
 
 
+    /**
+     * override the generalReNameFunction but only take one parameter.
+     * Change inner information of an imagefile class based on given String
+     * @param newName
+     */
+    public void generalReName(String newName){
+        String tempName = currentName.toString();
+        currentName = new StringBuilder();
+        currentName.append(newName);
+        currentName.append(this.imageType);
+        Long timeStamp = System.currentTimeMillis();
+        String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
+        this.oldName.add(tempLog);
+        String targetName = this.underWhichDirectory+tempName+this.imageType;
+        this.thisFile = new File(targetName);
+    }
+
+
     //some getters
     public String getCurrentName(){
         return this.currentName.toString();
