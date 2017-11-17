@@ -58,7 +58,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * A ListView of String displaying the past names that the File has had.
      */
     @FXML
-    ListView<String> RevisionLog;
+    ListView<String[]> RevisionLog;
 
     /**
      * Displays the currently selected file.
@@ -89,6 +89,12 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     Button back;
+
+    /**
+     * Reverts selected image to the selected old name.
+     */
+    @FXML
+    Button revert;
 
 //    @FXML
 //    ListView<String> imageSidePane;
@@ -343,6 +349,7 @@ public class BrowseImageFilesViewController implements Initializable {
         imageView.setOnMouseClicked(event -> {
             try {
                 selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
+                displayRevisionLog((ImageFile) imageView.getUserData());
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -374,11 +381,26 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * Reverts the current image to the selected previous name.
+     */
     @FXML
-    public void revisionLogClick(){
-
+    public void revertButtonClick(){
+        String[] specificRevision = RevisionLog.getSelectionModel().getSelectedItem();
+        ImageFile currImageFileObject = (ImageFile) selectedImageView.getUserData();
+        ImageFileOperationsManager.renameImageFile(currImageFileObject, specificRevision[1]);
     }
 
+    /**
+     * Displays the revision log of the image selected.
+     *
+     * @param imageFileObject stores the revision log of the selected image.
+     */
+    public void displayRevisionLog(ImageFile imageFileObject){
+        for (String[] eachLog: imageFileObject.getOldName()){
+            RevisionLog.getItems().add(eachLog);
+        }
+    }
 }
 
 
