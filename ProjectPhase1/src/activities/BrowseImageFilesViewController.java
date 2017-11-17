@@ -236,6 +236,7 @@ public class BrowseImageFilesViewController implements Initializable {
         }
         ImageView imageView = new ImageView();
         imageView.setImage(image);
+        imageView.setUserData(imageFile);
         imageView.setOnMouseClicked(event -> {
             try {
                 selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
