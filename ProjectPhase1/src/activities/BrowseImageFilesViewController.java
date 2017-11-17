@@ -182,21 +182,22 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Rename the file name in users operating system
      */
-
     @FXML
     public void renameButtonClick(){
         if (selectedFile == null){
             Alerts.chooseFileAlert();
         }
         else {
+            ImageFile image = new ImageFile(selectedFile);
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < selectedTags.size() - 1; i++) {
+
+            for (int i = 0; i < selectedTags.size(); i++) {
                 sb.append("@" + selectedTags.get(i) + " ");
             }
-            sb.append("@" + selectedTags.get(selectedTags.size() - 1) + ".jpg");
 
-            //todo: need to track UDI, instead of name
-            ImageFileOperationsManager.renameImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()), sb.toString());
+            sb.append(image.getOriginalName());
+
+            ImageFileOperationsManager.renameImageFile(image, sb.toString());
         }
     }
 

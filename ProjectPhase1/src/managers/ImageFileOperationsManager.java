@@ -14,14 +14,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import model.Tag;
+import java.util.logging.Logger;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static utils.FileOperations.FileOperationsResponse.*;
+import static utils.FileOperations.*;
 
 /**
  * This class manages how file operations for ImageFiles are handled
  */
 public class ImageFileOperationsManager {
+    private static final Logger logger = Logger.getAnonymousLogger();
+
+    public static String[] ACCEPTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tif"};
 
     /**
      * Rename a given ImageFile
@@ -34,16 +38,18 @@ public class ImageFileOperationsManager {
         File currentImageFile = imageFile.getThisFile();
         Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
         imageFile.generalReName(newName);//everytime user rename the image, the information inside imagefile will also change.
-        int renameStatus = FileOperations.renameFile(currentImageFile, newName);
-        if (renameStatus == 1){
+        FileOperationsResponse response =  renameFile(currentImageFile, newName);
+        if (response == SUCCESS){
             UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
-        }else if (renameStatus == -1){
+            imageFile.generalReName(newName);
+        }else if (response == FILENAME_TAKEN){
             //where should we put the suffix inside the filename?
             String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(),
                     new File(imageFilePath+newName),
                     UserDataManager.getImageFileNames());
             if (suffixedFileName != null){
+                imageFile.generalReName(suffixedFileName);
                 /*
                   TODO:
                   Do steps required for a rename in imageFile
@@ -75,26 +81,15 @@ public class ImageFileOperationsManager {
         File newDirectory = PrimaryStageManager.getDirectoryWithChooser();
         // A file object of the imagefile in the new directory
         File newFile = new File(newDirectory, oldFile.getName());
-        int moveStatus = FileOperations.moveFile(oldFile, newDirectory.toPath());//when we use file.Move, shouldn't the target directory include the image name?
+        FileOperationsResponse response = moveFile(oldFile, newDirectory.toPath());
 
-        if (moveStatus == 1){
+        if (response == SUCCESS){
             return newFile;
-        }else if(moveStatus == -1){
+        }else if(response == FILENAME_TAKEN){
             String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile, null);
             if (suffixedFileName != null){
-                //where should we put the suffix inside the filename?
-                //
-                /*
-                TODO:
-                Take steps to rename this imageFile to suffixedFile.getName()
-                (ie. setUnderWhichDirectory, imageFile.setFile, ...
-                Take steps to move this iamgeFile to suffixedFile.getParent()
-                 */
-                // DO NOT USE THE BELOW "SLASH" IN THE FILE PATH!"
-//                newFile = new File(newDirectory.getAbsolutePath()+"/"+suffixedFileName);
-                // Make sure imageFile is renamed beforehand and its file attribute is reset with the new name before
-                // this line is run!
-                FileOperations.moveFile(imageFile.getThisFile(), newDirectory.toPath());
+                imageFile.generalReName(suffixedFileName);
+                moveFile(imageFile.getThisFile(), newDirectory.toPath());
             }else{
                 // Dont move
                 newFile = null;
@@ -110,17 +105,24 @@ public class ImageFileOperationsManager {
      *
      * @param directory the directory to fetch from
      * @return a collection of ImageFile's representing each image fetched
+     *
+     * TODO:
+     * 1 - See if imageFile exists in database
+     * 2 - If it does, get our saved ImageFile and add it to the sessionMap
+     * 3 - If it does not, create a new ImageFile, store it in our database and our sessionMap
      */
-    public ArrayDeque<ImageFile> fetchImageFiles(File directory){
+    public static ArrayDeque<ImageFile> fetchImageFiles(File directory){
         ArrayDeque<String> acceptedExtensions = new ArrayDeque<>();
         ArrayDeque<ImageFile> filesToLoad = new ArrayDeque<>();
-        acceptedExtensions.addAll(Arrays.asList(".jpg", ".jpeg", ".png", ".bmp", ".tif"));
+        acceptedExtensions.addAll(Arrays.asList(ACCEPTED_EXTENSIONS));
         try {
-            ArrayDeque<File> filesFromDir = FileOperations.fetchFromDirectory(directory, acceptedExtensions);
+            ArrayDeque<File> filesFromDir = fetchFromDirectory(directory, acceptedExtensions);
+            logger.info(Integer.toString(filesFromDir.size()));
             for (File file : filesFromDir){
                 String fileName = file.getName();
                 if (UserDataManager.existsInMap(fileName)){
                     ImageFile imageFile = UserDataManager.getImageFileWithName(fileName);
+                    logger.info("Got here");
                     if (!imageFile.getThisFile().getParentFile().getAbsolutePath().equals(directory.getAbsolutePath())){
                         // Image does not match image that exists in directory!
                         /*
@@ -129,10 +131,15 @@ public class ImageFileOperationsManager {
                          */
                     }else {
                         filesToLoad.add(imageFile);
+                        UserDataManager.addImageFileToSessionMap(imageFile);
                     }
                 }else {
+                    logger.info("got here also");
                     ImageFile imageFile = new ImageFile(file);
+                    filesToLoad.add(imageFile);
+                    logger.warning(imageFile.getThisFile().getAbsolutePath());
                     UserDataManager.addImageFileToMap(imageFile);
+                    UserDataManager.addImageFileToSessionMap(imageFile);
                 }
             }
         } catch (InvalidArgumentException e) {
