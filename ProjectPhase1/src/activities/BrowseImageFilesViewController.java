@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Label;
@@ -134,7 +135,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         // clear
         stringsOfTags.clear();
-        // import all tags from taglist to the scene
+        // import all tags from tagList to the scene
 
         for (Tag tag : TagManager.getTagList()) {
             stringsOfTags.add(tag.toString());
@@ -149,9 +150,7 @@ public class BrowseImageFilesViewController implements Initializable {
         ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, stringsOfTags);
 
         if (targetDirectory.isDirectory()) {
-            for (File imgFile : targetDirectory.listFiles(imgFilter)) {
-                fileObjectsInDirectory.add(imgFile);
-            }
+            Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
         }
 
         for (File file : fileObjectsInDirectory) {
@@ -260,6 +259,11 @@ public class BrowseImageFilesViewController implements Initializable {
         */
         // use alert goToDirectoryYesNo
         imageSidePane.getItems().remove(selectedFile.getName());
+    }
+
+    @FXML
+    public void revisionLogClick(){
+
     }
 
 }
