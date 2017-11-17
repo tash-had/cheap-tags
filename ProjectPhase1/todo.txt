@@ -14,8 +14,13 @@ You are welcome to add a directory containing small image files to your reposito
 As a heads up for phase 2, you'll be expected to apply design patterns to your code and write JUnit tests for as much of your code as you can. (You will not required to test the GUI code, but do think about MVC.) You're welcome to start early on these. :-)
 
 
-Also,we need add citation.
-
-READ OVER ASSIGNMENT INSTRUCTIONS AND MAKE SURE WE GOT EVERYTHINGS
+TODO:
+1. Also,we need add citation.
+2. READ OVER ASSIGNMENT INSTRUCTIONS AND MAKE SURE WE GOT EVERYTHINGS
 
 TAKE TURNS PRESENTING OUR CODE TO EACHOTEHR SO WE ALL UNDERSTAND
+
+=====
+SessionManager.java:
+* TODO: Place this in "data" folder along with objectserialization/desirialization/UserDataManager +change UserDataManager to not static
+* TODO: Regex search

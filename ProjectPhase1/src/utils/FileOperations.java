@@ -57,7 +57,7 @@ public class FileOperations {
      * @param parentDirectory the parent directory
      * @return a File object of the
      */
-    public static String getSuffixedFileName(String existingFileName, File parentDirectory){
+    public static String getSuffixedFileName(File parentDirectory, String existingFileName){
         String fileExtension = getFileExtension(new File(parentDirectory, existingFileName));
         String nameWithoutExt = existingFileName.substring(0, existingFileName.length() - fileExtension.length());
 
@@ -66,6 +66,7 @@ public class FileOperations {
         String newName = nameWithoutExt + "("+Integer.toString(suffix)+")"+fileExtension;
         File newFile = new File(baseFilePath + newName);
 
+        // Loop to ensure suffixed file name does not exist.
         while(newFile.exists()){
             newName = nameWithoutExt +"("+Integer.toString(suffix)+")"+fileExtension;
             newFile = new File(baseFilePath + newName);

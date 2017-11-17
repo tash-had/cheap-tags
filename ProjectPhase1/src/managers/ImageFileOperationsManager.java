@@ -37,44 +37,32 @@ public class ImageFileOperationsManager {
     public static File renameImageFile(ImageFile imageFile, String newName){
         File currentImageFile = imageFile.getThisFile();
         Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
-        imageFile.generalReName(newName);//everytime user rename the image, the information inside imagefile will also change.
         FileOperationsResponse response =  renameFile(currentImageFile, newName);
         if (response == SUCCESS){
+            imageFile.generalReName(newName);
             UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
-            imageFile.generalReName(newName);
         }else if (response == FILENAME_TAKEN){
-            //where should we put the suffix inside the filename?
-            String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(),
-                    new File(imageFilePath+newName),
+            String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(), newName,
                     UserDataManager.getImageFileNames());
+            // User accepted to a suffixed filename
             if (suffixedFileName != null){
-                imageFile.generalReName(suffixedFileName);
-                /*
-                  TODO:
-                  Do steps required for a rename in imageFile
-                 */
-                //check the imageFile.generalReName(newName) above
                 renameImageFile(imageFile, suffixedFileName);
             }else {
-                /*
-                  TODO:
-                  dont rename.
-                 */
                 return currentImageFile;
             }
         }else {
             // Show error alert dialog
             return currentImageFile;
         }
-        return imageFilePath.toFile();
+        return currentImageFile;
     }
 
     /**
      * Move an image to another directory
      *
      * @param imageFile the imageFile representing the image to move
-     * @return the
+     * @return File file in its new directory
      */
     public static File moveImageFile(ImageFile imageFile) {
         File oldFile = imageFile.getThisFile();
@@ -86,7 +74,7 @@ public class ImageFileOperationsManager {
         if (response == SUCCESS){
             return newFile;
         }else if(response == FILENAME_TAKEN){
-            String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile, null);
+            String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile.getName(), null);
             if (suffixedFileName != null){
                 imageFile.generalReName(suffixedFileName);
                 moveFile(imageFile.getThisFile(), newDirectory.toPath());
@@ -125,6 +113,7 @@ public class ImageFileOperationsManager {
                     logger.info("Got here");
                     if (!imageFile.getThisFile().getParentFile().getAbsolutePath().equals(directory.getAbsolutePath())){
                         // Image does not match image that exists in directory!
+                        
                         /*
                         TODO:
                         Figure out how to deal with this.. show text input dialog askk for new name

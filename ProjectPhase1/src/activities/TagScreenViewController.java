@@ -1,7 +1,5 @@
 package activities;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,37 +12,49 @@ import managers.PrimaryStageManager;
 import managers.TagManager;
 import model.Tag;
 import utils.Alerts;
-
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class TagScreenViewController implements Initializable {
 
+    /**
+     * Adds a tag to the system with name corresponding to user input in the TextField. Can also be accessed by pressing
+     * ENTER. Displays the added tag on the screen in tagView. Does not accept empty or duplicate tag names.
+     */
     @FXML
     Button add;
 
+    /**
+     * Deletes the selected tag from the system. Removes the tag name from the screen.
+     */
     @FXML
     Button delete;
 
+    /**
+     * Takes user back to home screen.
+     */
     @FXML
     Button back;
 
+    /**
+     * A TextField where users can enter their desired tag names.
+     */
     @FXML
     TextField tagInput;
 
+    /**
+     * Displays currently existing tags on the screen.
+     */
     @FXML
     ListView<Tag> tagView;
 
+    /**
+     * The base pane for the scene.
+     */
     @FXML
     Pane pane;
 
-    /**
-     * Initializes the tag screen. Fills tagView with Tags in TagManager and displays them.
-     *
-     * @param location
-     * @param resources
-     */
+
     @Override
     public void initialize(URL location, ResourceBundle resources){
 
@@ -126,6 +136,5 @@ public class TagScreenViewController implements Initializable {
 
     /*
     TODO: set initial focus on tagInput
-    TODO: decide if we want example tag on opening tag screen, if it is empty.
      */
 }

@@ -49,4 +49,8 @@ public class TagManager {
         }
         return null;
     }
+
+    /*
+    TODO: maybe delete removeTag methods?
+     */
 }
