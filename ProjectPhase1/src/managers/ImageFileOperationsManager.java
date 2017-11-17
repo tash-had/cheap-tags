@@ -67,7 +67,7 @@ public class ImageFileOperationsManager {
      * Move an image to another directory
      *
      * @param imageFile the imageFile representing the image to move
-     * @return the
+     * @return File file in its new directory
      */
     public static File moveImageFile(ImageFile imageFile) {
         File oldFile = imageFile.getThisFile();
