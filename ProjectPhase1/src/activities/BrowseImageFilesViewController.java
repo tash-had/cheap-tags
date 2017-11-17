@@ -22,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
+
 import javafx.stage.DirectoryChooser;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
@@ -29,54 +30,109 @@ import managers.TagManager;
 import managers.UserDataManager;
 import model.ImageFile;
 import model.Tag;
+import utils.Alerts;
 import utils.ConfigureJFXControl;
 
 
 public class BrowseImageFilesViewController implements Initializable {
-    private static File targetDirectory;
 
+    @FXML
+    ListView<String> imageSidePane;
+
+    /**
+     * A ListView of String representing all tags in the system (displayed on right pane).
+     */
     @FXML
     ListView<String> allTagsListView;
 
+    /**
+     * A ListView of String displaying all tags associated with the chosen file.
+     */
     @FXML
     ListView<String> existingTags;
 
+    /**
+     * A ListView of String displaying the past names that the File has had.
+     */
     @FXML
-    Button ChangedDirectory;
+    ListView<String> RevisionLog;
 
+    /**
+     * Displays the currently selected file.
+     */
     @FXML
     ImageView selectedImageView;
 
+    /**
+     * Allows user to pick a new directory and put the chosen file in that directory.
+     */
     @FXML
-    Button back;
+    Button ChangedDirectory;
 
+    /**
+     * Adds the selected tags to the files name.
+     */
     @FXML
-    Label Tags;
+    Button rename;
 
-    @FXML
-    Button Add;
-
+    /**
+     * Removes selected tag from the file's name. Once removed, it appears in allTagsListView again.
+     */
     @FXML
     Button Delete;
 
+    /**
+     * Takes user back to home screen.
+     */
     @FXML
-    Label NameOfFile;
+    Button back;
 
 //    @FXML
 //    ListView<String> imageSidePane;
 
 //    @FXML
 //    Button ChooseImage;
+    /**
+     * Labels allTagsListView as "Tags".
+     */
+    @FXML
+    Label Tags;
 
+    /**
+     * Displays name of the currently selected file above itself.
+     */
     @FXML
     TextField imageSearchBar;
     @FXML
     TilePane imageTilePane;
 
-//    ArrayList<File> allImages = new ArrayList<>();
-    ArrayList<String> allTags = new ArrayList<>();
-    ArrayList<String> selectedTags = new ArrayList<>();
-    static String[] acceptedExtensions = new String[]{"jpg"};
+
+    Label NameOfSelectedFile;
+
+    /**
+     * Stores the selected directory File object.
+     */
+    private static File targetDirectory;
+
+    /**
+     * An ArrayList of File objects of all the images in the chosen directory.
+     */
+    private ArrayList<File> fileObjectsInDirectory = new ArrayList<>();
+
+    /**
+     * An ArrayList of strings representing every tag's name.
+     */
+    private ArrayList<String> stringsOfTags = new ArrayList<>();
+
+    /**
+     * An ArrayList of strings representing tag names of tags associated with the selected file.
+     */
+    private ArrayList<String> stringsOfSelectedTags = new ArrayList<>();
+
+    /**
+     * A String array containing accepted image file types.
+     */
+    private static String[] acceptedExtensions = new String[]{"jpg"};
 
     private StringBuilder imageSearchPatternEnd;
     private static final Logger logger = Logger.getAnonymousLogger();
@@ -84,38 +140,34 @@ public class BrowseImageFilesViewController implements Initializable {
     private Collection<String> imageNames;
 
     /**
-     * The file object that is the currently displayed image
+     * The File object that is the currently displayed image.
      */
-    File selectedFile;
+    private File selectedFile = null;
 
-    static FilenameFilter imgFilter = (dir, name) -> {
+    /**
+     * A FilenameFilter which filters out files that are not accepted image types.
+     */
+    private static FilenameFilter imgFilter = (dir, name) -> {
         for (String ext : acceptedExtensions)
-            if (name.endsWith("." + ext)){
-            return true;
+            if (name.endsWith("." + ext)) {
+                return true;
             }
         return false;
     };
-
-    @FXML
-    Button rename;
-
-    @FXML
-    ListView<String> RevisionLog;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         // clear
-        allTags.clear();
+        stringsOfTags.clear();
         // import all tags from taglist to the scene
         for (Tag tag: TagManager.getTagList()){
-            allTags.add(tag.toString());
+            stringsOfTags.add(tag.toString());
         }
 
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
-        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, allTags);
+        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, stringsOfTags);
 
 //        if (targetDirectory.isDirectory()){
 //            for (File imgFile : targetDirectory.listFiles(imgFilter)){
@@ -130,6 +182,30 @@ public class BrowseImageFilesViewController implements Initializable {
         ImageFileOperationsManager.fetchImageFiles(targetDirectory);
         imageTilePane.setOrientation(Orientation.VERTICAL);
         populateImageTilePane();
+//
+//        for (Tag tag : TagManager.getTagList()) {
+//            stringsOfTags.add(tag.toString());
+//        }
+//
+////        System.out.println(targetDirectory.getPath());
+//
+//        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
+//
+//        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
+//
+//        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, stringsOfTags);
+//
+//        if (targetDirectory.isDirectory()) {
+//            for (File imgFile : targetDirectory.listFiles(imgFilter)) {
+//                fileObjectsInDirectory.add(imgFile);
+//            }
+//        }
+//
+//        for (File file : fileObjectsInDirectory) {
+//            imageSidePane.getItems().add(file.getName());
+//
+//        }
+
     }
 
     public static File getTargetDirectory() {
@@ -149,30 +225,30 @@ public class BrowseImageFilesViewController implements Initializable {
     static void setTargetDirectory(File directory) {
         targetDirectory = directory;
     }
-
     /**
-     * when the user click the back button, it should take users back to the main screen
+     * Takes user to the home screen when back button is clicked.
      */
     @FXML
-    public void backButtonClick(){
+    public void backButtonClick() {
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
     /**
-     * When the user click the add button under Tags, the selected tag should be removed from Tags and added to exitingTags
+     * Handles when a tag is clicked and add the selected tag under the selected image and removes the tag from
+     * allTagsListView.
      */
-
     @FXML
     public void addButtonClick() {
         String selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
-        if (allTagsListView.getItems().indexOf(selectedTag) > -1){
+        if (selectedFile == null) {
+            Alerts.chooseFileAlert();
+        } else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
             allTagsListView.getItems().remove(selectedTag);
             existingTags.getItems().add(selectedTag);
-            selectedTags.add(selectedTag);
+            stringsOfSelectedTags.add(selectedTag);
         }
 
     }
-
 //
 //    @FXML
 //    public void ChooseImageClick(){
@@ -190,35 +266,55 @@ public class BrowseImageFilesViewController implements Initializable {
 //        }
 //    }
 
-    @FXML
-    public void renameButtonClick(){
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < selectedTags.size()-1; i++){
-            sb.append("@" + selectedTags.get(i) + " ");
-        }
-        sb.append("@" + selectedTags.get(selectedTags.size()-1) + ".jpg");
 
-        //todo: need to track UDI, instead of name
-        ImageFileOperationsManager.renameImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()), sb.toString());
+    /**
+     * Renames the file name in the user's operating system.
+     */
+    @FXML
+    public void renameButtonClick() {
+        if (selectedFile == null) {
+            Alerts.chooseFileAlert();
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < stringsOfSelectedTags.size() - 1; i++) {
+                sb.append("@").append(stringsOfSelectedTags.get(i)).append(" ");
+            }
+            sb.append("@" + stringsOfSelectedTags.get(stringsOfSelectedTags.size() - 1) + ".jpg");
+
+            //todo: need to track UDI, instead of name
+            ImageFileOperationsManager.renameImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()), sb.toString());
+        }
     }
 
+    /**
+     * Deletes the tag from selected tags when user clicks the button or clicks the tag. Deleted tag will reappear in
+     * allTagsListView.
+     */
     @FXML
-    public void deleteButtonClick(){
+    public void deleteButtonClick() {
         String selectedTag = existingTags.getSelectionModel().getSelectedItem();
-        if (existingTags.getItems().size() > -1){
+        if (selectedFile == null) {
+            Alerts.chooseFileAlert();
+        } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
             existingTags.getItems().remove(selectedTag);
-            selectedTags.remove(selectedTag);
+            stringsOfSelectedTags.remove(selectedTag);
             allTagsListView.getItems().add(selectedTag);
-            allTags.add(selectedTag);
+            stringsOfTags.add(selectedTag);
         }
     }
 
+    /**
+     * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
+     * directory or stay in the current directory.
+     */
     @FXML
-    public void moveImageButtonClick(){
+    public void moveImageButtonClick() {
         ImageFileOperationsManager.moveImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()));
-        /* TODO: after image is moved from this directory, remove its name from image pane on the right.
-
-         */
+        /* TODO: after image is moved from this directory, ask user if they want to go to the new directory or stay.
+        TODO: if they stay, make sure the moved image is removed from the left side pane displaying images.
+        */
+        // use alert goToDirectoryYesNo
+        imageSidePane.getItems().remove(selectedFile.getName());
     }
     
     public void populateImageTilePane(){

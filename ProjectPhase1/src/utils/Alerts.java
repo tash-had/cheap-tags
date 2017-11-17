@@ -58,7 +58,7 @@ public class Alerts {
     }
 
     /**
-     * Tell the that they are trying to move/rename a file to/in a directory where a file with that name exists.
+     * Tell the user that they are trying to move/rename a file to/in a directory where a file with that name exists.
      *
      * @param directory the directory in which there is an existing file
      * @param fileName the name of the file they are trying to place in the directory
@@ -82,9 +82,31 @@ public class Alerts {
         return null;
     }
 
+    /**
+     * Tell the user that a tag already exists with the same name.
+     */
     public static void showTagExistsAlert(){
         Alert tagExistsDialog = new Alert(Alert.AlertType.NONE, "A tag with this name already exists. " +
                 "Please select a different name.", ButtonType.CLOSE);
         tagExistsDialog.showAndWait();
+    }
+
+    /**
+     * Tell the user that actions cannot be performed on a file because they haven't chosen one yet.
+     */
+    public static void chooseFileAlert(){
+        Alert needToChooseFile = new Alert(Alert.AlertType.NONE, "No image file has been selected yet.\n" +
+                "Please select a image file first.", ButtonType.CLOSE );
+        needToChooseFile.showAndWait();
+    }
+
+    /**
+     * Ask the user if they want to go to the new selected directory.
+     */
+    public static ButtonType goToDirectoryYesNo(){
+        Alert goToDirectoryDialog = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to go to the new " +
+                "directory?", ButtonType.NO, ButtonType.YES);
+        goToDirectoryDialog.showAndWait();
+        return goToDirectoryDialog.getResult();
     }
 }

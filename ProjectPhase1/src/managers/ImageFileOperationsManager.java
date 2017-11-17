@@ -62,7 +62,7 @@ public class ImageFileOperationsManager {
      * Move an image to another directory
      *
      * @param imageFile the imageFile representing the image to move
-     * @return the
+     * @return File file in its new directory
      */
     public static File moveImageFile(ImageFile imageFile) {
         File oldFile = imageFile.getThisFile();
@@ -74,7 +74,7 @@ public class ImageFileOperationsManager {
         if (response == SUCCESS){
             return newFile;
         }else if(response == FILENAME_TAKEN){
-            String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile, null);
+            String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile.getName(), null);
             if (suffixedFileName != null){
                 imageFile.generalReName(suffixedFileName);
                 moveFile(imageFile.getThisFile(), newDirectory.toPath());
