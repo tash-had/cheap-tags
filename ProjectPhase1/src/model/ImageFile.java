@@ -13,7 +13,7 @@ import java.lang.StringBuilder;
 //Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
 public class ImageFile{
     private StringBuilder currentName; //the most current name of this image
-    private ArrayList<Tag> tagList; //the list of tag this image has.
+    private ArrayList<String> tagList; //the list of tag this image has.
     //oldName keeps track of all of the revision histories in the format of array [newname,previous name,timestamp]
     private ArrayList<String[]> oldName;
     private String originalName; //the original name of this image without any tag.
@@ -105,7 +105,7 @@ public class ImageFile{
      * Change inner information of an imagefile class based on given String
      * @param newName
      */
-    public void generalReName(String newName, ArrayList<Tag> newTagList){
+    public void generalReName(String newName, ArrayList<String> newTagList){
         String tempName = currentName.toString();
         currentName = new StringBuilder();
         currentName.append(newName);
@@ -153,7 +153,7 @@ public class ImageFile{
     public File getThisFile(){
         return this.thisFile;
     }
-    public ArrayList<Tag> getTagList(){return this.tagList;}
+    public ArrayList<String> getTagList(){return this.tagList;}
     public String getImageType(){ return this.imageType; }
 
 
