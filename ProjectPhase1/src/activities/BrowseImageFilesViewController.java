@@ -222,7 +222,7 @@ public class BrowseImageFilesViewController implements Initializable {
         } else {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < stringsOfSelectedTags.size() - 1; i++) {
-                sb.append("@" + stringsOfSelectedTags.get(i) + " ");
+                sb.append("@").append(stringsOfSelectedTags.get(i)).append(" ");
             }
             sb.append("@" + stringsOfSelectedTags.get(stringsOfSelectedTags.size() - 1) + ".jpg");
 
@@ -256,8 +256,9 @@ public class BrowseImageFilesViewController implements Initializable {
     public void moveImageButtonClick() {
         ImageFileOperationsManager.moveImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()));
         /* TODO: after image is moved from this directory, ask user if they want to go to the new directory or stay.
-         */
-        // if they stay, make sure the moved image is removed from the left side pane displaying images.
+        TODO: if they stay, make sure the moved image is removed from the left side pane displaying images.
+        */
+        // use alert goToDirectoryYesNo
         imageSidePane.getItems().remove(selectedFile.getName());
     }
 
