@@ -9,9 +9,13 @@ import java.util.List;
 
 public abstract class UserDataManager {
 
+    /*
+    TODO: Do not make this all static!
+     */
     private static ArrayList<String> previousPathsVisited = new ArrayList<>();
 
     private static HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>();
+    private static HashMap<String, ImageFile> nameToImageFileSessionMap = new HashMap<>();
 
     public static String[] getPreviousPathsVisited() {
         return previousPathsVisited.toArray(new String[previousPathsVisited.size()]);
@@ -45,18 +49,30 @@ public abstract class UserDataManager {
         }return false;
     }
 
-    public static Collection getImageFileNames(){
-        return getNameToImageFileMap().keySet();
+    public static Collection<String> getImageFileNames(){
+        return nameToImageFileSessionMap.keySet();
     }
 
+    public static Collection<String> getSessionImageFileNames(){
+        return getNameToImageFileSessionMap().keySet();
+    }
 
     public static void addImageFileToMap(ImageFile imageFile){
         getNameToImageFileMap().put(imageFile.getCurrentName(), imageFile);
     }
 
+    public static void addImageFileToSessionMap(ImageFile imageFile){
+        getNameToImageFileSessionMap().put(imageFile.getCurrentName(), imageFile);
+    }
+
+
+    public static HashMap<String, ImageFile> getNameToImageFileSessionMap() {
+        return nameToImageFileSessionMap;
+    }
     private static HashMap<String, ImageFile> getNameToImageFileMap() {
         return nameToImageFileMap;
     }
+
 
     // prep data
 }

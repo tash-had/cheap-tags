@@ -2,23 +2,36 @@ package activities;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import java.util.Collection;
 import java.util.Collections;
+
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.TilePane;
+
+import javafx.stage.DirectoryChooser;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.TagManager;
 import managers.UserDataManager;
+import model.ImageFile;
 import model.Tag;
 import utils.Alerts;
 import utils.ConfigureJFXControl;
@@ -77,6 +90,11 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Button back;
 
+//    @FXML
+//    ListView<String> imageSidePane;
+
+//    @FXML
+//    Button ChooseImage;
     /**
      * Labels allTagsListView as "Tags".
      */
@@ -86,6 +104,11 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Displays name of the currently selected file above itself.
      */
+    @FXML
+    TextField imageSearchBar;
+    @FXML
+    TilePane imageTilePane;
+
     @FXML
     Label NameOfSelectedFile;
 
@@ -114,6 +137,11 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     private static String[] acceptedExtensions = new String[]{"jpg"};
 
+    private StringBuilder imageSearchPatternEnd;
+    private static final Logger logger = Logger.getAnonymousLogger();
+
+    private Collection<String> imageNames;
+
     /**
      * The File object that is the currently displayed image.
      */
@@ -141,32 +169,69 @@ public class BrowseImageFilesViewController implements Initializable {
             stringsOfTags.add(tag.toString());
         }
 
-//        System.out.println(targetDirectory.getPath());
-
-        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
-
-        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
-
+        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, stringsOfTags);
 
         if (targetDirectory.isDirectory()) {
             Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
         }
+//        if (targetDirectory.isDirectory()){
+//            for (File imgFile : targetDirectory.listFiles(imgFilter)){
+//                allImages.add(imgFile);
+//            }
+//        }
 
-        for (File file : fileObjectsInDirectory) {
-            imageSidePane.getItems().add(file.getName());
+//        for (File file : allImages){
+//            imageSidePane.getItems().add(file.getName());
+//        }
+        prepImageSearchRegex();
+        ImageFileOperationsManager.fetchImageFiles(targetDirectory);
+        imageTilePane.setOrientation(Orientation.VERTICAL);
+        populateImageTilePane();
+//
+//        for (Tag tag : TagManager.getTagList()) {
+//            stringsOfTags.add(tag.toString());
+//        }
+//
+////        System.out.println(targetDirectory.getPath());
+//
+//        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
+//
+//        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
+//
+//        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, stringsOfTags);
+//
+//        if (targetDirectory.isDirectory()) {
+//            for (File imgFile : targetDirectory.listFiles(imgFilter)) {
+//                fileObjectsInDirectory.add(imgFile);
+//            }
+//        }
+//
+//        for (File file : fileObjectsInDirectory) {
+//            imageSidePane.getItems().add(file.getName());
+//
+//        }
 
-        }
     }
 
     public static File getTargetDirectory() {
         return targetDirectory;
     }
 
-    public static void setTargetDirectory(File directory) {
-        targetDirectory = directory;
+    private void prepImageSearchRegex(){
+        imageSearchPatternEnd = new StringBuilder(".*\\b(");
+        for (String extension :ImageFileOperationsManager.ACCEPTED_EXTENSIONS){
+            imageSearchPatternEnd.append(extension);
+            imageSearchPatternEnd.append("|");
+        }
+        imageSearchPatternEnd.deleteCharAt(imageSearchPatternEnd.lastIndexOf("|"));
+        imageSearchPatternEnd.append(")\\b");
     }
 
+    static void setTargetDirectory(File directory) {
+        targetDirectory = directory;
+    }
     /**
      * Takes user to the home screen when back button is clicked.
      */
@@ -191,25 +256,23 @@ public class BrowseImageFilesViewController implements Initializable {
         }
 
     }
+//
+//    @FXML
+//    public void ChooseImageClick(){
+//        String selectedImage = imageSidePane.getSelectionModel().getSelectedItem();
+//        if (imageSidePane.getItems().indexOf(selectedImage) > -1){
+//            for (int i = 0; i < imageSidePane.getItems().size(); i++){
+//                if (selectedImage.equals(allImages.get(i).getName())){
+//                   Image image = new Image(allImages.get(i).toURI().toString());
+//                   selectedImageView.setImage(image);
+//                   NameOfFile.setText(selectedImage);
+//                   selectedFile = allImages.get(i);
+//                   break;
+//                }
+//            }
+//        }
+//    }
 
-    /**
-     * Handles the selection of image from the imageSidePane. Displays the ImageView of the selected image File object.
-     */
-    @FXML
-    public void ChooseImageClick() {
-        String selectedImage = imageSidePane.getSelectionModel().getSelectedItem();
-        if (imageSidePane.getItems().indexOf(selectedImage) > -1) {
-            for (int i = 0; i < imageSidePane.getItems().size(); i++) {
-                if (selectedImage.equals(fileObjectsInDirectory.get(i).getName())) {
-                    Image image = new Image(fileObjectsInDirectory.get(i).toURI().toString());
-                    selectedImageView.setImage(image);
-                    NameOfSelectedFile.setText(selectedImage);
-                    selectedFile = fileObjectsInDirectory.get(i);
-                    break;
-                }
-            }
-        }
-    }
 
     /**
      * Renames the file name in the user's operating system.
@@ -259,6 +322,56 @@ public class BrowseImageFilesViewController implements Initializable {
         */
         // use alert goToDirectoryYesNo
         imageSidePane.getItems().remove(selectedFile.getName());
+    }
+    
+    public void populateImageTilePane(){
+        for (ImageFile imageFile : UserDataManager.getNameToImageFileSessionMap().values()){
+            addImageToTilePane(imageFile);
+        }
+    }
+
+    private void addImageToTilePane(ImageFile imageFile){
+        Image image = null;
+        try {
+            image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, false); //imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, false);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setUserData(imageFile);
+        imageView.setOnMouseClicked(event -> {
+            try {
+                selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        });
+        imageTilePane.getChildren().add(imageView);
+    }
+
+    public void imageSearchTextChanged(){
+        String input = imageSearchBar.getText();
+        ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();
+
+        String imageSearchPatternStart = ".*\\b(" + input + ")";
+        Pattern imageSearchPattern = Pattern.compile(imageSearchPatternStart +imageSearchPatternEnd);
+        Matcher imageSearchMatcher;
+        if (input.equals("")){
+            searchResultImageFileList.clear();
+            populateImageTilePane();
+        }else {
+            for (String name:imageNames){
+                imageSearchMatcher = imageSearchPattern.matcher(name);
+                if (imageSearchMatcher.find()){
+                    searchResultImageFileList.add(UserDataManager.getNameToImageFileSessionMap().get(name));
+                }
+            }
+        }
+        imageTilePane.getChildren().clear();
+        for (ImageFile imf : searchResultImageFileList){
+            addImageToTilePane(imf);
+        }
     }
 
     @FXML

@@ -9,7 +9,8 @@
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
-            <ListView fx:id="imageSidePane" layoutX="-2.0" layoutY="-2.0" onMouseClicked="#ChooseImageClick" prefHeight="723.0" prefWidth="322.0" />
+            <TilePane fx:id="imageTilePane" layoutX="14.0" layoutY="14.0" orientation="VERTICAL" tileAlignment="TOP_LEFT" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <TextField fx:id="imageSearchBar" layoutX="5.0" layoutY="675.0" onKeyReleased="#imageSearchTextChanged" prefHeight="39.0" prefWidth="306.0" promptText="Search image name by text or regex" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="443.0">
          <children>

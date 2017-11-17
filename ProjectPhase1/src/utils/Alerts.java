@@ -61,26 +61,22 @@ public class Alerts {
      * Tell the user that they are trying to move/rename a file to/in a directory where a file with that name exists.
      *
      * @param directory the directory in which there is an existing file
-     * @param file the file they are trying to place in the directory
+     * @param fileName the name of the file they are trying to place in the directory
      * @param filter which names to avoid when selecting a suffixed name
      * @return the file name with a numerical suffix
      */
-    public static String showFileExistsAlert(File directory, File file, @Nullable Collection filter){
+    public static String showFileExistsAlert(File directory, String fileName, @Nullable Collection filter){
         // Get new file with a suffix
-        String directoryPath = directory.getAbsolutePath()+"/";
-
-        String suffixedFileName = FileOperations.getSuffixedFileName(file.getName(), directory);
+        String suffixedFileName = FileOperations.getSuffixedFileName(directory, fileName);
 
         while (filter != null && filter.contains(suffixedFileName)){
-            suffixedFileName = FileOperations.getSuffixedFileName(suffixedFileName, directory);
+            suffixedFileName = FileOperations.getSuffixedFileName(directory, suffixedFileName);
         }
         // Ask user if they would like a suffixed name on the image
         ButtonType renameReqResponse = Alerts.showYesNoAlert("Could not rename file",
-                "You Stupid",
-                file.getName() +" already exists. Would you like to name it "+suffixedFileName+"?");
+                "Filename Taken",
+                fileName +" already exists. Would you like to name it "+suffixedFileName+"?");
         if (renameReqResponse == ButtonType.OK){
-            System.out.println("Implement code IN THE CALLING METHOD, make this method return the modified file " +
-                    "after ImageFile implements a renameFunction");
             return suffixedFileName;
         }
         return null;
