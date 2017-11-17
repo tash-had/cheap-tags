@@ -336,9 +336,9 @@ public class BrowseImageFilesViewController implements Initializable {
         imageView.setOnMouseClicked(event -> {
             try {
                 selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
-
                 selectedFile = imageFile.getThisFile();
                 loadImageExistingTags(imageFile);
+                NameOfSelectedFile.setText(imageFile.getCurrentName());
                 displayRevisionLog((ImageFile) imageView.getUserData());
 
             } catch (MalformedURLException e) {
@@ -346,6 +346,11 @@ public class BrowseImageFilesViewController implements Initializable {
             }
         });
         imageTilePane.getChildren().add(imageView);
+    }
+
+    @FXML
+    public void tilePaneImageClicked(){
+
     }
 
     public void imageSearchTextChanged(){
