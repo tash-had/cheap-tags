@@ -277,7 +277,7 @@ public class BrowseImageFilesViewController implements Initializable {
             for (int i = 0; i < stringsOfSelectedTags.size(); i++) {
                 sb.append("@" + stringsOfSelectedTags.get(i) + " ");
             }
-            sb.append(image.getOriginalName() + image.getImageType());
+            sb.append(image.getOriginalName());
 
 
             ImageFileOperationsManager.renameImageFile(image, sb.toString());
