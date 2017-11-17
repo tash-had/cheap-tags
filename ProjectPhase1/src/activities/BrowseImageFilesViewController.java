@@ -170,15 +170,12 @@ public class BrowseImageFilesViewController implements Initializable {
 
         // clear
         stringsOfTags.clear();
-<<<<<<< HEAD
 
-        // import all tags from taglist to the scene
-        for (Tag tag: TagManager.getTagList()){
-=======
+
         // import all tags from tagList to the scene
 
         for (Tag tag : TagManager.getTagList()) {
->>>>>>> 2be5c83923c1696f1fe69ab7f2c7cb80e08dff8d
+
             stringsOfTags.add(tag.toString());
         }
 
@@ -186,8 +183,6 @@ public class BrowseImageFilesViewController implements Initializable {
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, stringsOfTags);
 
-<<<<<<< HEAD
-=======
         if (targetDirectory.isDirectory()) {
             Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
         }
@@ -196,7 +191,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //                allImages.add(imgFile);
 //            }
 //        }
->>>>>>> 2be5c83923c1696f1fe69ab7f2c7cb80e08dff8d
+
 
         prepImageSearchRegex();
         ImageFileOperationsManager.fetchImageFiles(targetDirectory);
@@ -341,13 +336,11 @@ public class BrowseImageFilesViewController implements Initializable {
         imageView.setOnMouseClicked(event -> {
             try {
                 selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
-<<<<<<< HEAD
+
                 selectedFile = imageFile.getThisFile();
                 loadImageExistingTags(imageFile);
-
-=======
                 displayRevisionLog((ImageFile) imageView.getUserData());
->>>>>>> 2be5c83923c1696f1fe69ab7f2c7cb80e08dff8d
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
