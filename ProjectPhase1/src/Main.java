@@ -3,6 +3,7 @@ import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import model.ImageFile;
+import tests.FileOperationsTest;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +17,6 @@ public class Main extends Application{
         PrimaryStageManager.setDefaultStageHeight(720);
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
         PrimaryStageManager.showPrimaryStage();
-
-//        ImageFileOperationsManager.renameImageFile(new ImageFile(new File("img.jpg")), null);
-
     }
     public static void main(String[] args){
         launch(args);

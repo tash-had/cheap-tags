@@ -2,6 +2,7 @@ package activities;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 
@@ -20,6 +21,7 @@ import managers.TagManager;
 import managers.UserDataManager;
 import model.ImageFile;
 import model.Tag;
+import utils.Alerts;
 import utils.ConfigureJFXControl;
 
 
@@ -44,8 +46,6 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label Tags;
 
-    @FXML
-    Button Add;
 
     @FXML
     Button Delete;
@@ -67,7 +67,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * The file object that is the currently displayed image
      */
-    File selectedFile;
+    File selectedFile = null;
 
     static FilenameFilter imgFilter = (dir, name) -> {
         for (String ext : acceptedExtensions)
@@ -118,6 +118,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
 
 
+
         
     }
 
@@ -139,13 +140,18 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     /**
-     * When the user click the add button under Tags, the selected tag should be removed from Tags and added to exitingTags
+     * Handle the click on tags
+     * add the tag under the selected image
+     * remove the tag from all tags view
      */
 
     @FXML
     public void addButtonClick() {
         String selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
-        if (allTagsListView.getItems().indexOf(selectedTag) > -1){
+        if (selectedFile == null){
+            Alerts.chooseFileAlert();
+        }
+        else if (allTagsListView.getItems().indexOf(selectedTag) > -1){
             allTagsListView.getItems().remove(selectedTag);
             existingTags.getItems().add(selectedTag);
             selectedTags.add(selectedTag);
@@ -153,7 +159,10 @@ public class BrowseImageFilesViewController implements Initializable {
 
     }
 
-
+    /**
+     * Handle the selection of image from the imageSidePane. Show the image view of to screen
+     * connect the image with choosing tags system
+     */
     @FXML
     public void ChooseImageClick(){
         String selectedImage = imageSidePane.getSelectionModel().getSelectedItem();
@@ -170,22 +179,38 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * Rename the file name in users operating system
+     */
+
     @FXML
     public void renameButtonClick(){
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < selectedTags.size()-1; i++){
-            sb.append("@" + selectedTags.get(i) + " ");
+        if (selectedFile == null){
+            Alerts.chooseFileAlert();
         }
-        sb.append("@" + selectedTags.get(selectedTags.size()-1) + ".jpg");
+        else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < selectedTags.size() - 1; i++) {
+                sb.append("@" + selectedTags.get(i) + " ");
+            }
+            sb.append("@" + selectedTags.get(selectedTags.size() - 1) + ".jpg");
 
-        //todo: need to track UDI, instead of name
-        ImageFileOperationsManager.renameImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()), sb.toString());
+            //todo: need to track UDI, instead of name
+            ImageFileOperationsManager.renameImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()), sb.toString());
+        }
     }
 
+    /**
+     * Delete the tag from selected tags when user click the button or click the tag
+     * Put it back to all tags list
+     */
     @FXML
     public void deleteButtonClick(){
         String selectedTag = existingTags.getSelectionModel().getSelectedItem();
-        if (existingTags.getItems().size() > -1){
+        if (selectedFile == null){
+            Alerts.chooseFileAlert();
+        }
+        else if (existingTags.getItems().size() > 0 && selectedTag != null){
             existingTags.getItems().remove(selectedTag);
             selectedTags.remove(selectedTag);
             allTagsListView.getItems().add(selectedTag);
@@ -199,6 +224,7 @@ public class BrowseImageFilesViewController implements Initializable {
         /* TODO: after image is moved from this directory, remove its name from image pane on the right.
 
          */
+        imageSidePane.getItems().remove(selectedFile.getName());
     }
 
 }

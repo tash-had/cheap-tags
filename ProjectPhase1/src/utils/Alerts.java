@@ -91,4 +91,10 @@ public class Alerts {
                 "Please select a different name.", ButtonType.CLOSE);
         tagExistsDialog.showAndWait();
     }
+
+    public static void chooseFileAlert(){
+        Alert needTochooseFile = new Alert(Alert.AlertType.NONE, "No image file has been selected yet.\n" +
+                "Please select a image file first.", ButtonType.CLOSE );
+        needTochooseFile.showAndWait();
+    }
 }

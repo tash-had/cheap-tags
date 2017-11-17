@@ -14,18 +14,17 @@
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="443.0">
          <children>
             <ImageView fx:id="selectedImageView" fitHeight="308.0" fitWidth="380.0" layoutX="85.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true" />
-            <ListView fx:id="existingTags" layoutX="74.0" layoutY="367.0" prefHeight="212.0" prefWidth="163.0" />
+            <ListView fx:id="existingTags" layoutX="74.0" layoutY="367.0" onMouseClicked="#deleteButtonClick" prefHeight="212.0" prefWidth="163.0" />
             <Button fx:id="ChangedDirectory" layoutX="95.0" layoutY="651.0" mnemonicParsing="false" onAction="#moveImageButtonClick" prefHeight="27.0" prefWidth="121.0" text="Move Image" />
             <Button fx:id="back" layoutX="358.0" layoutY="651.0" mnemonicParsing="false" onAction="#backButtonClick" prefHeight="27.0" prefWidth="91.0" text="Back" />
             <Label fx:id="NameOfFile" layoutX="143.0" layoutY="18.0" prefHeight="27.0" prefWidth="215.0" />
-            <ListView fx:id="allTagsListView" layoutX="521.0" layoutY="60.0" prefHeight="566.0" prefWidth="215.0" />
+            <ListView fx:id="allTagsListView" layoutX="521.0" layoutY="60.0" onMouseClicked="#addButtonClick" prefHeight="566.0" prefWidth="215.0" />
             <Label fx:id="Tags" layoutX="459.0" layoutY="2.0" prefHeight="58.0" prefWidth="261.0" text="                      Tags" />
-            <Button fx:id="Add" layoutX="686.0" layoutY="627.0" mnemonicParsing="false" onAction="#addButtonClick" prefHeight="37.0" prefWidth="49.0" text="Add" />
             <Button fx:id="Delete" layoutX="178.0" layoutY="579.0" mnemonicParsing="false" onAction="#deleteButtonClick" prefHeight="27.0" prefWidth="59.0" text="Delete" />
-            <Button fx:id="rename" layoutX="73.0" layoutY="579.0" mnemonicParsing="false" onAction="#renameButtonClick" text="Rename" />
+            <Button fx:id="rename" layoutX="73.0" layoutY="579.0" mnemonicParsing="false" onAction="#renameButtonClick" text="Set Tags" />
             <ListView fx:id="RevisionLog" layoutX="311.0" layoutY="367.0" prefHeight="212.0" prefWidth="163.0" />
             <Label layoutX="347.0" layoutY="351.0" prefHeight="17.0" prefWidth="112.0" text="Revision Log" />
-            <Label layoutX="115.0" layoutY="351.0" text="Current Name" />
+            <Label layoutX="115.0" layoutY="351.0" text="Current Tags" />
          </children></AnchorPane>
   </items>
 </SplitPane>

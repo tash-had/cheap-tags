@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import model.Tag;
 
@@ -31,12 +32,12 @@ public class ImageFileOperationsManager {
      */
     public static File renameImageFile(ImageFile imageFile, String newName){
         File currentImageFile = imageFile.getThisFile();
-        String imageFilePath = currentImageFile.getParentFile().getAbsolutePath() +"/";
+        Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
         imageFile.generalReName(newName);//everytime user rename the image, the information inside imagefile will also change.
         int renameStatus = FileOperations.renameFile(currentImageFile, newName);
         if (renameStatus == 1){
             UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
-            imageFilePath += newName;
+            imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
         }else if (renameStatus == -1){
             //where should we put the suffix inside the filename?
             String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(),
@@ -60,7 +61,7 @@ public class ImageFileOperationsManager {
             // Show error alert dialog
             return currentImageFile;
         }
-        return new File(imageFilePath);
+        return imageFilePath.toFile();
     }
 
     /**
@@ -73,8 +74,9 @@ public class ImageFileOperationsManager {
         File oldFile = imageFile.getThisFile();
         File newDirectory = PrimaryStageManager.getDirectoryWithChooser();
         // A file object of the imagefile in the new directory
-        File newFile = new File(newDirectory.getAbsolutePath()+"/"+oldFile.getName());
+        File newFile = new File(newDirectory, oldFile.getName());
         int moveStatus = FileOperations.moveFile(oldFile, newDirectory.toPath());//when we use file.Move, shouldn't the target directory include the image name?
+
         if (moveStatus == 1){
             return newFile;
         }else if(moveStatus == -1){
@@ -88,6 +90,7 @@ public class ImageFileOperationsManager {
                 (ie. setUnderWhichDirectory, imageFile.setFile, ...
                 Take steps to move this iamgeFile to suffixedFile.getParent()
                  */
+                // DO NOT USE THE BELOW "SLASH" IN THE FILE PATH!"
 //                newFile = new File(newDirectory.getAbsolutePath()+"/"+suffixedFileName);
                 // Make sure imageFile is renamed beforehand and its file attribute is reset with the new name before
                 // this line is run!
