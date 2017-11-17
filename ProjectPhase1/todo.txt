@@ -19,3 +19,8 @@ Also,we need add citation.
 READ OVER ASSIGNMENT INSTRUCTIONS AND MAKE SURE WE GOT EVERYTHINGS
 
 TAKE TURNS PRESENTING OUR CODE TO EACHOTEHR SO WE ALL UNDERSTAND
+
+=====
+SessionManager.java:
+* TODO: Place this in "data" folder along with objectserialization/desirialization/UserDataManager +change UserDataManager to not static
+* TODO: Regex search
