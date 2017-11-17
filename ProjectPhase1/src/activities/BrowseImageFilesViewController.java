@@ -11,7 +11,10 @@ import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
 import java.util.Collection;
+import java.util.Collections;
+
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -55,7 +58,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * A ListView of String displaying the past names that the File has had.
      */
     @FXML
-    ListView<String> RevisionLog;
+    ListView<String[]> RevisionLog;
 
     /**
      * Displays the currently selected file.
@@ -87,6 +90,12 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Button back;
 
+    /**
+     * Reverts selected image to the selected old name.
+     */
+    @FXML
+    Button revert;
+
 //    @FXML
 //    ListView<String> imageSidePane;
 
@@ -107,7 +116,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     TilePane imageTilePane;
 
-
+    @FXML
     Label NameOfSelectedFile;
 
     /**
@@ -161,9 +170,15 @@ public class BrowseImageFilesViewController implements Initializable {
 
         // clear
         stringsOfTags.clear();
+<<<<<<< HEAD
 
         // import all tags from taglist to the scene
         for (Tag tag: TagManager.getTagList()){
+=======
+        // import all tags from tagList to the scene
+
+        for (Tag tag : TagManager.getTagList()) {
+>>>>>>> 2be5c83923c1696f1fe69ab7f2c7cb80e08dff8d
             stringsOfTags.add(tag.toString());
         }
 
@@ -171,6 +186,17 @@ public class BrowseImageFilesViewController implements Initializable {
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, stringsOfTags);
 
+<<<<<<< HEAD
+=======
+        if (targetDirectory.isDirectory()) {
+            Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
+        }
+//        if (targetDirectory.isDirectory()){
+//            for (File imgFile : targetDirectory.listFiles(imgFilter)){
+//                allImages.add(imgFile);
+//            }
+//        }
+>>>>>>> 2be5c83923c1696f1fe69ab7f2c7cb80e08dff8d
 
         prepImageSearchRegex();
         ImageFileOperationsManager.fetchImageFiles(targetDirectory);
@@ -315,9 +341,13 @@ public class BrowseImageFilesViewController implements Initializable {
         imageView.setOnMouseClicked(event -> {
             try {
                 selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
+<<<<<<< HEAD
                 selectedFile = imageFile.getThisFile();
                 loadImageExistingTags(imageFile);
 
+=======
+                displayRevisionLog((ImageFile) imageView.getUserData());
+>>>>>>> 2be5c83923c1696f1fe69ab7f2c7cb80e08dff8d
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -349,6 +379,26 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * Reverts the current image to the selected previous name.
+     */
+    @FXML
+    public void revertButtonClick(){
+        String[] specificRevision = RevisionLog.getSelectionModel().getSelectedItem();
+        ImageFile currImageFileObject = (ImageFile) selectedImageView.getUserData();
+        ImageFileOperationsManager.renameImageFile(currImageFileObject, specificRevision[1]);
+    }
+
+    /**
+     * Displays the revision log of the image selected.
+     *
+     * @param imageFileObject stores the revision log of the selected image.
+     */
+    public void displayRevisionLog(ImageFile imageFileObject){
+        for (String[] eachLog: imageFileObject.getOldName()){
+            RevisionLog.getItems().add(eachLog);
+        }
+    }
 }
 
 
