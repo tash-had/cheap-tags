@@ -38,6 +38,7 @@ public class ImageFile{
         String[] split = c.split("\\.");
         imageType = ("."+split[split.length-1]);
         suffixForDuplicate = "";
+        tagList = new ArrayList<>();
     }
 
     /**
