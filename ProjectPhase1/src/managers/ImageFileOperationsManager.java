@@ -9,9 +9,6 @@ import utils.Alerts;
 import utils.FileOperations;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -27,37 +24,6 @@ public class ImageFileOperationsManager {
     private static final Logger logger = Logger.getAnonymousLogger();
 
     public static String[] ACCEPTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tif"};
-
-    /**
-     * Rename a given ImageFile
-     *
-     * @param imageFile the image to rename
-     * @param newName the new name
-     * @return a File object with the new name if successfully renamed, the old File object otherwise
-     */
-    public static File renameImageFile(ImageFile imageFile, String newName, ArrayList<Tag> newTagList ){
-        File currentImageFile = imageFile.getThisFile();
-        Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
-        FileOperationsResponse response =  renameFile(currentImageFile, newName);
-        if (response == SUCCESS){
-            imageFile.generalReName(newName,newTagList);
-            UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
-            imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
-        }else if (response == FILENAME_TAKEN){
-            String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(), newName,
-                    UserDataManager.getImageFileNames());
-            // User accepted to a suffixed filename
-            if (suffixedFileName != null){
-                renameImageFile(imageFile, suffixedFileName, newTagList);
-            }else {
-                return currentImageFile;
-            }
-        }else {
-            // Show error alert dialog
-            return currentImageFile;
-        }
-        return currentImageFile;
-    }
 
     /**
      * Rename a given ImageFile but only take two parameters.
