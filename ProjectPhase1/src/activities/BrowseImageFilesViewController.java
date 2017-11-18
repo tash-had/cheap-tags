@@ -245,10 +245,7 @@ public class BrowseImageFilesViewController implements Initializable {
         }
 
         else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
-            if (selectedImageFile.getCurrentName().contains(selectedTag.name)){
-                Alerts.fileContainsTagAlert();
-            }
-            else if (selectedImageFile.getTagList().contains(selectedTag)){
+            if (selectedImageFile.getTagList().contains(selectedTag)){
                     Alerts.fileContainsTagAlert();
                 }
 //                stringsOfTags.remove(selectedTag);
@@ -370,6 +367,7 @@ public class BrowseImageFilesViewController implements Initializable {
             displayRevisionLog(selectedImageFile);
 
             // load existing tags
+
             stringsOfSelectedTags.clear();
             stringsOfSelectedTags.addAll(selectedImageFile.getTagList());
 
