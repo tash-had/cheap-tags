@@ -174,10 +174,6 @@ public class BrowseImageFilesViewController implements Initializable {
 
         // import all tags from tagList to the scene
 
-        for (Tag tag : TagManager.getTagList()) {
-
-            stringsOfTags.add(tag.toString());
-        }
 
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
@@ -224,6 +220,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void backButtonClick() {
+        UserDataManager.clearSession();
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
@@ -279,8 +276,7 @@ public class BrowseImageFilesViewController implements Initializable {
             }
             sb.append(image.getOriginalName());
 
-
-            ImageFileOperationsManager.renameImageFile(image, sb.toString());
+            ImageFileOperationsManager.renameImageFile(image, sb.toString(),stringsOfSelectedTags);
         }
     }
 
