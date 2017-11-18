@@ -9,16 +9,8 @@
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
+            <TilePane fx:id="imageTilePane" layoutX="14.0" layoutY="14.0" orientation="VERTICAL" tileAlignment="TOP_LEFT" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <TextField fx:id="imageSearchBar" layoutX="5.0" layoutY="675.0" onKeyReleased="#imageSearchTextChanged" prefHeight="39.0" prefWidth="306.0" promptText="Search image name by text or regex" />
-            <ScrollPane layoutY="7.0" prefHeight="673.0" prefWidth="317.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="668.0" prefWidth="314.0">
-                     <children>
-                        <TilePane fx:id="imageTilePane" alignment="CENTER" maxHeight="1.7976931348623157E308" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-              </content>
-            </ScrollPane>
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="443.0">
          <children>
