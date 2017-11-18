@@ -278,13 +278,13 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void backButtonClick() {
-        UserDataManager.clearSession();
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
     // Miscellaneous
 
     static void setTargetDirectory(File directory) {
+        UserDataManager.setSession(directory.getPath());
         targetDirectory = directory;
     }
 
@@ -367,6 +367,7 @@ public class BrowseImageFilesViewController implements Initializable {
         selectedImageLog = ConfigureJFXControl.populateListViewWithArrayList(revisionLog,
                 selectedImageFile.getOldName());
     }
+
     public void imageSearchTextChanged(){
         String input = imageSearchBar.getText();
         ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();

@@ -15,6 +15,7 @@ public abstract class UserDataManager {
     private static ArrayList<String> previousPathsVisited = new ArrayList<>();
     private static HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>(); // contains all known images
     private static HashMap<String, ImageFile> nameToImageFileSessionMap = new HashMap<>(); // contains images from this session only
+    private static String currentSessionPath;
 
     public static String[] getPreviousPathsVisited() {
         return previousPathsVisited.toArray(new String[previousPathsVisited.size()]);
@@ -85,8 +86,12 @@ public abstract class UserDataManager {
     public static void previousPathsVisitedSetterForDataGetter(ArrayList<String> newList){
         previousPathsVisited = newList;
     }
-    public static void clearSession(){
-        getNameToImageFileSessionMap().clear();
+
+    public static void setSession(String sessionPath){
+        if (currentSessionPath != null && !currentSessionPath.equals(sessionPath)){
+            getNameToImageFileSessionMap().clear();
+            currentSessionPath = sessionPath;
+        }
     }
 
 
