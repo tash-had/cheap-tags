@@ -270,13 +270,21 @@ public class BrowseImageFilesViewController implements Initializable {
         /* TODO: after image is moved from this directory, ask user if they want to go to the new directory or stay.
         TODO: if they stay, make sure the moved image is removed from the left side pane displaying images.
         */
+        //System.out.println(newDirectoryLocation.toString());
         ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
                 "to the new directory?");
         if (response == ButtonType.YES){
+            // set screen to new directory
             setTargetDirectory(newDirectoryLocation);
+            PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
+                    "/activities/browse_imagefiles_view.fxml");
+            // update recently viewed on homescreen
+            UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
         }
         else{
             setTargetDirectory(targetDirectory);
+            PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                    "/activities/browse_imagefiles_view.fxml");
         }
 
     }

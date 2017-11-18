@@ -98,20 +98,23 @@ public class ImageFileOperationsManager {
         FileOperationsResponse response = moveFile(oldFile, newDirectory.toPath());
 
         if (response == SUCCESS){
-            return newFile;
-        }else if(response == FILENAME_TAKEN){
+            return newDirectory;
+        }
+        else if(response == FILENAME_TAKEN){
             String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile.getName(), null);
             if (suffixedFileName != null){
                 imageFile.generalReName(suffixedFileName);
                 moveFile(imageFile.getThisFile(), newDirectory.toPath());
+                return newDirectory;
             }else{
                 // Dont move
                 newFile = null;
             }
-        }else {
+        }
+        else {
             // error alert
         }
-        return newDirectory;
+    return null;
     }
 
     /**
