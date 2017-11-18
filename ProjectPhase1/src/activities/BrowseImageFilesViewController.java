@@ -1,5 +1,6 @@
 package activities;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -59,7 +60,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * A ListView of String displaying the past names that the File has had.
      */
     @FXML
-    ListView<String[]> RevisionLog;
+    ListView<javafx.collections.ObservableList<String>> RevisionLog;
 
     /**
      * Displays the currently selected file.
@@ -394,9 +395,9 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void revertButtonClick(){
-        String[] specificRevision = RevisionLog.getSelectionModel().getSelectedItem();
-        ImageFile currImageFileObject = (ImageFile) selectedImageView.getUserData();
-        ImageFileOperationsManager.renameImageFile(currImageFileObject, specificRevision[1]);
+        ObservableList<String> specificRevision = RevisionLog.getSelectionModel().getSelectedItem();
+        Logger.getAnonymousLogger().info(specificRevision.get(1));
+        ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
     }
 
     /**
@@ -405,8 +406,9 @@ public class BrowseImageFilesViewController implements Initializable {
      * @param imageFileObject stores the revision log of the selected image.
      */
     public void displayRevisionLog(ImageFile imageFileObject){
-        for (String[] eachLog: imageFileObject.getOldName()){
-            RevisionLog.getItems().add(eachLog);
+        for (String[] eachLog : imageFileObject.getOldName()){
+            ObservableList<String> cellItem = FXCollections.observableArrayList(eachLog[0], eachLog[1], eachLog[2]);
+            RevisionLog.getItems().add(cellItem);
         }
     }
 
