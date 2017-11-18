@@ -21,7 +21,6 @@ import static utils.FileOperations.*;
  * This class manages how file operations for ImageFiles are handled
  */
 public class ImageFileOperationsManager {
-    private static final Logger logger = Logger.getAnonymousLogger();
 
     public static String[] ACCEPTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tif"};
 
