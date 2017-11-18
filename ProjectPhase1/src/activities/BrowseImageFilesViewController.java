@@ -266,18 +266,19 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void moveImageButtonClick() {
-        File newDirectoryLocation = ImageFileOperationsManager.moveImageFileGetDirectory(UserDataManager.getImageFileWithName(selectedImageFile.getCurrentName()));
+        File newDirectoryLocation = ImageFileOperationsManager.moveImageFileGetDirectory(selectedImageFile);
         /* TODO: after image is moved from this directory, ask user if they want to go to the new directory or stay.
         TODO: if they stay, make sure the moved image is removed from the left side pane displaying images.
         */
         ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
                 "to the new directory?");
         if (response == ButtonType.YES){
-
+            setTargetDirectory(newDirectoryLocation);
         }
         else{
-
+            setTargetDirectory(targetDirectory);
         }
+
     }
 
     /**
