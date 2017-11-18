@@ -115,6 +115,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label nameOfSelectedFile;
 
+
     /**
      * Stores the selected directory File object.
      */
@@ -129,7 +130,7 @@ public class BrowseImageFilesViewController implements Initializable {
     private ObservableList<Tag> existingTagsOnImageFile;
     private ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
-    
+    private Collection<ImageFile> imagesToLoad;
     /**
      * A String array containing accepted image file types.
      */
@@ -191,7 +192,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         imageNames = UserDataManager.getImageFileNames();
         prepImageSearchRegex();
-        ImageFileOperationsManager.fetchImageFiles(targetDirectory);
+        imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
         imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
         populateImageTilePane();
@@ -319,7 +320,7 @@ public class BrowseImageFilesViewController implements Initializable {
     // ImageTile Pane Methods
 
     public void populateImageTilePane(){
-        for (ImageFile imageFile : UserDataManager.getNameToImageFileSessionMap().values()){
+        for (ImageFile imageFile : imagesToLoad){
             addImageToTilePane(imageFile);
         }
     }
