@@ -247,13 +247,17 @@ public class BrowseImageFilesViewController implements Initializable {
             if (selectedImageFile.getCurrentName().contains(selectedTag.name)){
                 Alerts.fileContainsTagAlert();
             }
-            else {
-                stringsOfTags.remove(selectedTag);
+            else if (selectedImageFile.getTagList().contains(selectedTag)){
+                    Alerts.fileContainsTagAlert();
+                }
+//                stringsOfTags.remove(selectedTag);
+            else{
                 stringsOfSelectedTags.add(selectedTag);
                 selectedImageFile.getTagList().add(selectedTag);
 //            allTagsListView.getItems().remove(selectedTag);
 //            existingTags.getItems().add(selectedTag);
-//            stringsOfSelectedTags.add(selectedTag);
+//            stringsOfTags.remove(selectedTag);
+
             }
         }
 
@@ -311,7 +315,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //            existingTags.getItems().remove(selectedTag);
             stringsOfSelectedTags.remove(selectedTag);
 //            allTagsListView.getItems().add(selectedTag);
-            stringsOfTags.add(selectedTag);
+//            stringsOfTags.add(selectedTag);
             selectedImageFile.getTagList().remove(selectedTag);
         }
     }
@@ -363,6 +367,14 @@ public class BrowseImageFilesViewController implements Initializable {
             stringsOfSelectedTags = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
             loadImageExistingTags(imageFile);
             displayRevisionLog(selectedImageFile);
+
+            // load existing tags
+            stringsOfSelectedTags.clear();
+            stringsOfSelectedTags.addAll(selectedImageFile.getTagList());
+
+            //load all tags
+//            stringsOfTags.clear();
+//            stringsOfTags.addAll(TagManager.getTagList());
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
