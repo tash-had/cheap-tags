@@ -361,8 +361,6 @@ public class BrowseImageFilesViewController implements Initializable {
             NameOfSelectedFile.setText(imageFile.getCurrentName());
             selectedImageFile = new ImageFile(imageFile.getThisFile());
             stringsOfSelectedTags = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
-
-            stringsOfSelectedTags = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
             loadImageExistingTags(imageFile);
             displayRevisionLog(selectedImageFile);
 
