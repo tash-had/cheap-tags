@@ -240,13 +240,20 @@ public class BrowseImageFilesViewController implements Initializable {
         Tag selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
-        } else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
-            stringsOfTags.remove(selectedTag);
-            stringsOfSelectedTags.add(selectedTag);
-            selectedImageFile.getTagList().add(selectedTag);
+        }
+
+        else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
+            if (selectedImageFile.getCurrentName().contains(selectedTag.name)){
+                Alerts.fileContainsTagAlert();
+            }
+            else {
+                stringsOfTags.remove(selectedTag);
+                stringsOfSelectedTags.add(selectedTag);
+                selectedImageFile.getTagList().add(selectedTag);
 //            allTagsListView.getItems().remove(selectedTag);
 //            existingTags.getItems().add(selectedTag);
 //            stringsOfSelectedTags.add(selectedTag);
+            }
         }
 
     }
@@ -286,9 +293,6 @@ public class BrowseImageFilesViewController implements Initializable {
             }
             sb.append(selectedImageFile.getOriginalName());
             ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
-            imageTilePane.getChildren().clear();
-            populateImageTilePane();
-
         }
     }
 
@@ -346,7 +350,7 @@ public class BrowseImageFilesViewController implements Initializable {
         imageView.setOnMouseClicked(event -> {
             try {
                 selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
-
+                NameOfSelectedFile.setText(imageFile.getCurrentName());
                 selectedImageFile = new ImageFile(imageFile.getThisFile());
                 stringsOfSelectedTags = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
 
