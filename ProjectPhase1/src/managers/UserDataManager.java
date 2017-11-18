@@ -85,7 +85,9 @@ public abstract class UserDataManager {
     public static void previousPathsVisitedSetterForDataGetter(ArrayList<String> newList){
         previousPathsVisited = newList;
     }
-
+    public static void clearSession(){
+        getNameToImageFileSessionMap().clear();
+    }
 
 
     // prep data

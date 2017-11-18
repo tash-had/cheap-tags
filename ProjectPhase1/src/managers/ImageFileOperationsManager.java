@@ -35,7 +35,7 @@ public class ImageFileOperationsManager {
      * @param newName the new name
      * @return a File object with the new name if successfully renamed, the old File object otherwise
      */
-    public static File renameImageFile(ImageFile imageFile, String newName, ArrayList<String> newTagList ){
+    public static File renameImageFile(ImageFile imageFile, String newName, ArrayList<Tag> newTagList ){
         File currentImageFile = imageFile.getThisFile();
         Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
         FileOperationsResponse response =  renameFile(currentImageFile, newName);

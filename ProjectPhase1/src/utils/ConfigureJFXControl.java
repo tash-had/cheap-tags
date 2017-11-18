@@ -3,9 +3,11 @@ package utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import model.Tag;
 
 import java.util.ArrayList;
 
@@ -39,6 +41,29 @@ public abstract class ConfigureJFXControl {
         }
     }
 
+    /**
+     * Set the listview to display string version of custom objects.
+     * Precondition: The type parameter of the listview should have a toString() method defined.
+     *
+     * @param listView the listview on which to set the cell factory
+     * @param <T> the type parameter of the listview
+     */
+    public static <T> void setListViewToDisplayCustomObjects(ListView<T> listView){
+        listView.setCellFactory(param -> new ListCell<T>(){
+            @Override
+            protected void updateItem(T obj, boolean empty){
+                super.updateItem(obj, empty);
+
+                if (empty || obj == null || obj.toString() == null){
+                    setText(null);
+                }else {
+                    setText(obj.toString());
+                }
+            }
+
+        });
+
+    }
     /**
      * Populate a given ListView with a given ArrayList of data by adding the data to an ObservableList (which acts
      * as the data source for the ListView). Returns a reference to the ObservableList so the user can modify
