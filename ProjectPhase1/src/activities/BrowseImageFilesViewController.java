@@ -1,5 +1,6 @@
 package activities;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -59,7 +60,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * A ListView of String displaying the past names that the File has had.
      */
     @FXML
-    ListView<String[]> RevisionLog;
+    ListView<javafx.collections.ObservableList<String>> RevisionLog;
 
     /**
      * Displays the currently selected file.
@@ -256,7 +257,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 selectedImageFile.getTagList().add(selectedTag);
 //            allTagsListView.getItems().remove(selectedTag);
 //            existingTags.getItems().add(selectedTag);
-//            stringsOfTags.remove(selectedTag);
+              stringsOfTags.remove(selectedTag);
 
             }
         }
@@ -315,7 +316,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //            existingTags.getItems().remove(selectedTag);
             stringsOfSelectedTags.remove(selectedTag);
 //            allTagsListView.getItems().add(selectedTag);
-//            stringsOfTags.add(selectedTag);
+            stringsOfTags.add(selectedTag);
             selectedImageFile.getTagList().remove(selectedTag);
         }
     }
@@ -373,8 +374,10 @@ public class BrowseImageFilesViewController implements Initializable {
             stringsOfSelectedTags.addAll(selectedImageFile.getTagList());
 
             //load all tags
-//            stringsOfTags.clear();
-//            stringsOfTags.addAll(TagManager.getTagList());
+            stringsOfTags.clear();
+            stringsOfTags.addAll(TagManager.getTagList());
+
+
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -409,9 +412,9 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void revertButtonClick(){
-        String[] specificRevision = RevisionLog.getSelectionModel().getSelectedItem();
-        ImageFile currImageFileObject = selectedImageFile;
-        ImageFileOperationsManager.renameImageFile(currImageFileObject, specificRevision[1]);
+        ObservableList<String> specificRevision = RevisionLog.getSelectionModel().getSelectedItem();
+        Logger.getAnonymousLogger().info(specificRevision.get(1));
+        ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
     }
 
     /**
@@ -420,8 +423,9 @@ public class BrowseImageFilesViewController implements Initializable {
      * @param imageFileObject stores the revision log of the selected image.
      */
     public void displayRevisionLog(ImageFile imageFileObject){
-        for (String[] eachLog: imageFileObject.getOldName()){
-            RevisionLog.getItems().add(eachLog);
+        for (String[] eachLog : imageFileObject.getOldName()){
+            ObservableList<String> cellItem = FXCollections.observableArrayList(eachLog[0], eachLog[1], eachLog[2]);
+            RevisionLog.getItems().add(cellItem);
         }
     }
 
