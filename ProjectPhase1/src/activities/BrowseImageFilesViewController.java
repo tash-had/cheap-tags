@@ -177,7 +177,6 @@ public class BrowseImageFilesViewController implements Initializable {
 
         ConfigureJFXControl.setListViewToDisplayCustomObjects(existingTags);
         ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
-
         availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView,TagManager.getTagList());
         if (targetDirectory.isDirectory()) {
             Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
@@ -337,18 +336,28 @@ public class BrowseImageFilesViewController implements Initializable {
             selectedImageFile = imageFile;
             selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
-            if (existingTagsOnImageFile != null){
-                existingTagsOnImageFile.clear();
-            }
-            existingTagsOnImageFile = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
-            // Populate selectedImageLog with pre-existing logs
-//            selectedImageLog = ConfigureJFXControl.populateListViewWithArrayList(revisionLog,
-//                    selectedImageFile.getOldName());
+            populateImageFileTagListViews();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
 
+    private void populateImageFileTagListViews(){
+        if (existingTagsOnImageFile != null){
+            existingTagsOnImageFile.clear();
+        }
+        existingTagsOnImageFile = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
+
+        availableTagOptions.clear();
+        availableTagOptions.addAll(TagManager.getTagList());
+        for (Tag tag : existingTagsOnImageFile){
+            availableTagOptions.remove(tag);
+        }
+        // Populate selectedImageLog with pre-existing logs
+        selectedImageLog = ConfigureJFXControl.populateListViewWithArrayList(revisionLog,
+                selectedImageFile.getOldName());
+
+    }
     public void imageSearchTextChanged(){
         String input = imageSearchBar.getText();
         ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();
