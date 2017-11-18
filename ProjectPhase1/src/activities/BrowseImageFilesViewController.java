@@ -320,9 +320,12 @@ public class BrowseImageFilesViewController implements Initializable {
             addImageToTilePane(imageFile);
         }
     }
+
     private void loadImageExistingTags(ImageFile imageFile){
+        existingTags.getItems().clear();
         ConfigureJFXControl.populateListViewWithArrayList(existingTags, imageFile.getTagList());
     }
+
     private void addImageToTilePane(ImageFile imageFile){
         Image image = null;
         try {
@@ -335,22 +338,19 @@ public class BrowseImageFilesViewController implements Initializable {
         imageView.setUserData(imageFile);
         imageView.setOnMouseClicked(event -> {
             try {
-                selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
-                selectedFile = imageFile.getThisFile();
-                loadImageExistingTags(imageFile);
-                NameOfSelectedFile.setText(imageFile.getCurrentName());
-                displayRevisionLog((ImageFile) imageView.getUserData());
-
-            } catch (MalformedURLException e) {
+                System.out.println(imageView.getUserData().toString());
+                ImageFile thisImageFile = (ImageFile) imageView.getUserData();
+                selectedImageView.setImage(new Image(thisImageFile.getThisFile().toURI().toURL().toString(), true));
+                selectedFile = thisImageFile.getThisFile();
+                loadImageExistingTags(thisImageFile);
+                NameOfSelectedFile.setText(thisImageFile.getCurrentName());
+                displayRevisionLog(thisImageFile);
+            }
+            catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         });
         imageTilePane.getChildren().add(imageView);
-    }
-
-    @FXML
-    public void tilePaneImageClicked(){
-
     }
 
     public void imageSearchTextChanged(){
