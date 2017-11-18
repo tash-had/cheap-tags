@@ -4,8 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -21,8 +20,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
@@ -131,6 +128,8 @@ public class BrowseImageFilesViewController implements Initializable {
     private ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
     private Collection<ImageFile> imagesToLoad;
+    private boolean unsavedChanges = false;
+
     /**
      * A String array containing accepted image file types.
      */
@@ -217,6 +216,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 availableTagOptions.remove(selectedTag);
                 existingTagsOnImageFile.add(selectedTag);
                 selectedImageFile.getTagList().add(selectedTag);
+                unsavedChanges = true;
             }
         }
     }
@@ -340,6 +340,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private void imageClicked(ImageFile imageFile, ImageView sidePaneImageView){
         try {
+            checkForUnsavedChanges();
             // Keep a reference to the selected image and set up right pane attributes for selected image
             selectedImageFile = imageFile;
             selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
@@ -347,6 +348,17 @@ public class BrowseImageFilesViewController implements Initializable {
             populateImageFileTagListViews();
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void checkForUnsavedChanges(){
+        if (unsavedChanges){
+            ButtonType saveChangesResponse = Alerts.showYesNoAlert("Save Your Changes", "Unsaved Changes",
+                    "You forgot to hit Set Tags! Would you like us to set your new tags?");
+            if (saveChangesResponse == ButtonType.YES){
+                renameButtonClick();
+            }
+            unsavedChanges = false;
         }
     }
 
