@@ -24,3 +24,12 @@ TAKE TURNS PRESENTING OUR CODE TO EACHOTEHR SO WE ALL UNDERSTAND
 SessionManager.java:
 * TODO: Place this in "data" folder along with objectserialization/desirialization/UserDataManager +change UserDataManager to not static
 * TODO: Regex search
+
+======
+TODO: In Alerts.java
+Methods for alerts are created in Alerts.java so they can be reused and we don't have to keep writing Alert Dialog code (since we use alert dialogs so much).
+chooseFileAlert(), goToDirectoryYesNo() and fileContainsTagAlert() all do the exact same thing. It'd probably be better to just have one function for that dialog
+that takes a parameter for the body. (You can also use alertDialog.setHeader() to set the title on the dialog if you want).
+
+About goToDirectoryYesNo(), there's was already a showYesNoAlert() method in Alerts.java and it can be used  (it's the 2nd one)
+
