@@ -47,13 +47,13 @@ public class BrowseImageFilesViewController implements Initializable {
      * A ListView of String representing all tags in the system (displayed on right pane).
      */
     @FXML
-    ListView<String> allTagsListView;
+    ListView<Tag> allTagsListView;
 
     /**
      * A ListView of String displaying all tags associated with the chosen file.
      */
     @FXML
-    ListView<String> existingTags;
+    ListView<Tag> existingTags;
 
     /**
      * A ListView of String displaying the past names that the File has had.
@@ -133,12 +133,12 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * An ArrayList of strings representing every tag's name.
      */
-    private ArrayList<String> stringsOfTags = new ArrayList<>();
+    private ObservableList<Tag> stringsOfTags;
 
     /**
      * An ArrayList of strings representing tag names of tags associated with the selected file.
      */
-    private ArrayList<String> stringsOfSelectedTags = new ArrayList<>();
+    private ObservableList<Tag> stringsOfSelectedTags;
 
     /**
      * A String array containing accepted image file types.
@@ -153,8 +153,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * The File object that is the currently displayed image.
      */
-    private File selectedFile = null;
-
+    private ImageFile selectedImageFile = null;
 
     /**
      * A FilenameFilter which filters out files that are not accepted image types.
@@ -171,19 +170,27 @@ public class BrowseImageFilesViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         // clear
-        stringsOfTags.clear();
+//        stringsOfTags.clear();
 
 
         // import all tags from tagList to the scene
 
+//        for (Tag tag : TagManager.getTagList()) {
+//
+//            stringsOfTags.add(tag.toString());
+//        }
 
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
-        ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, stringsOfTags);
+
+        ConfigureJFXControl.setListViewToDisplayCustomObjects(existingTags);
+        ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
+
+        stringsOfTags = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView,TagManager.getTagList());
 
         if (targetDirectory.isDirectory()) {
             Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
-        }
+    }
 //        if (targetDirectory.isDirectory()){
 //            for (File imgFile : targetDirectory.listFiles(imgFilter)){
 //                allImages.add(imgFile);
@@ -232,13 +239,16 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void addButtonClick() {
-        String selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
-        if (selectedFile == null) {
+        Tag selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
+        if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
         } else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
-            allTagsListView.getItems().remove(selectedTag);
-            existingTags.getItems().add(selectedTag);
+            stringsOfTags.remove(selectedTag);
             stringsOfSelectedTags.add(selectedTag);
+            selectedImageFile.getTagList().add(selectedTag);
+//            allTagsListView.getItems().remove(selectedTag);
+//            existingTags.getItems().add(selectedTag);
+//            stringsOfSelectedTags.add(selectedTag);
         }
 
     }
@@ -265,20 +275,20 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void renameButtonClick() {
-        if (selectedFile == null) {
+        if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
 
         }
         else {
-            ImageFile image = new ImageFile(selectedFile);
+//            ImageFile image = new ImageFile(selectedFile);
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < stringsOfSelectedTags.size(); i++) {
                 sb.append("@" + stringsOfSelectedTags.get(i) + " ");
             }
-            sb.append(image.getOriginalName());
+            sb.append(selectedImageFile.getOriginalName());
+            ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
 
-            ImageFileOperationsManager.renameImageFile(image, sb.toString(),stringsOfSelectedTags);
         }
     }
 
@@ -288,14 +298,15 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void deleteButtonClick() {
-        String selectedTag = existingTags.getSelectionModel().getSelectedItem();
-        if (selectedFile == null) {
+        Tag selectedTag = existingTags.getSelectionModel().getSelectedItem();
+        if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
-            existingTags.getItems().remove(selectedTag);
+//            existingTags.getItems().remove(selectedTag);
             stringsOfSelectedTags.remove(selectedTag);
-            allTagsListView.getItems().add(selectedTag);
+//            allTagsListView.getItems().add(selectedTag);
             stringsOfTags.add(selectedTag);
+            selectedImageFile.getTagList().remove(selectedTag);
         }
     }
 
@@ -305,12 +316,11 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void moveImageButtonClick() {
-        ImageFileOperationsManager.moveImageFile(UserDataManager.getImageFileWithName(selectedFile.getName()));
+        ImageFileOperationsManager.moveImageFile(UserDataManager.getImageFileWithName(selectedImageFile.getCurrentName()));
         /* TODO: after image is moved from this directory, ask user if they want to go to the new directory or stay.
         TODO: if they stay, make sure the moved image is removed from the left side pane displaying images.
         */
         // use alert goToDirectoryYesNo
-        imageSidePane.getItems().remove(selectedFile.getName());
     }
     
     public void populateImageTilePane(){
@@ -318,12 +328,9 @@ public class BrowseImageFilesViewController implements Initializable {
             addImageToTilePane(imageFile);
         }
     }
-
     private void loadImageExistingTags(ImageFile imageFile){
-        existingTags.getItems().clear();
         ConfigureJFXControl.populateListViewWithArrayList(existingTags, imageFile.getTagList());
     }
-
     private void addImageToTilePane(ImageFile imageFile){
         Image image = null;
         try {
@@ -336,15 +343,15 @@ public class BrowseImageFilesViewController implements Initializable {
         imageView.setUserData(imageFile);
         imageView.setOnMouseClicked(event -> {
             try {
-                System.out.println(imageView.getUserData().toString());
-                ImageFile thisImageFile = (ImageFile) imageView.getUserData();
-                selectedImageView.setImage(new Image(thisImageFile.getThisFile().toURI().toURL().toString(), true));
-                selectedFile = thisImageFile.getThisFile();
-                loadImageExistingTags(thisImageFile);
-                NameOfSelectedFile.setText(thisImageFile.getCurrentName());
-                displayRevisionLog(thisImageFile);
-            }
-            catch (MalformedURLException e) {
+                selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
+
+                selectedImageFile = new ImageFile(imageFile.getThisFile());
+                stringsOfSelectedTags = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
+
+                loadImageExistingTags(imageFile);
+                displayRevisionLog((ImageFile) imageView.getUserData());
+
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         });

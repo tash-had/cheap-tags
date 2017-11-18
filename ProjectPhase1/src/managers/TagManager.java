@@ -50,6 +50,10 @@ public class TagManager {
         return null;
     }
 
+    public static void tagListSetterForDataGetter(ArrayList<Tag> newList){
+        TagManager.tagList = newList;
+    }
+
     /*
     TODO: maybe delete removeTag methods?
      */
