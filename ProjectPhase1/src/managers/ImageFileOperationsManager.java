@@ -137,12 +137,10 @@ public class ImageFileOperationsManager {
         acceptedExtensions.addAll(Arrays.asList(ACCEPTED_EXTENSIONS));
         try {
             ArrayDeque<File> filesFromDir = fetchFromDirectory(directory, acceptedExtensions);
-            logger.info(Integer.toString(filesFromDir.size()));
             for (File file : filesFromDir){
                 String fileName = file.getName();
                 if (UserDataManager.existsInMap(fileName)){
                     ImageFile imageFile = UserDataManager.getImageFileWithName(fileName);
-                    logger.info("Got here");
                     if (!imageFile.getThisFile().getParentFile().getAbsolutePath().equals(directory.getAbsolutePath())){
                         // Image does not match image that exists in directory!
                         
@@ -155,10 +153,8 @@ public class ImageFileOperationsManager {
                         UserDataManager.addImageFileToSessionMap(imageFile);
                     }
                 }else {
-                    logger.info("got here also");
                     ImageFile imageFile = new ImageFile(file);
                     filesToLoad.add(imageFile);
-                    logger.warning(imageFile.getThisFile().getAbsolutePath());
                     UserDataManager.addImageFileToMap(imageFile);
                     UserDataManager.addImageFileToSessionMap(imageFile);
                 }
