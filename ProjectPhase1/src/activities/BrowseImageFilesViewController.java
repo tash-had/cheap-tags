@@ -293,6 +293,7 @@ public class BrowseImageFilesViewController implements Initializable {
             }
             sb.append(selectedImageFile.getOriginalName());
             ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
+            displayRevisionLog(selectedImageFile);
         }
     }
 
@@ -408,6 +409,7 @@ public class BrowseImageFilesViewController implements Initializable {
             RevisionLog.getItems().add(eachLog);
         }
     }
+
 }
 
 
