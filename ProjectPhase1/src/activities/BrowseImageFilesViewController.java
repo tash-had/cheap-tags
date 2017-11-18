@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -208,7 +209,7 @@ public class BrowseImageFilesViewController implements Initializable {
         if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
         }else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
-            if (selectedImageFile.getCurrentName().contains(selectedTag.name)){
+            if (selectedImageFile.getTagList().contains(selectedTag)){
                 Alerts.fileContainsTagAlert();
             }
             else {
@@ -245,12 +246,18 @@ public class BrowseImageFilesViewController implements Initializable {
         }
         else {
             StringBuilder sb = new StringBuilder();
-            for (Tag stringsOfSelectedTag : existingTagsOnImageFile) {
-                sb.append("@" + stringsOfSelectedTag + " ");
+            for (Tag tag : existingTagsOnImageFile) {
+                sb.append("@" + tag + " ");
             }
             sb.append(selectedImageFile.getOriginalName());
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
+            updateImageLog();
         }
+    }
+
+    private void updateImageLog(){
+        selectedImageLog.clear();
+        selectedImageLog.addAll(selectedImageFile.getOldName());
     }
 
     /**
@@ -332,7 +339,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private void imageClicked(ImageFile imageFile, ImageView sidePaneImageView){
         try {
-            // Keep a reference to the selected image, set the main ImageView, image name, pre-existing tags
+            // Keep a reference to the selected image and set up right pane attributes for selected image
             selectedImageFile = imageFile;
             selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
@@ -353,10 +360,12 @@ public class BrowseImageFilesViewController implements Initializable {
         for (Tag tag : existingTagsOnImageFile){
             availableTagOptions.remove(tag);
         }
+        if (selectedImageLog != null){
+            selectedImageLog.clear();
+        }
         // Populate selectedImageLog with pre-existing logs
         selectedImageLog = ConfigureJFXControl.populateListViewWithArrayList(revisionLog,
                 selectedImageFile.getOldName());
-
     }
     public void imageSearchTextChanged(){
         String input = imageSearchBar.getText();
@@ -387,21 +396,9 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void revertButtonClick(){
-//        ObservableList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
-//        Logger.getAnonymousLogger().info(specificRevision.get(1));
-//        ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
-    }
-
-    /**
-     * Displays the revision log of the image selected.
-     *
-     * @param imageFileObject stores the revision log of the selected image.
-     */
-    public void displayrevisionLog(ImageFile imageFileObject){
-//        for (ArrayList<String> log : imageFileObject.getOldName()){
-//            ObservableList<String> cellItem = FXCollections.observableArrayList(eachLog[0], eachLog[1], eachLog[2]);
-//            revisionLog.getItems().add(cellItem);
-//        }
+        ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
+        selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
+        updateImageLog();
     }
 
 }
