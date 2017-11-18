@@ -82,6 +82,13 @@ public class Alerts {
         return null;
     }
 
+    public static void showErrorAlert(String windowTitle, String header, String body){
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR, body, ButtonType.OK);
+        errorAlert.setTitle(windowTitle);
+        errorAlert.setHeaderText(header);
+        errorAlert.showAndWait();
+    }
+
     /**
      * Tell the user that a tag already exists with the same name.
      */
