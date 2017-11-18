@@ -109,4 +109,13 @@ public class Alerts {
         goToDirectoryDialog.showAndWait();
         return goToDirectoryDialog.getResult();
     }
+
+    /**
+     * Tell the user that the selected file already has that tag.
+     */
+    public static void fileContainsTagAlert(){
+        Alert fileContainsTag = new Alert(Alert.AlertType.NONE, "The selected file already contains this tag." +
+                "", ButtonType.CLOSE);
+        fileContainsTag.showAndWait();
+    }
 }
