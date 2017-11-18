@@ -2,6 +2,7 @@ package model;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 import java.nio.file.Path;
 import java.io.File;
@@ -14,8 +15,8 @@ import java.lang.StringBuilder;
 public class ImageFile{
     private StringBuilder currentName; //the most current name of this image
     private ArrayList<Tag> tagList; //the list of tag this image has.
-    //oldName keeps track of all of the revision histories in the format of array [newname,previous name,timestamp]
-    private ArrayList<String[]> oldName;
+    //oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
+    private ArrayList<ArrayList<String>> oldName;
     private String originalName; //the original name of this image without any tag.
     private String underWhichDirectory; //the path for the parent folder of this image.
     private File thisFile;
@@ -31,7 +32,7 @@ public class ImageFile{
         currentName = new StringBuilder();
         originalName = oneImageFile.getName();
         currentName.append(originalName);
-        oldName = new ArrayList<String[]>();
+        oldName = new ArrayList<ArrayList<String>>();
         underWhichDirectory = oneImageFile.getParent();
         thisFile = oneImageFile;
         String c= oneImageFile.getName();
@@ -113,8 +114,8 @@ public class ImageFile{
         currentName.append(this.imageType);
         tagList = newTagList;
         Long timeStamp = System.currentTimeMillis();
-        String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
-        this.oldName.add(tempLog);
+        ArrayList<String> temLog = new ArrayList<>(Arrays.asList(currentName.toString(),tempName,timeStamp.toString()));
+        this.oldName.add(temLog);
         String targetName = this.underWhichDirectory+tempName+this.imageType;
         this.thisFile = new File(targetName);
     }
@@ -131,8 +132,8 @@ public class ImageFile{
         currentName.append(newName);
         currentName.append(this.imageType);
         Long timeStamp = System.currentTimeMillis();
-        String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
-        this.oldName.add(tempLog);
+        ArrayList<String> temLog = new ArrayList<>(Arrays.asList(currentName.toString(),tempName,timeStamp.toString()));
+        this.oldName.add(temLog);
         String targetName = this.underWhichDirectory+tempName+this.imageType;
         this.thisFile = new File(targetName);
     }
@@ -145,7 +146,7 @@ public class ImageFile{
     public String getOriginalName(){
         return this.originalName;
     }
-    public ArrayList<String[]> getOldName(){
+    public ArrayList<ArrayList<String>> getOldName(){
         return this.oldName;
     }
     public String getTheParentpath(){
