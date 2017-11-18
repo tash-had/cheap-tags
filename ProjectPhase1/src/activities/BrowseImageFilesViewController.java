@@ -4,8 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -21,8 +20,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
@@ -260,17 +257,26 @@ public class BrowseImageFilesViewController implements Initializable {
         selectedImageLog.addAll(selectedImageFile.getOldName());
     }
 
+    /* TODO: Finish if and else statements when the user clicks yes/no to moving directories.
+    */
     /**
      * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
      * directory or stay in the current directory.
      */
     @FXML
     public void moveImageButtonClick() {
-        ImageFileOperationsManager.moveImageFile(UserDataManager.getImageFileWithName(selectedImageFile.getCurrentName()));
+        File newDirectoryLocation = ImageFileOperationsManager.moveImageFileGetDirectory(UserDataManager.getImageFileWithName(selectedImageFile.getCurrentName()));
         /* TODO: after image is moved from this directory, ask user if they want to go to the new directory or stay.
         TODO: if they stay, make sure the moved image is removed from the left side pane displaying images.
         */
-        // use alert goToDirectoryYesNo
+        ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
+                "to the new directory?");
+        if (response == ButtonType.YES){
+
+        }
+        else{
+
+        }
     }
 
     /**
