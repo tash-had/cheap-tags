@@ -189,7 +189,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //            }
 //        }
 
-        imageNames = UserDataManager.getImageFileNames();
+        imageNames = UserDataManager.getSessionImageFileNames();
         prepImageSearchRegex();
         imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
@@ -253,6 +253,7 @@ public class BrowseImageFilesViewController implements Initializable {
             sb.append(selectedImageFile.getOriginalName());
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
             updateImageLog();
+            unsavedChanges = false;
         }
     }
 
