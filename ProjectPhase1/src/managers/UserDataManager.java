@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class UserDataManager {
 
@@ -88,8 +89,11 @@ public abstract class UserDataManager {
     }
 
     public static void setSession(String sessionPath){
-        if (currentSessionPath != null && !currentSessionPath.equals(sessionPath)){
+        if (currentSessionPath != null){
             getNameToImageFileSessionMap().clear();
+            Logger.getAnonymousLogger().info("Cleared a session");
+            currentSessionPath = sessionPath;
+        }else {
             currentSessionPath = sessionPath;
         }
     }
