@@ -26,9 +26,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 
-import javafx.stage.DirectoryChooser;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.TagManager;
@@ -201,7 +201,8 @@ public class BrowseImageFilesViewController implements Initializable {
 
         prepImageSearchRegex();
         ImageFileOperationsManager.fetchImageFiles(targetDirectory);
-        imageTilePane.setOrientation(Orientation.VERTICAL);
+        imageTilePane.setOrientation(Orientation.HORIZONTAL);
+        imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
         populateImageTilePane();
 
     }
@@ -342,30 +343,32 @@ public class BrowseImageFilesViewController implements Initializable {
     private void addImageToTilePane(ImageFile imageFile){
         Image image = null;
         try {
-            image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, false); //imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, false);
+            image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, true); //imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, false);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         ImageView imageView = new ImageView();
         imageView.setImage(image);
-        imageView.setUserData(imageFile);
-        imageView.setOnMouseClicked(event -> {
-            try {
-                selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
-                NameOfSelectedFile.setText(imageFile.getCurrentName());
-                selectedImageFile = new ImageFile(imageFile.getThisFile());
-                stringsOfSelectedTags = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
-
-                loadImageExistingTags(imageFile);
-                displayRevisionLog((ImageFile) imageView.getUserData());
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        });
+        imageView.setOnMouseClicked(event -> imageClicked(imageFile, imageView));
         imageTilePane.getChildren().add(imageView);
     }
 
+    private void imageClicked(ImageFile imageFile, ImageView sidePaneImageView){
+        try {
+            selectedImageView.setImage(new Image(imageFile.getThisFile().toURI().toURL().toString(), true));
+            selectedImageFile = new ImageFile(imageFile.getThisFile());
+            Image image = new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, true); //imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, false);
+
+            NameOfSelectedFile.setText(imageFile.getCurrentName());
+            selectedImageFile = new ImageFile(imageFile.getThisFile());
+            stringsOfSelectedTags = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
+            loadImageExistingTags(imageFile);
+            displayRevisionLog(selectedImageFile);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
     public void imageSearchTextChanged(){
         String input = imageSearchBar.getText();
         ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();
