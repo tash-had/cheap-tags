@@ -2,15 +2,12 @@ package managers;
 
 import model.ImageFile;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public abstract class UserDataManager implements java.io.Serializable {
-
-    /*
-    TODO: Do not make this all static!
-     */
+public abstract class UserDataManager implements Serializable {
     private static ArrayList<String> previousPathsVisited = new ArrayList<>();
     private static HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>(); // contains all known images
     private static HashMap<String, ImageFile> nameToImageFileSessionMap = new HashMap<>(); // contains images from this session only
@@ -88,6 +85,9 @@ public abstract class UserDataManager implements java.io.Serializable {
     public static void NameToImageFileMapSetterForDataGetter(HashMap<String, ImageFile> newOne){
         nameToImageFileMap = newOne;
     }
+    private void setNameToImageFileMap(HashMap<String, ImageFile> map){
+        nameToImageFileMap = map;
+    }
     public static ArrayList<String> previousPathsVisitedGetterForDataSaver(){
         return previousPathsVisited;
     }
@@ -104,6 +104,23 @@ public abstract class UserDataManager implements java.io.Serializable {
         }
     }
 
+    private void writeObject(ObjectOutputStream out) throws IOException{
+        out.defaultWriteObject();
+        Object[] data = {nameToImageFileMap, previousPathsVisited};
+        out.writeObject(data);
+     }
+
+    private void readObject(ObjectInputStream in) throws IOException{
+        try {
+            Object[] data = (Object[]) in.readObject();
+            HashMap<String, ImageFile> nameToImfMap;
+            nameToImfMap = (HashMap<String, ImageFile>) data[0];
+            setNameToImageFileMap(nameToImfMap);
+            previousPathsVisitedSetterForDataGetter((ArrayList<String>) data[1]);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     // prep data
 }
