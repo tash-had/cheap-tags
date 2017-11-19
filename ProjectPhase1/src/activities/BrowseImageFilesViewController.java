@@ -258,6 +258,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 existingTagsOnImageFile.add(selectedTag);
                 unsavedChanges = true;
                 rename.setDisable(false);
+                Delete.setDisable(false);
             }
         }
     }
