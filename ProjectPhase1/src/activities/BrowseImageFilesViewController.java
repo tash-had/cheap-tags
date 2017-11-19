@@ -198,6 +198,10 @@ public class BrowseImageFilesViewController implements Initializable {
         populateImageTilePane();
         rename.setDisable(true);
 
+        if (existingTagsOnImageFile == null || existingTagsOnImageFile.size() == 0){
+            Delete.setDisable(true);
+        }
+
         if (imagesToLoad.size() == 0){
             Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
                     " in the directory you loaded. Please select another");
@@ -261,6 +265,7 @@ public class BrowseImageFilesViewController implements Initializable {
             availableTagOptions.add(selectedTag);
             unsavedChanges = true;
             rename.setDisable(false);
+            Delete.setDisable(true);
         }
     }
 
@@ -284,9 +289,11 @@ public class BrowseImageFilesViewController implements Initializable {
             updateImageLog();
             unsavedChanges = false;
             rename.setDisable(true);
+            if (existingTagsOnImageFile.size() != 0) {
+                Delete.setDisable(false);
+            }
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
         }
-
     }
 
     private void updateImageLog(){

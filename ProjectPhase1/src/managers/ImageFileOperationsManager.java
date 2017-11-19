@@ -60,11 +60,15 @@ public class ImageFileOperationsManager implements java.io.Serializable {
      * Move an image to another directory
      *
      * @param imageFile the imageFile representing the image to move
-     * @return File file in its new directory
+     * @return File file in its new directory or null if file not moved
      */
     public static File moveImageFile(ImageFile imageFile) {
         File oldFile = imageFile.getThisFile();
         File newDirectory = PrimaryStageManager.getDirectoryWithChooser();
+        // If user clicks cancel on directory dialog, end function.
+        if (newDirectory == null){
+            return null;
+        }
         // A file object of the imagefile in the new directory
         File newFile = new File(newDirectory, oldFile.getName());
         FileOperationsResponse response = moveFile(oldFile, newDirectory.toPath());
