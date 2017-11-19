@@ -235,6 +235,7 @@ public class BrowseImageFilesViewController implements Initializable {
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
             existingTagsOnImageFile.remove(selectedTag);
             availableTagOptions.add(selectedTag);
+            unsavedChanges = true;
 
         }
     }
