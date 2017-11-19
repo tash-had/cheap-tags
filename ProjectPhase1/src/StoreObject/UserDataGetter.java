@@ -26,7 +26,13 @@ public class UserDataGetter implements java.io.Serializable {
             File newFile = new File("src/data/AllOfData.cheaptag");
             newFile.createNewFile();
 
-        } else {
+        }
+        else if(!new File("src/data/AllOfData.cheaptag").exists()){
+            File newFile = new File("src/data/AllOfData.cheaptag");
+            newFile.createNewFile();
+        }
+
+        else {
             //Object nameToImageFileMap = null;
             Object previousPathsVisited = null;
             //Object tagList = null;
