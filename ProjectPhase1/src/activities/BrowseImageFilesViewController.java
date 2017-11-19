@@ -255,6 +255,7 @@ public class BrowseImageFilesViewController implements Initializable {
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
             updateImageLog();
             unsavedChanges = false;
+            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
         }
     }
 

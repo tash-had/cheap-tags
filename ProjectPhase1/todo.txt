@@ -49,3 +49,9 @@ Timestamp appearing in the revision log isn't readable (just a series of numbers
 ======
 TODO: In BrowseImageFilesViewController.java
 Directory gets renamed accidentally, when using revert button.
+
+======
+TODO: check if image tile pane is scrollable when there are many images.
+
+======
+TODO: set listen on textfield on opening tag screen.
