@@ -52,7 +52,7 @@ public class HomeScreenViewController implements Initializable{
 
     @Override
     public void initialize (URL location, ResourceBundle resources) {
-//        UserDataGetter.loadDATA();
+       UserDataGetter.loadDATA();
 
         Image logoImage = new Image("resources/images/logo_2.jpg", true);
         homeScreenImageView.setImage(logoImage);
@@ -76,7 +76,7 @@ public class HomeScreenViewController implements Initializable{
             UserDataManager.addPathToVisitedList(selectedFile.getPath());
             switchToToBrowseImageFilesView(selectedFile);
         }
- //       UserDataSaver.storeData();
+        UserDataSaver.storeData();
     }
 
     /**
