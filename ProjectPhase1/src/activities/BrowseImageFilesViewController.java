@@ -128,6 +128,8 @@ public class BrowseImageFilesViewController implements Initializable {
     private ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
     private Collection<ImageFile> imagesToLoad;
+    private boolean unsavedChanges = false;
+
     /**
      * A String array containing accepted image file types.
      */
@@ -187,7 +189,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //            }
 //        }
 
-        imageNames = UserDataManager.getImageFileNames();
+        imageNames = UserDataManager.getSessionImageFileNames();
         prepImageSearchRegex();
         imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
@@ -214,6 +216,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 availableTagOptions.remove(selectedTag);
                 existingTagsOnImageFile.add(selectedTag);
                 selectedImageFile.getTagList().add(selectedTag);
+                unsavedChanges = true;
             }
         }
     }
@@ -250,6 +253,7 @@ public class BrowseImageFilesViewController implements Initializable {
             sb.append(selectedImageFile.getOriginalName());
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
             updateImageLog();
+            unsavedChanges = false;
         }
     }
 
@@ -355,6 +359,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private void imageClicked(ImageFile imageFile, ImageView sidePaneImageView){
         try {
+            checkForUnsavedChanges();
             // Keep a reference to the selected image and set up right pane attributes for selected image
             selectedImageFile = imageFile;
             selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
@@ -362,6 +367,17 @@ public class BrowseImageFilesViewController implements Initializable {
             populateImageFileTagListViews();
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void checkForUnsavedChanges(){
+        if (unsavedChanges){
+            ButtonType saveChangesResponse = Alerts.showYesNoAlert("Save Your Changes", "Unsaved Changes",
+                    "You forgot to hit Set Tags! Would you like us to set your new tags?");
+            if (saveChangesResponse == ButtonType.YES){
+                renameButtonClick();
+            }
+            unsavedChanges = false;
         }
     }
 
