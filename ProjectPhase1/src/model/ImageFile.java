@@ -130,7 +130,6 @@ public class ImageFile implements java.io.Serializable{
      * @param newName
      */
     public void generalReName(String newName){
-        ArrayList<Tag> tagsBeforeRename = this.tagList;
         String tempName = currentName.toString();
         currentName = new StringBuilder();
         currentName.append(newName);
@@ -143,7 +142,9 @@ public class ImageFile implements java.io.Serializable{
     }
 
     public void updateTagHistory(ArrayList<Tag> newEntry){
-        this.tagHistory.add(newEntry);
+        ArrayList<Tag> temp = new ArrayList<>();
+        temp.addAll(newEntry);
+        this.tagHistory.add(temp);
     }
 
     public ArrayList<ArrayList<Tag>> getTagHistory(){

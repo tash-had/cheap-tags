@@ -309,10 +309,8 @@ public class BrowseImageFilesViewController implements Initializable {
             Alerts.chooseFileAlert();
         }
         else {
-           // System.out.println(selectedImageFile.getTagList());
             selectedImageFile.updateTagHistory(selectedImageFile.getTagList()); //Add the tag list to the tag history before updating.
-
-            //System.out.println(selectedImageFile.getTagHistory());
+            System.out.println(selectedImageFile.getTagHistory());
 
             StringBuilder sb = new StringBuilder();
             selectedImageFile.getTagList().clear(); //clear all tags, since .addAll adds everything again.
