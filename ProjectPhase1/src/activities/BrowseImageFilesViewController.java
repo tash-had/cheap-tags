@@ -218,8 +218,6 @@ public class BrowseImageFilesViewController implements Initializable {
             else {
                 availableTagOptions.remove(selectedTag);
                 existingTagsOnImageFile.add(selectedTag);
-
-//                selectedImageFile.getTagList().add(selectedTag);
                 unsavedChanges = true;
             }
         }
@@ -237,12 +235,13 @@ public class BrowseImageFilesViewController implements Initializable {
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
             existingTagsOnImageFile.remove(selectedTag);
             availableTagOptions.add(selectedTag);
-//            selectedImageFile.getTagList().remove(selectedTag);
+
         }
     }
 
     /**
      * Renames the file name in the user's operating system.
+     * Modifies the tagslist of selected image, and stores the data
      */
     @FXML
     public void renameButtonClick() {
