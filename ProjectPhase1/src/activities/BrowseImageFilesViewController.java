@@ -272,22 +272,26 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void moveImageButtonClick() {
-        File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
-        File newDirectoryLocation = movedFile.getParentFile();
-        ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
-                "to the new directory?");
-        if (response == ButtonType.YES){
-            // set screen to new directory
-            setTargetDirectory(newDirectoryLocation);
-            PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
-                    "/activities/browse_imagefiles_view.fxml");
-            // update recently viewed on homescreen
-            UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
+        if (selectedImageFile == null){
+            Alerts.chooseFileAlert();
         }
-        else{
-            setTargetDirectory(targetDirectory);
-            PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
-                    "/activities/browse_imagefiles_view.fxml");
+        else {
+            File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
+            File newDirectoryLocation = movedFile.getParentFile();
+            ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
+                    "to the new directory?");
+            if (response == ButtonType.YES) {
+                // set screen to new directory
+                setTargetDirectory(newDirectoryLocation);
+                PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
+                        "/activities/browse_imagefiles_view.fxml");
+                // update recently viewed on homescreen
+                UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
+            } else {
+                setTargetDirectory(targetDirectory);
+                PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                        "/activities/browse_imagefiles_view.fxml");
+            }
         }
     }
 
