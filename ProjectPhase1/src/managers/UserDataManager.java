@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class UserDataManager {
 
@@ -15,6 +16,7 @@ public abstract class UserDataManager {
     private static ArrayList<String> previousPathsVisited = new ArrayList<>();
     private static HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>(); // contains all known images
     private static HashMap<String, ImageFile> nameToImageFileSessionMap = new HashMap<>(); // contains images from this session only
+    private static String currentSessionPath;
 
     public static String[] getPreviousPathsVisited() {
         return previousPathsVisited.toArray(new String[previousPathsVisited.size()]);
@@ -34,12 +36,17 @@ public abstract class UserDataManager {
         return getNameToImageFileMap().get(imageName);
     }
 
-    public static void resetImageFileKey(String oldName, String newName){
+    public static void resetImageFileKey(String oldName){
         if (getNameToImageFileMap().containsKey(oldName)){
             ImageFile renamedImageFile = getNameToImageFileMap().get(oldName);
             getNameToImageFileMap().remove(oldName);
             addImageFileToMap(renamedImageFile);
+            if (getNameToImageFileSessionMap().containsKey(oldName)){
+                getNameToImageFileSessionMap().remove(oldName);
+                addImageFileToSessionMap(renamedImageFile);
+            }
         }
+
     }
     public static boolean setNewImageFile(String imageName, ImageFile newImageFile){
         if (getNameToImageFileMap().containsKey(imageName)){
@@ -85,8 +92,15 @@ public abstract class UserDataManager {
     public static void previousPathsVisitedSetterForDataGetter(ArrayList<String> newList){
         previousPathsVisited = newList;
     }
-    public static void clearSession(){
-        getNameToImageFileSessionMap().clear();
+
+    public static void setSession(String sessionPath){
+        if (currentSessionPath != null){
+            getNameToImageFileSessionMap().clear();
+            Logger.getAnonymousLogger().info("Cleared a session");
+            currentSessionPath = sessionPath;
+        }else {
+            currentSessionPath = sessionPath;
+        }
     }
 
 

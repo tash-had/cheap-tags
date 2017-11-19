@@ -37,7 +37,7 @@ public class ImageFileOperationsManager {
         FileOperationsResponse response =  renameFile(currentImageFile, newName);
         if (response == SUCCESS){
             imageFile.generalReName(newName);
-            UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
+            UserDataManager.resetImageFileKey(currentImageFile.getName());
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
         }else if (response == FILENAME_TAKEN){
             String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(), newName,
@@ -95,7 +95,11 @@ public class ImageFileOperationsManager {
      * 2 - If it does, get our saved ImageFile and add it to the sessionMap
      * 3 - If it does not, create a new ImageFile, store it in our database and our sessionMap
      */
-    public static ArrayDeque<ImageFile> fetchImageFiles(File directory){
+    public static Collection<ImageFile> fetchImageFiles(File directory){
+        Collection<ImageFile> sessionMap = UserDataManager.getNameToImageFileSessionMap().values();
+        if (sessionMap.size() > 0){
+            return sessionMap;
+        }
         ArrayDeque<String> acceptedExtensions = new ArrayDeque<>();
         ArrayDeque<ImageFile> filesToLoad = new ArrayDeque<>();
         acceptedExtensions.addAll(Arrays.asList(ACCEPTED_EXTENSIONS));
