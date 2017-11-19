@@ -4,8 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -21,8 +20,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
@@ -115,6 +112,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label nameOfSelectedFile;
 
+
     /**
      * Stores the selected directory File object.
      */
@@ -129,7 +127,9 @@ public class BrowseImageFilesViewController implements Initializable {
     private ObservableList<Tag> existingTagsOnImageFile;
     private ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
-    
+    private Collection<ImageFile> imagesToLoad;
+    private boolean unsavedChanges = false;
+
     /**
      * A String array containing accepted image file types.
      */
@@ -161,6 +161,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Logger.getAnonymousLogger().info("Set");
 
         // clear
 //        stringsOfTags.clear();
@@ -189,9 +190,9 @@ public class BrowseImageFilesViewController implements Initializable {
 //            }
 //        }
 
-        imageNames = UserDataManager.getImageFileNames();
+        imageNames = UserDataManager.getSessionImageFileNames();
         prepImageSearchRegex();
-        ImageFileOperationsManager.fetchImageFiles(targetDirectory);
+        imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
         imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
         populateImageTilePane();
@@ -216,6 +217,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 availableTagOptions.remove(selectedTag);
                 existingTagsOnImageFile.add(selectedTag);
                 selectedImageFile.getTagList().add(selectedTag);
+                unsavedChanges = true;
             }
         }
     }
@@ -252,6 +254,8 @@ public class BrowseImageFilesViewController implements Initializable {
             sb.append(selectedImageFile.getOriginalName());
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
             updateImageLog();
+            unsavedChanges = false;
+            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
         }
     }
 
@@ -260,17 +264,36 @@ public class BrowseImageFilesViewController implements Initializable {
         selectedImageLog.addAll(selectedImageFile.getOldName());
     }
 
+    /*
+    TODO: bug after you move file, go to new directory, moved file doesn't show up.
+     */
     /**
      * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
      * directory or stay in the current directory.
      */
     @FXML
     public void moveImageButtonClick() {
-        ImageFileOperationsManager.moveImageFile(UserDataManager.getImageFileWithName(selectedImageFile.getCurrentName()));
-        /* TODO: after image is moved from this directory, ask user if they want to go to the new directory or stay.
-        TODO: if they stay, make sure the moved image is removed from the left side pane displaying images.
-        */
-        // use alert goToDirectoryYesNo
+        if (selectedImageFile == null){
+            Alerts.chooseFileAlert();
+        }
+        else {
+            File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
+            File newDirectoryLocation = movedFile.getParentFile();
+            ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
+                    "to the new directory?");
+            if (response == ButtonType.YES) {
+                // set screen to new directory
+                setTargetDirectory(newDirectoryLocation);
+                PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
+                        "/activities/browse_imagefiles_view.fxml");
+                // update recently viewed on home scene
+                UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
+            } else {
+                setTargetDirectory(targetDirectory);
+                PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                        "/activities/browse_imagefiles_view.fxml");
+            }
+        }
     }
 
     /**
@@ -319,7 +342,8 @@ public class BrowseImageFilesViewController implements Initializable {
     // ImageTile Pane Methods
 
     public void populateImageTilePane(){
-        for (ImageFile imageFile : UserDataManager.getNameToImageFileSessionMap().values()){
+        Logger.getAnonymousLogger().info("Trying to populate");
+        for (ImageFile imageFile : imagesToLoad){
             addImageToTilePane(imageFile);
         }
     }
@@ -339,6 +363,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private void imageClicked(ImageFile imageFile, ImageView sidePaneImageView){
         try {
+            checkForUnsavedChanges();
             // Keep a reference to the selected image and set up right pane attributes for selected image
             selectedImageFile = imageFile;
             selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
@@ -346,6 +371,17 @@ public class BrowseImageFilesViewController implements Initializable {
             populateImageFileTagListViews();
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void checkForUnsavedChanges(){
+        if (unsavedChanges){
+            ButtonType saveChangesResponse = Alerts.showYesNoAlert("Save Your Changes", "Save Changes?",
+                    "You forgot to hit Set Tags! Would you like us to set your new tags?");
+            if (saveChangesResponse == ButtonType.YES){
+                renameButtonClick();
+            }
+            unsavedChanges = false;
         }
     }
 
@@ -369,26 +405,31 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     public void imageSearchTextChanged(){
-        String input = imageSearchBar.getText();
+        String input = imageSearchBar.getText().toLowerCase().replace("@", "");
         ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();
+        String fullPattern;
+        if (input.startsWith("^") && input.endsWith("$")){
+            fullPattern = input;
+        }else {
+            fullPattern = ".*\\b(" + Pattern.quote(input) + ")" +imageSearchPatternEnd.toString();
+        }
 
-        String imageSearchPatternStart = ".*\\b(" + input + ")";
-        Pattern imageSearchPattern = Pattern.compile(imageSearchPatternStart +imageSearchPatternEnd);
+        Pattern imageSearchPattern = Pattern.compile(fullPattern);
         Matcher imageSearchMatcher;
-        if (input.equals("")){
+        imageTilePane.getChildren().clear();
+        if (input.isEmpty()){
             searchResultImageFileList.clear();
             populateImageTilePane();
         }else {
             for (String name:imageNames){
-                imageSearchMatcher = imageSearchPattern.matcher(name);
+                imageSearchMatcher = imageSearchPattern.matcher(name.toLowerCase());
                 if (imageSearchMatcher.find()){
                     searchResultImageFileList.add(UserDataManager.getNameToImageFileSessionMap().get(name));
                 }
             }
-        }
-        imageTilePane.getChildren().clear();
-        for (ImageFile imf : searchResultImageFileList){
-            addImageToTilePane(imf);
+            for (ImageFile imf : searchResultImageFileList){
+                addImageToTilePane(imf);
+            }
         }
     }
 

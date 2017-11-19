@@ -108,16 +108,6 @@ public class Alerts {
     }
 
     /**
-     * Ask the user if they want to go to the new selected directory.
-     */
-    public static ButtonType goToDirectoryYesNo(){
-        Alert goToDirectoryDialog = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to go to the new " +
-                "directory?", ButtonType.NO, ButtonType.YES);
-        goToDirectoryDialog.showAndWait();
-        return goToDirectoryDialog.getResult();
-    }
-
-    /**
      * Tell the user that the selected file already has that tag.
      */
     public static void fileContainsTagAlert(){

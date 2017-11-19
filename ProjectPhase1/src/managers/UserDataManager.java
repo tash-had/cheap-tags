@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class UserDataManager {
 
@@ -35,12 +36,17 @@ public abstract class UserDataManager {
         return getNameToImageFileMap().get(imageName);
     }
 
-    public static void resetImageFileKey(String oldName, String newName){
+    public static void resetImageFileKey(String oldName){
         if (getNameToImageFileMap().containsKey(oldName)){
             ImageFile renamedImageFile = getNameToImageFileMap().get(oldName);
             getNameToImageFileMap().remove(oldName);
             addImageFileToMap(renamedImageFile);
+            if (getNameToImageFileSessionMap().containsKey(oldName)){
+                getNameToImageFileSessionMap().remove(oldName);
+                addImageFileToSessionMap(renamedImageFile);
+            }
         }
+
     }
     public static boolean setNewImageFile(String imageName, ImageFile newImageFile){
         if (getNameToImageFileMap().containsKey(imageName)){
@@ -88,8 +94,11 @@ public abstract class UserDataManager {
     }
 
     public static void setSession(String sessionPath){
-        if (currentSessionPath != null && !currentSessionPath.equals(sessionPath)){
+        if (currentSessionPath != null){
             getNameToImageFileSessionMap().clear();
+            Logger.getAnonymousLogger().info("Cleared a session");
+            currentSessionPath = sessionPath;
+        }else {
             currentSessionPath = sessionPath;
         }
     }
