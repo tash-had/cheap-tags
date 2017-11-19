@@ -1,5 +1,7 @@
 package activities;
 
+import StoreObject.UserDataGetter;
+import StoreObject.UserDataSaver;
 import activities.BrowseImageFilesViewController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,7 +46,9 @@ public class HomeScreenViewController implements Initializable{
      * */
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize (URL location, ResourceBundle resources) {
+        UserDataGetter.loadDATA();
+
         Image logoImage = new Image("resources/images/logo_2.jpg", true);
         homeScreenImageView.setImage(logoImage);
 
@@ -64,6 +68,7 @@ public class HomeScreenViewController implements Initializable{
             UserDataManager.addPathToVisitedList(selectedFile.getPath());
             switchToToBrowseImageFilesView(selectedFile);
         }
+        UserDataSaver.storeData();
     }
 
     private ArrayList<Hyperlink> getHyperlinkArrayList(String[] pathArray){

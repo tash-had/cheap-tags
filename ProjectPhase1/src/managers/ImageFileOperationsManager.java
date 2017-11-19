@@ -22,7 +22,7 @@ import static utils.FileOperations.FileOperationsResponse.SUCCESS;
 /**
  * This class manages how file operations for ImageFiles are handled
  */
-public class ImageFileOperationsManager {
+public class ImageFileOperationsManager implements java.io.Serializable {
 
     public static String[] ACCEPTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tif"};
 

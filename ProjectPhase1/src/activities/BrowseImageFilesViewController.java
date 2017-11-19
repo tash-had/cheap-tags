@@ -1,5 +1,6 @@
 package activities;
 
+import StoreObject.UserDataGetter;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -121,7 +122,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * An ArrayList of File objects of all the images in the chosen directory.
      */
     private ArrayList<File> fileObjectsInDirectory = new ArrayList<>();
-    
+
     private ObservableList<Tag> availableTagOptions;
     private ObservableList<Tag> existingTagsOnImageFile;
     private ObservableList<ArrayList<String>> selectedImageLog;
@@ -195,6 +196,8 @@ public class BrowseImageFilesViewController implements Initializable {
 //        imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
         populateImageTilePane();
 
+        rename.setDisable(true);
+
     }
 
     // Button click handlers
@@ -203,7 +206,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * allTagsListView.
      */
     @FXML
-    public void addButtonClick() {
+    public void addButtonClick(){
         Tag selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
@@ -232,6 +235,21 @@ public class BrowseImageFilesViewController implements Initializable {
         if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
+//            // find the matching tag in the images tagList and remove that object
+//            for (int i = 0; i < selectedImageFile.getTagList().size(); i++){
+//                if (selectedTag.name.equals(selectedImageFile.getTagList().get(i).name)){
+//                    selectedImageFile.getTagList().remove(i);
+//                    break;
+//                }
+//            }
+//            StringBuilder sb = new StringBuilder();
+//            for (Tag tag : selectedImageFile.getTagList()){
+//                sb.append("@" + tag + " ");
+//            }
+//            sb.append(selectedImageFile.getOriginalName());
+//            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
+//            updateImageLog();
+
             existingTagsOnImageFile.remove(selectedTag);
             availableTagOptions.add(selectedTag);
             unsavedChanges = true;
@@ -254,7 +272,7 @@ public class BrowseImageFilesViewController implements Initializable {
             for (Tag tag : existingTagsOnImageFile) {
                 sb.append("@" + tag + " ");
             }
-            sb.append(selectedImageFile.getOriginalName());
+            sb.append(selectedImageFile.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
             updateImageLog();
             unsavedChanges = false;
@@ -278,25 +296,29 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void moveImageButtonClick() {
+        checkForUnsavedChanges();
         if (selectedImageFile == null){
             Alerts.chooseFileAlert();
         }
         else {
             File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
-            File newDirectoryLocation = movedFile.getParentFile();
-            ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
-                    "to the new directory?");
-            if (response == ButtonType.YES) {
-                // set screen to new directory
-                setTargetDirectory(newDirectoryLocation);
-                PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
-                        "/activities/browse_imagefiles_view.fxml");
-                // update recently viewed on home scene
-                UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
-            } else {
-                setTargetDirectory(targetDirectory);
-                PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
-                        "/activities/browse_imagefiles_view.fxml");
+            if (movedFile != null) {
+                File newDirectoryLocation = movedFile.getParentFile();
+                ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
+                        "to the new directory?");
+                if (response == ButtonType.YES) {
+                    // set screen to new directory
+                    setTargetDirectory(newDirectoryLocation);
+                    PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
+                            "/activities/browse_imagefiles_view.fxml");
+                    // update recently viewed on home scene
+                    selectedImageFile.setFile(movedFile);
+                    UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
+                } else {
+                    setTargetDirectory(targetDirectory);
+                    PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                            "/activities/browse_imagefiles_view.fxml");
+                }
             }
         }
     }
@@ -306,6 +328,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void backButtonClick() {
+        checkForUnsavedChanges();
         PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 

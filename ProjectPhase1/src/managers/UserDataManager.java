@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
-public abstract class UserDataManager {
+public abstract class UserDataManager implements java.io.Serializable {
 
     /*
     TODO: Do not make this all static!

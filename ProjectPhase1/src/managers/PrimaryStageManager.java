@@ -16,7 +16,7 @@ import java.io.IOException;
  * This class consists exclusively of static methods, and delegates all communication with the
  * primary stage of the application.
  */
-public abstract class PrimaryStageManager {
+public abstract class PrimaryStageManager implements java.io.Serializable {
     private static Stage primaryStage;
 
     private static double defaultStageWidth;

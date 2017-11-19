@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.lang.StringBuilder;
 //after the filemanager passes the file to this class, model.ImageFile will construct an imagefile object
 //on it. But in this class, I haven't associated rename with tag.java
 //Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
-public class ImageFile{
+public class ImageFile implements java.io.Serializable{
     private StringBuilder currentName; //the most current name of this image
     private ArrayList<Tag> tagList; //the list of tag this image has.
     //oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
@@ -130,7 +131,7 @@ public class ImageFile{
         String tempName = currentName.toString();
         currentName = new StringBuilder();
         currentName.append(newName);
-        currentName.append(this.imageType);
+        //currentName.append(this.imageType);
         Long timeStamp = System.currentTimeMillis();
         ArrayList<String> temLog = new ArrayList<>(Arrays.asList(currentName.toString(),tempName,timeStamp.toString()));
         this.oldName.add(temLog);
