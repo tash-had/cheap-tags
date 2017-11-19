@@ -63,7 +63,7 @@ public class Alerts {
      * @param directory the directory in which there is an existing file
      * @param fileName the name of the file they are trying to place in the directory
      * @param filter which names to avoid when selecting a suffixed name
-     * @return the file name with a numerical suffix
+     * @return the file name with a numerical suffix, or null if they don't want to rename it
      */
     public static String showFileExistsAlert(File directory, String fileName, @Nullable Collection filter){
         // Get new file with a suffix

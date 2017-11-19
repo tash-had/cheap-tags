@@ -5,8 +5,6 @@ import model.ImageFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
 
 public abstract class UserDataManager implements java.io.Serializable {
 
@@ -36,6 +34,10 @@ public abstract class UserDataManager implements java.io.Serializable {
         return getNameToImageFileMap().get(imageName);
     }
 
+    public static ImageFile getSessionImageFileWithName(String imageName){
+        return getNameToImageFileSessionMap().get(imageName);
+    }
+
     public static void resetImageFileKey(String oldName){
         if (getNameToImageFileMap().containsKey(oldName)){
             ImageFile renamedImageFile = getNameToImageFileMap().get(oldName);
@@ -60,7 +62,7 @@ public abstract class UserDataManager implements java.io.Serializable {
     }
 
     public static Collection<String> getSessionImageFileNames(){
-        return getNameToImageFileSessionMap().keySet();
+        return new ArrayList<>(getNameToImageFileSessionMap().keySet());
     }
 
     public static void addImageFileToMap(ImageFile imageFile){
