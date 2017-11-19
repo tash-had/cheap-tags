@@ -294,9 +294,9 @@ public class BrowseImageFilesViewController implements Initializable {
             if (existingTagsOnImageFile.size() == 0){
                 Delete.setDisable(true);
             }
-            //unsavedChanges = true;
-            //rename.setDisable(false);
-            //Delete.setDisable(true);
+            unsavedChanges = true;
+            rename.setDisable(false);
+            Delete.setDisable(true);
         }
     }
 
