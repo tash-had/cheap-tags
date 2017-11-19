@@ -23,6 +23,7 @@ public class ImageFile implements java.io.Serializable{
     private File thisFile;
     private String imageType; //the type of the string(eg. ".jpeg")
     private String suffixForDuplicate; //
+    private ArrayList<ArrayList<Tag>> tagHistory;
 
 
     /**
@@ -41,6 +42,7 @@ public class ImageFile implements java.io.Serializable{
         imageType = ("."+split[split.length-1]);
         suffixForDuplicate = "";
         tagList = new ArrayList<>();
+        tagHistory = new ArrayList<>();
     }
 
     /**
@@ -128,15 +130,24 @@ public class ImageFile implements java.io.Serializable{
      * @param newName
      */
     public void generalReName(String newName){
+        ArrayList<Tag> tagsBeforeRename = this.tagList;
         String tempName = currentName.toString();
         currentName = new StringBuilder();
         currentName.append(newName);
         //currentName.append(this.imageType);
         Long timeStamp = System.currentTimeMillis();
         ArrayList<String> temLog = new ArrayList<>(Arrays.asList(currentName.toString(),tempName,timeStamp.toString()));
-        this.oldName.add(temLog);
+        this.oldName.add(temLog); //Add new entry to revision history
         String targetName = this.underWhichDirectory+tempName+this.imageType;
         this.thisFile = new File(targetName);
+    }
+
+    public void updateTagHistory(ArrayList<Tag> newEntry){
+        this.tagHistory.add(newEntry);
+    }
+
+    public ArrayList<ArrayList<Tag>> getTagHistory(){
+        return this.tagHistory;
     }
 
 
