@@ -57,3 +57,5 @@ TODO: set listen on textfield on opening tag screen.
 Revert revision log has to update current name
 Dialog to remind user to set tags before exiting
 >>>>>>> Stashed changes
+
+CLEAR IMAGE FILE TAGS BEFORE ADDING EXISITNG TAGS

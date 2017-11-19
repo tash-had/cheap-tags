@@ -38,8 +38,6 @@ import utils.ConfigureJFXControl;
 
 public class BrowseImageFilesViewController implements Initializable {
 
-    @FXML
-    ListView<String> imageSidePane;
 
     /**
      * A ListView of String representing all tags in the system (displayed on right pane).
@@ -114,7 +112,12 @@ public class BrowseImageFilesViewController implements Initializable {
     Label nameOfSelectedFile;
 
     @FXML
+    ToggleButton toggleButton;
+
+    @FXML
     ListView<String> imageNamesListView;
+
+    ObservableList<String> imageFileNames;
 
     /**
      * Stores the selected directory File object.
@@ -157,6 +160,7 @@ public class BrowseImageFilesViewController implements Initializable {
     };
 
 
+
     /**
      * TODO; imageFile rename oldName to revisionLog
      */
@@ -183,6 +187,8 @@ public class BrowseImageFilesViewController implements Initializable {
         if (targetDirectory.isDirectory()) {
             Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
     }
+        toggleButton.setSelected(false);
+        imagesViewToggle();
 
 //        if (targetDirectory.isDirectory()){
 //            for (File imgFile : targetDirectory.listFiles(imgFilter)){
@@ -190,10 +196,10 @@ public class BrowseImageFilesViewController implements Initializable {
 //            }
 //        }
 
-        imageNames = UserDataManager.getSessionImageFileNames();
+
         prepImageSearchRegex();
         imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
-
+        imageNames = UserDataManager.getSessionImageFileNames();
 
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
         imageTilePane.setVgap(0);
@@ -307,6 +313,10 @@ public class BrowseImageFilesViewController implements Initializable {
                 sb.append("@" + tag + " ");
             }
             sb.append(selectedImageFile.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
+            imageNames.remove(selectedImageFile.getCurrentName());
+            if (imageFileNames != null){
+                imageFileNames.remove(selectedImageFile.getCurrentName());
+            }
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
             updateImageLog();
             unsavedChanges = false;
@@ -315,8 +325,30 @@ public class BrowseImageFilesViewController implements Initializable {
                 Delete.setDisable(false);
             }
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+            imageNames.add(selectedImageFile.getCurrentName());
+            imageFileNames.add(selectedImageFile.getCurrentName());
         }
     }
+
+    @FXML
+    public void imagesViewToggle(){
+        if (toggleButton.isSelected()){
+            imageTilePane.setVisible(false);
+            imageSearchBar.setVisible(false);
+            imageNamesListView.setVisible(true);
+            ArrayList<String> imageNamesArrayList = new ArrayList<>();
+            imageNamesArrayList.addAll(imageNames);
+            if (imageFileNames != null){
+                imageFileNames.clear();
+            }
+            imageFileNames = ConfigureJFXControl.populateListViewWithArrayList(imageNamesListView, imageNamesArrayList);
+        }else {
+            imageTilePane.setVisible(true);
+            imageSearchBar.setVisible(true);
+            imageNamesListView.setVisible(false);
+        }
+    }
+
 
     private void updateImageLog(){
         selectedImageLog.clear();
