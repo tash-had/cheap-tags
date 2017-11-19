@@ -69,7 +69,7 @@ public class ImageFileOperationsManager implements java.io.Serializable {
         if (newDirectory == null){
             return null;
         }
-        // A file object of the imagefile in the new directory
+        // A file object of the imageFile in the new directory
         File newFile = new File(newDirectory, oldFile.getName());
         FileOperationsResponse response = moveFile(oldFile, newDirectory.toPath());
 
@@ -81,7 +81,7 @@ public class ImageFileOperationsManager implements java.io.Serializable {
                 imageFile.generalReName(suffixedFileName);
                 moveFile(imageFile.getThisFile(), newDirectory.toPath());
             }else{
-                // Dont move
+                // Don't move
                 newFile = null;
             }
         }else {
@@ -159,7 +159,7 @@ public class ImageFileOperationsManager implements java.io.Serializable {
     }
 
     /**
-     * Prompt the user to rename the file being imported since it has the same name as somethining the database.
+     * Prompt the user to rename the file being imported since it has the same name as something the database.
      *
      * @param file the file they are trying to import
      * @return the new name they chose for the file, null if they said no to a new name.

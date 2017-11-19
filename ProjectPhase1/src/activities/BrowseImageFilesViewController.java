@@ -246,26 +246,30 @@ public class BrowseImageFilesViewController implements Initializable {
         if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
-//            // find the matching tag in the images tagList and remove that object
-//            for (int i = 0; i < selectedImageFile.getTagList().size(); i++){
-//                if (selectedTag.name.equals(selectedImageFile.getTagList().get(i).name)){
-//                    selectedImageFile.getTagList().remove(i);
-//                    break;
-//                }
-//            }
-//            StringBuilder sb = new StringBuilder();
-//            for (Tag tag : selectedImageFile.getTagList()){
-//                sb.append("@" + tag + " ");
-//            }
-//            sb.append(selectedImageFile.getOriginalName());
-//            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
-//            updateImageLog();
+            // find the matching tag in the images tagList and remove that object
+            for (int i = 0; i < selectedImageFile.getTagList().size(); i++){
+                if (selectedTag.name.equals(selectedImageFile.getTagList().get(i).name)){
+                    selectedImageFile.getTagList().remove(i);
+                    break;
+                }
+            }
+            StringBuilder sb = new StringBuilder();
+            for (Tag tag : selectedImageFile.getTagList()){
+                sb.append("@" + tag + " ");
+            }
+            sb.append(selectedImageFile.getOriginalName());
+            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
+            updateImageLog();
 
             existingTagsOnImageFile.remove(selectedTag);
             availableTagOptions.add(selectedTag);
-            unsavedChanges = true;
-            rename.setDisable(false);
-            Delete.setDisable(true);
+
+            if (existingTagsOnImageFile.size() == 0){
+                Delete.setDisable(true);
+            }
+            //unsavedChanges = true;
+            //rename.setDisable(false);
+            //Delete.setDisable(true);
         }
     }
 
@@ -465,10 +469,11 @@ public class BrowseImageFilesViewController implements Initializable {
      * Reverts the current image to the selected previous name.
      */
     @FXML
-    public void revertButtonClick(){
+    public void revertButtonClick() {
         ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
         selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
         updateImageLog();
+//        selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
     }
 
 }
