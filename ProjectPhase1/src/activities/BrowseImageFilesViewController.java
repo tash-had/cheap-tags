@@ -171,7 +171,6 @@ public class BrowseImageFilesViewController implements Initializable {
 //
 //            stringsOfTags.add(tag.toString());
 //        }
-
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
 
@@ -191,13 +190,21 @@ public class BrowseImageFilesViewController implements Initializable {
         imageNames = UserDataManager.getSessionImageFileNames();
         prepImageSearchRegex();
         imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
+
+
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
         imageTilePane.setVgap(0);
 //        imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
         populateImageTilePane();
-
         rename.setDisable(true);
 
+        if (imagesToLoad.size() == 0){
+            Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+                    " in the directory you loaded. Please select another");
+            setTargetDirectory(PrimaryStageManager.getDirectoryWithChooser());
+            initialize(location, resources);
+
+        }
     }
 
     // Button click handlers

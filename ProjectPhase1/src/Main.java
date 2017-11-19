@@ -3,7 +3,7 @@ import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import model.ImageFile;
-
+import utils.FileOperations;
 
 
 //import tests.FileOperationsTest;
@@ -24,6 +24,10 @@ public class Main extends Application{
     }
     public static void main(String[] args){
         launch(args);
+        File file = new File("/Users/tash-had/Desktop/fikder.jpg/@Tag1 @Tag1 @Tag1 @Tag1 489 - ZRa7b8X.jpg");
+        System.out.println(file.getAbsolutePath());
+        FileOperations.renameFile(file, "yooooo_fam.jpg");
+        System.out.println(file.getAbsolutePath());
     }
 
 

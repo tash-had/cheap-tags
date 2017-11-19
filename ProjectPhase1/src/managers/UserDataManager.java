@@ -96,7 +96,6 @@ public abstract class UserDataManager implements java.io.Serializable {
     public static void setSession(String sessionPath){
         if (currentSessionPath != null){
             getNameToImageFileSessionMap().clear();
-            Logger.getAnonymousLogger().info("Cleared a session");
             currentSessionPath = sessionPath;
         }else {
             currentSessionPath = sessionPath;

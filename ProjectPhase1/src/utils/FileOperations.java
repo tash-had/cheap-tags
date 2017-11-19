@@ -25,7 +25,6 @@ public class FileOperations {
         SUCCESS, FAILURE, FILENAME_TAKEN
     }
 
-    private FileOperationsResponse response;
     /**
      * Rename a given file.
      *
@@ -34,6 +33,9 @@ public class FileOperations {
      * @return 0 on failure, 1 on success and -1 on failure due to existing file
      */
     public static FileOperationsResponse renameFile(File file, String newName) {
+        if (newName == null){
+            return FAILURE;
+        }
         File newFile = new File(file.getParentFile().getAbsolutePath(), newName);
         try {
             if (!(newFile.exists())) {

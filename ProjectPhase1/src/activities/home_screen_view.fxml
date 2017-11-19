@@ -13,7 +13,7 @@
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
             <Label fx:id="previouslyViewedLabel" alignment="CENTER" layoutX="4.0" prefHeight="35.0" prefWidth="166.0" text="Previously Viewed " AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <ListView fx:id="homeScreenListView" layoutX="-13.0" layoutY="40.0" prefHeight="353.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
+            <ListView fx:id="previouslyViewedListView" layoutX="-13.0" layoutY="40.0" prefHeight="353.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>

@@ -1,4 +1,4 @@
-﻿- Ensure design follows Model-View-Controller structure 
+﻿﻿- Ensure design follows Model-View-Controller structure 
 - Create a digital flow chart with ALL functions of the program all possible things that can occur, including specifically how each occurence is handled.
 
 *** Phase 1 Clarifications from Portal ***
@@ -50,5 +50,10 @@ Timestamp appearing in the revision log isn't readable (just a series of numbers
 TODO: In BrowseImageFilesViewController.java
 Directory gets renamed accidentally, when using revert button.
 
+<<<<<<< Updated upstream
 ======
 TODO: set listen on textfield on opening tag screen.
+=======
+Revert revision log has to update current name
+Dialog to remind user to set tags before exiting
+>>>>>>> Stashed changes

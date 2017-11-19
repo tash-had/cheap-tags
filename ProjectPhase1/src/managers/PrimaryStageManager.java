@@ -16,7 +16,8 @@ import java.io.IOException;
  * This class consists exclusively of static methods, and delegates all communication with the
  * primary stage of the application.
  */
-public abstract class PrimaryStageManager implements java.io.Serializable {
+@SuppressWarnings({"unused"})
+public abstract class PrimaryStageManager {
     private static Stage primaryStage;
 
     private static double defaultStageWidth;
@@ -88,12 +89,12 @@ public abstract class PrimaryStageManager implements java.io.Serializable {
     }
 
     /**
-     * Return a Parent object loaded with an object hierarchy from an FXMLfile.
+     * Return a Parent object loaded with an object hierarchy from an FXML file.
      *
      * @param fxmlPath the path of the FXML file to load the Parent with. (relative to this class)
      * @return a Parent instance, loaded with the given FXML file
      */
-    public static Parent getParentWithFXMLPath(String fxmlPath){
+    private static Parent getParentWithFXMLPath(String fxmlPath){
         try {
             return FXMLLoader.load(PrimaryStageManager.class.getResource(fxmlPath));
         } catch (IOException e) {
@@ -107,7 +108,7 @@ public abstract class PrimaryStageManager implements java.io.Serializable {
      *
      * @return the default width of this primary stage
      */
-    public static double getDefaultStageWidth() {
+    private static double getDefaultStageWidth() {
         return defaultStageWidth;
     }
 
@@ -126,7 +127,7 @@ public abstract class PrimaryStageManager implements java.io.Serializable {
      *
      * @return the default height of this primary stage
      */
-    public static double getDefaultStageHeight() {
+    private static double getDefaultStageHeight() {
         return defaultStageHeight;
     }
 

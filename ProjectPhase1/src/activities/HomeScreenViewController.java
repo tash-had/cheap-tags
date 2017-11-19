@@ -3,6 +3,7 @@ package activities;
 import StoreObject.UserDataGetter;
 import StoreObject.UserDataSaver;
 import activities.BrowseImageFilesViewController;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -25,8 +26,11 @@ import java.util.ResourceBundle;
 
 public class HomeScreenViewController implements Initializable{
 
+    /**
+     * A reference to the
+     */
     @FXML
-    ListView<Hyperlink> homeScreenListView;
+    ListView<Hyperlink> previouslyViewedListView;
 
     @FXML
     ImageView homeScreenImageView;
@@ -36,10 +40,11 @@ public class HomeScreenViewController implements Initializable{
 
     @FXML
     Button openDirectoryButton;
+
     @FXML
     Button addTagsButton;
 
-    /**
+    /*
      * TODO: Style buttons - material
      * add docstrings!
      * remove the "Users/tash-had/Pictures" initial entry in listview
@@ -52,7 +57,7 @@ public class HomeScreenViewController implements Initializable{
         Image logoImage = new Image("resources/images/logo_2.jpg", true);
         homeScreenImageView.setImage(logoImage);
 
-        ConfigureJFXControl.populateListViewWithArrayList(homeScreenListView,
+        ConfigureJFXControl.populateListViewWithArrayList(previouslyViewedListView,
                 getHyperlinkArrayList(UserDataManager.getPreviousPathsVisited()));
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf",
                 15, previouslyViewedLabel);
@@ -62,6 +67,9 @@ public class HomeScreenViewController implements Initializable{
                 Color.BLACK, openDirectoryButton, addTagsButton);
     }
 
+    /**
+     * Function to handle "Open Directory" button click on Home screen.
+     */
     public void openDirectoryClick(){
         File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
         if (selectedFile != null) {
@@ -71,6 +79,12 @@ public class HomeScreenViewController implements Initializable{
         UserDataSaver.storeData();
     }
 
+    /**
+     * Given an array of paths, get an arraylist of hyperlinked paths
+     *
+     * @param pathArray an array of paths
+     * @return an arraylist of hyperlinked paths
+     */
     private ArrayList<Hyperlink> getHyperlinkArrayList(String[] pathArray){
         ArrayList<Hyperlink> hyperlinkArrayList = new ArrayList<>();
         for (String path : pathArray){
@@ -79,11 +93,15 @@ public class HomeScreenViewController implements Initializable{
         return hyperlinkArrayList;
     }
 
+    /**
+     * Create a hyperlink with a given path, and set its action to  switch to the BrowseImageFilesView
+     *
+     * @param path the path to hyperlink
+     * @return the hyperlinked path
+     */
     private Hyperlink getHyperlinkWithPathName(String path){
         Hyperlink hyperlink = new Hyperlink(path);
-        hyperlink.setOnAction(event -> {
-            switchToToBrowseImageFilesView(new File(path));
-        });
+        hyperlink.setOnAction(event -> switchToToBrowseImageFilesView(new File(path)));
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.BLUE, Color.BLACK, hyperlink);
         hyperlink.setTextFill(Color.BLACK);
         hyperlink.setUnderline(false);

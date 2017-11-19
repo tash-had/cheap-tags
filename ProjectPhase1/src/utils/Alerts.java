@@ -50,11 +50,11 @@ public class Alerts {
      * @return the user response to the dialog
      */
     public static ButtonType showYesNoAlert(String title, String header, String body){
-        Alert nameExistsDialog = new Alert(Alert.AlertType.CONFIRMATION, body, ButtonType.NO, ButtonType.YES);
-        nameExistsDialog.setTitle(title);
-        nameExistsDialog.setHeaderText(header);
-        nameExistsDialog.showAndWait();
-        return nameExistsDialog.getResult();
+        Alert yesNoDialog = new Alert(Alert.AlertType.CONFIRMATION, body, ButtonType.NO, ButtonType.YES);
+        yesNoDialog.setTitle(title);
+        yesNoDialog.setHeaderText(header);
+        yesNoDialog.showAndWait();
+        return yesNoDialog.getResult();
     }
 
     /**

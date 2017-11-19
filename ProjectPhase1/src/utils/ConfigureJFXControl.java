@@ -42,7 +42,7 @@ public abstract class ConfigureJFXControl {
     }
 
     /**
-     * Set the listview to display string version of custom objects.
+     * Set the listview to display string representation of custom objects.
      * Precondition: The type parameter of the listview should have a toString() method defined.
      *
      * Source:https://stackoverflow.com/questions/36657299/how-can-i-populate-a-listview-in-javafx-using-custom-objects
