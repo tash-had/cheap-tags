@@ -255,7 +255,7 @@ public class BrowseImageFilesViewController implements Initializable {
             for (Tag tag : existingTagsOnImageFile) {
                 sb.append("@" + tag + " ");
             }
-            sb.append(selectedImageFile.getOriginalName());
+            sb.append(selectedImageFile.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
             updateImageLog();
             unsavedChanges = false;
@@ -284,20 +284,23 @@ public class BrowseImageFilesViewController implements Initializable {
         }
         else {
             File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
-            File newDirectoryLocation = movedFile.getParentFile();
-            ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
-                    "to the new directory?");
-            if (response == ButtonType.YES) {
-                // set screen to new directory
-                setTargetDirectory(newDirectoryLocation);
-                PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
-                        "/activities/browse_imagefiles_view.fxml");
-                // update recently viewed on home scene
-                UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
-            } else {
-                setTargetDirectory(targetDirectory);
-                PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
-                        "/activities/browse_imagefiles_view.fxml");
+            if (movedFile != null) {
+                File newDirectoryLocation = movedFile.getParentFile();
+                ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
+                        "to the new directory?");
+                if (response == ButtonType.YES) {
+                    // set screen to new directory
+                    setTargetDirectory(newDirectoryLocation);
+                    PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
+                            "/activities/browse_imagefiles_view.fxml");
+                    // update recently viewed on home scene
+                    selectedImageFile.setFile(movedFile);
+                    UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
+                } else {
+                    setTargetDirectory(targetDirectory);
+                    PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                            "/activities/browse_imagefiles_view.fxml");
+                }
             }
         }
     }

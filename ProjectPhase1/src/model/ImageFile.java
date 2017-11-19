@@ -131,7 +131,7 @@ public class ImageFile implements java.io.Serializable{
         String tempName = currentName.toString();
         currentName = new StringBuilder();
         currentName.append(newName);
-        currentName.append(this.imageType);
+        //currentName.append(this.imageType);
         Long timeStamp = System.currentTimeMillis();
         ArrayList<String> temLog = new ArrayList<>(Arrays.asList(currentName.toString(),tempName,timeStamp.toString()));
         this.oldName.add(temLog);
