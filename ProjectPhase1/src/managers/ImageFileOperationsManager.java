@@ -97,9 +97,9 @@ public class ImageFileOperationsManager implements java.io.Serializable {
      * @return a collection of ImageFile's representing each image fetched
      */
     public static Collection<ImageFile> fetchImageFiles(File directory) {
-        Collection<ImageFile> sessionMap = UserDataManager.getNameToImageFileSessionMap().values();
-        if (sessionMap.size() > 0) {
-            return sessionMap;
+        Collection<ImageFile> sessionMapVals = UserDataManager.getNameToImageFileSessionMap().values();
+        if (sessionMapVals.size() > 0) {
+            return sessionMapVals;
         }
         ArrayDeque<String> acceptedExtensions = new ArrayDeque<>();
         ArrayDeque<ImageFile> filesToLoad = new ArrayDeque<>();
@@ -199,9 +199,9 @@ public class ImageFileOperationsManager implements java.io.Serializable {
         ImageFile fileToProcess;
         if (file == null){
             fileToProcess = existingImageFIle;
-            UserDataManager.addImageFileToMap(fileToProcess);
         }else {
             fileToProcess = new ImageFile(file);
+            UserDataManager.addImageFileToMap(fileToProcess);
         }
         list.add(fileToProcess);
         UserDataManager.addImageFileToSessionMap(fileToProcess);
