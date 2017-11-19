@@ -17,6 +17,7 @@
                </content>
             </ScrollPane>
             <TextField fx:id="imageSearchBar" focusTraversable="false" layoutX="5.0" layoutY="675.0" onKeyReleased="#imageSearchTextChanged" prefHeight="39.0" prefWidth="306.0" promptText="Search image name by text or regex" />
+            <ListView fx:id="imageNamesListView" onMouseClicked="#chooseImageClick" prefHeight="673.0" prefWidth="317.0" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="443.0">
          <children>
@@ -44,6 +45,7 @@
                   <ImageView fx:id="selectedImageView" fitHeight="306.0" fitWidth="502.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </StackPane>
+            <ToggleButton fx:id="toggleButton" layoutX="-35.0" layoutY="487.0" mnemonicParsing="false" onAction="#imagesViewToggle" rotate="90.0" text="View As Text" />
          </children></AnchorPane>
   </items>
 </SplitPane>
