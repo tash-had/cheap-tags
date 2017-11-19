@@ -473,6 +473,8 @@ public class BrowseImageFilesViewController implements Initializable {
         ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
         selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
         updateImageLog();
+        nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+
 //        selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
     }
 
