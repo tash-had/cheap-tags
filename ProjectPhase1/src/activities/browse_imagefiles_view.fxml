@@ -32,7 +32,7 @@
                   <Font name="System Bold" size="14.0" />
                </font></Label>
             <ListView fx:id="allTagsListView" layoutX="524.0" layoutY="60.0" onMouseClicked="#addButtonClick" prefHeight="566.0" prefWidth="215.0" />
-            <Label fx:id="Tags" layoutX="459.0" layoutY="2.0" prefHeight="58.0" prefWidth="261.0" text="                      Tags" />
+            <Label fx:id="Tags" alignment="CENTER" layoutX="546.0" layoutY="12.0" prefHeight="58.0" prefWidth="157.0" text="Tags" />
             <Button fx:id="Delete" layoutX="178.0" layoutY="579.0" mnemonicParsing="false" onAction="#deleteButtonClick" prefHeight="27.0" prefWidth="59.0" text="Delete" />
             <Button fx:id="rename" layoutX="73.0" layoutY="579.0" mnemonicParsing="false" onAction="#renameButtonClick" text="Set Tags" />
             <ListView fx:id="revisionLog" layoutX="311.0" layoutY="367.0" prefHeight="212.0" prefWidth="163.0" />
