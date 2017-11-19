@@ -122,7 +122,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * An ArrayList of File objects of all the images in the chosen directory.
      */
     private ArrayList<File> fileObjectsInDirectory = new ArrayList<>();
-    
+
     private ObservableList<Tag> availableTagOptions;
     private ObservableList<Tag> existingTagsOnImageFile;
     private ObservableList<ArrayList<String>> selectedImageLog;
@@ -195,6 +195,8 @@ public class BrowseImageFilesViewController implements Initializable {
         imageTilePane.setVgap(0);
 //        imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
         populateImageTilePane();
+
+        rename.setDisable(true);
 
     }
 
