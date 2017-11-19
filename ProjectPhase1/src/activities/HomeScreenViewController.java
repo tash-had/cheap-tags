@@ -1,8 +1,6 @@
 package activities;
 
-import StoreObject.UserDataGetter;
 import StoreObject.UserDataSaver;
-import activities.BrowseImageFilesViewController;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,13 +12,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.UserDataManager;
+import model.ImageFile;
+import utils.Alerts;
 import utils.ConfigureJFXControl;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 
@@ -72,15 +74,25 @@ public class HomeScreenViewController implements Initializable{
      */
     public void openDirectoryClick(){
         File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
+
         if (selectedFile != null) {
-            UserDataManager.addPathToVisitedList(selectedFile.getPath());
-            switchToToBrowseImageFilesView(selectedFile);
+            Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
+            if (imagesToLoad.size() != 0) {
+                UserDataManager.addPathToVisitedList(selectedFile.getPath());
+                switchToToBrowseImageFilesView(selectedFile);
+            }
+            // else imagesToLoad size != 0
+            else{
+                Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+                        " in the directory you loaded. Please select another");
+                openDirectoryClick();
+            }
         }
         UserDataSaver.storeData();
     }
 
     /**
-     * Given an array of paths, get an arraylist of hyperlinked paths
+     * Given an array of paths, get an arrayList of hyperlinked paths
      *
      * @param pathArray an array of paths
      * @return an arraylist of hyperlinked paths

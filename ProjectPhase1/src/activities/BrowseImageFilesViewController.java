@@ -213,13 +213,37 @@ public class BrowseImageFilesViewController implements Initializable {
             Delete.setDisable(true);
         }
 
-        if (imagesToLoad.size() == 0){
-            Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
-                    " in the directory you loaded. Please select another");
-            setTargetDirectory(PrimaryStageManager.getDirectoryWithChooser());
-            initialize(location, resources);
-
-        }
+//        if (imagesToLoad.size() != 0){
+//            UserDataManager.addPathToVisitedList(targetDirectory.getPath());
+//        }
+//
+//        if (imagesToLoad.size()== 0){
+//            Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+//                    " in the directory you loaded. Please select another");
+//            File response = PrimaryStageManager.getDirectoryWithChooser();
+//            if (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() != 0) {
+//                setTargetDirectory(response);
+//                initialize(location, resources);
+//                UserDataManager.addPathToVisitedList(response.getPath());
+//            }
+//            else if (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() == 0){
+//                while (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() == 0) {
+//                    Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+//                        " in the directory you loaded. Please select another");
+//                    response = PrimaryStageManager.getDirectoryWithChooser();
+//                }
+//                if (ImageFileOperationsManager.fetchImageFiles(response).size() != 0){
+//                    setTargetDirectory(response);
+//                    initialize(location,resources);
+//                    UserDataManager.addPathToVisitedList(response.getPath());
+//                }
+//            }
+//            else {
+//                PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+////                initialize(location, resources);
+//
+//            }
+//        }
     }
 
     @FXML

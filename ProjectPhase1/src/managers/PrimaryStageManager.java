@@ -144,7 +144,7 @@ public abstract class PrimaryStageManager {
     /**
      * Prompt the user to select a directory using a DirectoryChooser Dialog, and return the selected directory.
      *
-     * @return the directory chosen by the user.
+     * @return the directory chosen by the user. returns null if no file selected.
      */
     public static File getDirectoryWithChooser(){
         DirectoryChooser directoryChooser=  new DirectoryChooser();
