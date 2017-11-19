@@ -112,7 +112,6 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label nameOfSelectedFile;
 
-
     /**
      * Stores the selected directory File object.
      */
@@ -161,8 +160,6 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Logger.getAnonymousLogger().info("Set");
-
         // clear
 //        stringsOfTags.clear();
 
@@ -194,7 +191,8 @@ public class BrowseImageFilesViewController implements Initializable {
         prepImageSearchRegex();
         imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
-        imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
+        imageTilePane.setVgap(0);
+//        imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
         populateImageTilePane();
 
     }
@@ -327,8 +325,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     // ImageTile Pane Methods
 
-    public void populateImageTilePane(){
-        Logger.getAnonymousLogger().info("Trying to populate");
+    private void populateImageTilePane(){
         for (ImageFile imageFile : imagesToLoad){
             addImageToTilePane(imageFile);
         }
@@ -337,21 +334,18 @@ public class BrowseImageFilesViewController implements Initializable {
     private void addImageToTilePane(ImageFile imageFile){
         Image image = null;
         try {
-            image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, true); //imageFile.getThisFile().toURI().toURL().toString(), 100, 100, true, false);
+            image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 300, 300, true, true);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         ImageView imageView = new ImageView();
         imageView.setImage(image);
-        imageView.setOnMouseClicked(event -> imageClicked(imageFile, imageView));
+        imageView.setOnMouseClicked(event -> imageClicked(imageFile));
         imageTilePane.getChildren().add(imageView);
     }
 
-    private void imageClicked(ImageFile imageFile, ImageView sidePaneImageView){
+    private void imageClicked(ImageFile imageFile){
         try {
-
-
-
             checkForUnsavedChanges();
 
             // Keep a reference to the selected image and set up right pane attributes for selected image
@@ -400,7 +394,10 @@ public class BrowseImageFilesViewController implements Initializable {
         ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();
         String fullPattern;
         if (input.startsWith("^") && input.endsWith("$")){
-            fullPattern = input;
+            fullPattern = input.substring(1, input.length()-1);
+        }else if(input.startsWith("^")){
+            // User is currently typing a regex. Must wait until they complete.
+            return;
         }else {
             fullPattern = ".*\\b(" + Pattern.quote(input) + ")" +imageSearchPatternEnd.toString();
         }
