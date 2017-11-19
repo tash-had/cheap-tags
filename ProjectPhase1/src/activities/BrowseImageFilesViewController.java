@@ -263,17 +263,35 @@ public class BrowseImageFilesViewController implements Initializable {
         selectedImageLog.addAll(selectedImageFile.getOldName());
     }
 
+    /* TODO: Finish if and else statements when the user clicks yes/no to moving directories.
+    */
     /**
      * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
      * directory or stay in the current directory.
      */
     @FXML
     public void moveImageButtonClick() {
-        ImageFileOperationsManager.moveImageFile(UserDataManager.getImageFileWithName(selectedImageFile.getCurrentName()));
+        File newDirectoryLocation = ImageFileOperationsManager.moveImageFileGetDirectory(selectedImageFile);
         /* TODO: after image is moved from this directory, ask user if they want to go to the new directory or stay.
         TODO: if they stay, make sure the moved image is removed from the left side pane displaying images.
         */
-        // use alert goToDirectoryYesNo
+        //System.out.println(newDirectoryLocation.toString());
+        ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
+                "to the new directory?");
+        if (response == ButtonType.YES){
+            // set screen to new directory
+            setTargetDirectory(newDirectoryLocation);
+            PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
+                    "/activities/browse_imagefiles_view.fxml");
+            // update recently viewed on homescreen
+            UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
+        }
+        else{
+            setTargetDirectory(targetDirectory);
+            PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                    "/activities/browse_imagefiles_view.fxml");
+        }
+
     }
 
     /**

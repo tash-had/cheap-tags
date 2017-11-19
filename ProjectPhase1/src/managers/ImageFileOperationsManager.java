@@ -85,6 +85,39 @@ public class ImageFileOperationsManager {
     }
 
     /**
+     * Moves image to new chosen directory, returns the new directory.
+     *
+     * @param imageFile The imageFile object containing the file to be moved.
+     * @return the new directory file.
+     */
+    public static File moveImageFileGetDirectory(ImageFile imageFile){
+        File oldFile = imageFile.getThisFile();
+        File newDirectory = PrimaryStageManager.getDirectoryWithChooser();
+        // A file object of the imagefile in the new directory
+        File newFile = new File(newDirectory, oldFile.getName());
+        FileOperationsResponse response = moveFile(oldFile, newDirectory.toPath());
+
+        if (response == SUCCESS){
+            return newDirectory;
+        }
+        else if(response == FILENAME_TAKEN){
+            String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile.getName(), null);
+            if (suffixedFileName != null){
+                imageFile.generalReName(suffixedFileName);
+                moveFile(imageFile.getThisFile(), newDirectory.toPath());
+                return newDirectory;
+            }else{
+                // Dont move
+                newFile = null;
+            }
+        }
+        else {
+            // error alert
+        }
+    return null;
+    }
+
+    /**
      * Fetch images in a given directory
      *
      * @param directory the directory to fetch from
