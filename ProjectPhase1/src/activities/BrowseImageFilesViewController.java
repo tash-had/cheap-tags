@@ -209,14 +209,17 @@ public class BrowseImageFilesViewController implements Initializable {
         Tag selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
-        }else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
+
+        }
+        else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
             if (selectedImageFile.getTagList().contains(selectedTag)){
                 Alerts.fileContainsTagAlert();
             }
             else {
                 availableTagOptions.remove(selectedTag);
                 existingTagsOnImageFile.add(selectedTag);
-                selectedImageFile.getTagList().add(selectedTag);
+
+//                selectedImageFile.getTagList().add(selectedTag);
                 unsavedChanges = true;
             }
         }
@@ -234,7 +237,7 @@ public class BrowseImageFilesViewController implements Initializable {
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
             existingTagsOnImageFile.remove(selectedTag);
             availableTagOptions.add(selectedTag);
-            selectedImageFile.getTagList().remove(selectedTag);
+//            selectedImageFile.getTagList().remove(selectedTag);
         }
     }
 
@@ -248,6 +251,7 @@ public class BrowseImageFilesViewController implements Initializable {
         }
         else {
             StringBuilder sb = new StringBuilder();
+            selectedImageFile.getTagList().addAll(existingTagsOnImageFile);
             for (Tag tag : existingTagsOnImageFile) {
                 sb.append("@" + tag + " ");
             }
@@ -363,12 +367,17 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private void imageClicked(ImageFile imageFile, ImageView sidePaneImageView){
         try {
+
+
+
             checkForUnsavedChanges();
+
             // Keep a reference to the selected image and set up right pane attributes for selected image
             selectedImageFile = imageFile;
             selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
             populateImageFileTagListViews();
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
