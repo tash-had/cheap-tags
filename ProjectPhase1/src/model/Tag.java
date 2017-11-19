@@ -4,7 +4,14 @@ import model.ImageFile;
 
 import java.util.ArrayList;
 public class Tag {
+    /**
+     * the name of the tag
+     */
     public String name;
+
+    /**
+     * the arraylist stores all images that have this tag
+     */
     public ArrayList<ImageFile> images = new ArrayList<>();
 
     public Tag(String name) {
