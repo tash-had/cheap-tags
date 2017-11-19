@@ -20,7 +20,7 @@ import static utils.FileOperations.*;
 /**
  * This class manages how file operations for ImageFiles are handled
  */
-public class ImageFileOperationsManager {
+public class ImageFileOperationsManager implements java.io.Serializable {
 
     public static String[] ACCEPTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tif"};
 
@@ -111,7 +111,6 @@ public class ImageFileOperationsManager {
                     ImageFile imageFile = UserDataManager.getImageFileWithName(fileName);
                     if (!imageFile.getThisFile().getParentFile().getAbsolutePath().equals(directory.getAbsolutePath())){
                         // Image does not match image that exists in directory!
-                        
                         /*
                         TODO:
                         Figure out how to deal with this.. show text input dialog askk for new name
