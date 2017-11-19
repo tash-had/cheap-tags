@@ -3,7 +3,7 @@ package model;
 import model.ImageFile;
 
 import java.util.ArrayList;
-public class Tag {
+public class Tag implements java.io.Serializable{
     public String name;
     public ArrayList<ImageFile> images = new ArrayList<>();
 

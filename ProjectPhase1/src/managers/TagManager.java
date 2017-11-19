@@ -4,7 +4,7 @@ import model.Tag;
 
 import java.util.ArrayList;
 
-public class TagManager {
+public class TagManager implements java.io.Serializable{
 
     /**
      * A list of all the tags in the system.

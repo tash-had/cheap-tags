@@ -1,5 +1,6 @@
 package activities;
 
+import StoreObject.UserDataGetter;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -205,7 +206,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * allTagsListView.
      */
     @FXML
-    public void addButtonClick() {
+    public void addButtonClick(){
         Tag selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
