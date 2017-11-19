@@ -100,19 +100,27 @@ public class BrowseImageFilesViewController implements Initializable {
     Label Tags;
 
     /**
-     * Displays name of the currently selected file above itself.
+     * Quick search for image files
      */
     @FXML
     TextField imageSearchBar;
 
+    /**
+     * Displays all image files in side bar
+     */
     @FXML
     TilePane imageTilePane;
 
+
+    /**
+     * Displays name of the currently selected file above itself.
+     */
     @FXML
     Label nameOfSelectedFile;
 
     @FXML
     ToggleButton toggleButton;
+
 
     @FXML
     ListView<String> imageNamesListView;
@@ -190,12 +198,6 @@ public class BrowseImageFilesViewController implements Initializable {
         toggleButton.setSelected(false);
         imagesViewToggle();
 
-//        if (targetDirectory.isDirectory()){
-//            for (File imgFile : targetDirectory.listFiles(imgFilter)){
-//                allImages.add(imgFile);
-//            }
-//        }
-
 
         prepImageSearchRegex();
         imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
@@ -203,7 +205,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
         imageTilePane.setVgap(0);
-//        imageTilePane.setMaxWidth(Region.USE_PREF_SIZE);
+
         populateImageTilePane();
         rename.setDisable(true);
 
@@ -453,6 +455,9 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * check if users save their changes or not
+     */
     private void checkForUnsavedChanges(){
         if (unsavedChanges){
             ButtonType saveChangesResponse = Alerts.showYesNoAlert("Save Your Changes", "Save Changes?",
@@ -464,6 +469,9 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * Populate a list view of tags under the image file
+     */
     private void populateImageFileTagListViews(){
         if (existingTagsOnImageFile != null){
             existingTagsOnImageFile.clear();
