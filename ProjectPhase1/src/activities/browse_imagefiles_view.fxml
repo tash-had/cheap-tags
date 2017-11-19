@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -15,11 +16,14 @@
                   <TilePane fx:id="imageTilePane" maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefColumns="3" prefWidth="300.0" tileAlignment="CENTER" />
                </content>
             </ScrollPane>
-            <TextField fx:id="imageSearchBar" layoutX="5.0" layoutY="675.0" onKeyReleased="#imageSearchTextChanged" prefHeight="39.0" prefWidth="306.0" promptText="Search image name by text or regex" />
+            <TextField fx:id="imageSearchBar" focusTraversable="false" layoutX="5.0" layoutY="675.0" onKeyReleased="#imageSearchTextChanged" prefHeight="39.0" prefWidth="306.0" promptText="Search image name by text or regex" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="443.0">
          <children>
-            <ImageView fx:id="selectedImageView" fitHeight="308.0" fitWidth="380.0" layoutX="85.0" layoutY="40.0" pickOnBounds="true"  preserveRatio="true" />
+            <ImageView fx:id="selectedImageView" fitHeight="308.0" fitWidth="380.0" layoutX="85.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
+               <effect>
+                  <DropShadow />
+               </effect></ImageView>
             <ListView fx:id="existingTags" layoutX="74.0" layoutY="367.0" prefHeight="212.0" prefWidth="163.0" />
             <Button fx:id="changedDirectory" layoutX="95.0" layoutY="651.0" mnemonicParsing="false" onAction="#moveImageButtonClick" prefHeight="27.0" prefWidth="121.0" text="Move Image" />
             <Button fx:id="back" layoutX="358.0" layoutY="651.0" mnemonicParsing="false" onAction="#backButtonClick" prefHeight="27.0" prefWidth="91.0" text="Back" />
