@@ -161,6 +161,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Logger.getAnonymousLogger().info("Set");
 
         // clear
 //        stringsOfTags.clear();
@@ -321,6 +322,7 @@ public class BrowseImageFilesViewController implements Initializable {
     // ImageTile Pane Methods
 
     public void populateImageTilePane(){
+        Logger.getAnonymousLogger().info("Trying to populate");
         for (ImageFile imageFile : imagesToLoad){
             addImageToTilePane(imageFile);
         }
@@ -354,7 +356,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private void checkForUnsavedChanges(){
         if (unsavedChanges){
-            ButtonType saveChangesResponse = Alerts.showYesNoAlert("Save Your Changes", "Unsaved Changes",
+            ButtonType saveChangesResponse = Alerts.showYesNoAlert("Save Your Changes", "Save Changes?",
                     "You forgot to hit Set Tags! Would you like us to set your new tags?");
             if (saveChangesResponse == ButtonType.YES){
                 renameButtonClick();
@@ -383,26 +385,31 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     public void imageSearchTextChanged(){
-        String input = imageSearchBar.getText();
+        String input = imageSearchBar.getText().toLowerCase().replace("@", "");
         ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();
+        String fullPattern;
+        if (input.startsWith("^") && input.endsWith("$")){
+            fullPattern = input;
+        }else {
+            fullPattern = ".*\\b(" + Pattern.quote(input) + ")" +imageSearchPatternEnd.toString();
+        }
 
-        String imageSearchPatternStart = ".*\\b(" + input + ")";
-        Pattern imageSearchPattern = Pattern.compile(imageSearchPatternStart +imageSearchPatternEnd);
+        Pattern imageSearchPattern = Pattern.compile(fullPattern);
         Matcher imageSearchMatcher;
-        if (input.equals("")){
+        imageTilePane.getChildren().clear();
+        if (input.isEmpty()){
             searchResultImageFileList.clear();
             populateImageTilePane();
         }else {
             for (String name:imageNames){
-                imageSearchMatcher = imageSearchPattern.matcher(name);
+                imageSearchMatcher = imageSearchPattern.matcher(name.toLowerCase());
                 if (imageSearchMatcher.find()){
                     searchResultImageFileList.add(UserDataManager.getNameToImageFileSessionMap().get(name));
                 }
             }
-        }
-        imageTilePane.getChildren().clear();
-        for (ImageFile imf : searchResultImageFileList){
-            addImageToTilePane(imf);
+            for (ImageFile imf : searchResultImageFileList){
+                addImageToTilePane(imf);
+            }
         }
     }
 

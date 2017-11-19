@@ -36,12 +36,17 @@ public abstract class UserDataManager {
         return getNameToImageFileMap().get(imageName);
     }
 
-    public static void resetImageFileKey(String oldName, String newName){
+    public static void resetImageFileKey(String oldName){
         if (getNameToImageFileMap().containsKey(oldName)){
             ImageFile renamedImageFile = getNameToImageFileMap().get(oldName);
             getNameToImageFileMap().remove(oldName);
             addImageFileToMap(renamedImageFile);
+            if (getNameToImageFileSessionMap().containsKey(oldName)){
+                getNameToImageFileSessionMap().remove(oldName);
+                addImageFileToSessionMap(renamedImageFile);
+            }
         }
+
     }
     public static boolean setNewImageFile(String imageName, ImageFile newImageFile){
         if (getNameToImageFileMap().containsKey(imageName)){

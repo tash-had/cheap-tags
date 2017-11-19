@@ -37,7 +37,7 @@ public class ImageFileOperationsManager {
         FileOperationsResponse response =  renameFile(currentImageFile, newName);
         if (response == SUCCESS){
             imageFile.generalReName(newName);
-            UserDataManager.resetImageFileKey(currentImageFile.getName(), newName);
+            UserDataManager.resetImageFileKey(currentImageFile.getName());
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
         }else if (response == FILENAME_TAKEN){
             String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(), newName,
