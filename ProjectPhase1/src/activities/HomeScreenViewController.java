@@ -1,5 +1,6 @@
 package activities;
 
+import StoreObject.UserDataGetter;
 import StoreObject.UserDataSaver;
 
 import javafx.fxml.FXML;
