@@ -15,3 +15,5 @@ out/
 # Log file
 *.log
 *.iml
+
+data/

@@ -21,7 +21,7 @@ public class UserDataGetter implements java.io.Serializable {
         //Object nameToImageFileMap = null;
         Object previousPathsVisited = null;
         //Object tagList = null;
-        FileInputStream InputStream = new FileInputStream(new File("src/historydata/AllOfUserData.cheaptag"));
+        FileInputStream InputStream = new FileInputStream(new File("src/data/AllOfUserData.cheaptag"));
         ObjectInputStream tempIn = new ObjectInputStream(InputStream);
 
         try {
