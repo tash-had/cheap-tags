@@ -302,7 +302,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     /**
      * Renames the file name in the user's operating system.
-     * Modifies the tagslist of selected image, and stores the data
+     * Modifies the tagsList of selected image, and stores the data
      */
     @FXML
     public void renameButtonClick() {
@@ -310,8 +310,13 @@ public class BrowseImageFilesViewController implements Initializable {
             Alerts.chooseFileAlert();
         }
         else {
+            selectedImageFile.updateTagHistory(selectedImageFile.getTagList()); //Add the tag list to the tag history before updating.
+            System.out.println(selectedImageFile.getTagHistory());
+
             StringBuilder sb = new StringBuilder();
-            selectedImageFile.getTagList().clear();
+
+            selectedImageFile.getTagList().clear(); //clear all tags, since .addAll adds everything again.
+
             selectedImageFile.getTagList().addAll(existingTagsOnImageFile);
             for (Tag tag : existingTagsOnImageFile) {
                 sb.append("@" + tag + " ");
@@ -531,11 +536,15 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void revertButtonClick() {
+        int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
         ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
         selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
+        selectedImageFile.getTagList().clear();
+        //update the selected imageFiles tagList with the tags associated with oldName.
+        selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
+        //System.out.println(selectedImageFile.getTagList().toString());
         updateImageLog();
         nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
-
 //        selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
     }
 
