@@ -288,15 +288,16 @@ public class BrowseImageFilesViewController implements Initializable {
 //            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
 //            updateImageLog();
 
+            
             existingTagsOnImageFile.remove(selectedTag);
             availableTagOptions.add(selectedTag);
 
             if (existingTagsOnImageFile.size() == 0){
                 Delete.setDisable(true);
             }
-            //unsavedChanges = true;
-            //rename.setDisable(false);
-            //Delete.setDisable(true);
+            unsavedChanges = true;
+            rename.setDisable(false);
+            Delete.setDisable(true);
         }
     }
 
