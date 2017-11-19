@@ -76,7 +76,7 @@ public class HomeScreenViewController implements Initializable{
             UserDataManager.addPathToVisitedList(selectedFile.getPath());
             switchToToBrowseImageFilesView(selectedFile);
         }
-        UserDataSaver.storeData();
+ //       UserDataSaver.storeData();
     }
 
     /**

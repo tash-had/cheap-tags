@@ -274,19 +274,19 @@ public class BrowseImageFilesViewController implements Initializable {
             Alerts.chooseFileAlert();
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
             // find the matching tag in the images tagList and remove that object
-            for (int i = 0; i < selectedImageFile.getTagList().size(); i++){
-                if (selectedTag.name.equals(selectedImageFile.getTagList().get(i).name)){
-                    selectedImageFile.getTagList().remove(i);
-                    break;
-                }
-            }
-            StringBuilder sb = new StringBuilder();
-            for (Tag tag : selectedImageFile.getTagList()){
-                sb.append("@" + tag + " ");
-            }
-            sb.append(selectedImageFile.getOriginalName());
-            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
-            updateImageLog();
+//            for (int i = 0; i < selectedImageFile.getTagList().size(); i++){
+//                if (selectedTag.name.equals(selectedImageFile.getTagList().get(i).name)){
+//                    selectedImageFile.getTagList().remove(i);
+//                    break;
+//                }
+//            }
+//            StringBuilder sb = new StringBuilder();
+//            for (Tag tag : selectedImageFile.getTagList()){
+//                sb.append("@" + tag + " ");
+//            }
+//            sb.append(selectedImageFile.getOriginalName());
+//            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
+//            updateImageLog();
 
             existingTagsOnImageFile.remove(selectedTag);
             availableTagOptions.add(selectedTag);
@@ -329,7 +329,8 @@ public class BrowseImageFilesViewController implements Initializable {
             }
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
             imageNames.add(selectedImageFile.getCurrentName());
-            imageFileNames.add(selectedImageFile.getCurrentName());
+            if (imageFileNames!=null){
+                imageFileNames.add(selectedImageFile.getCurrentName());}
         }
     }
 
