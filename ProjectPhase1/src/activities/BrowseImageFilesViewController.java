@@ -311,6 +311,7 @@ public class BrowseImageFilesViewController implements Initializable {
         }
         else {
             StringBuilder sb = new StringBuilder();
+            selectedImageFile.getTagList().clear();
             selectedImageFile.getTagList().addAll(existingTagsOnImageFile);
             for (Tag tag : existingTagsOnImageFile) {
                 sb.append("@" + tag + " ");
