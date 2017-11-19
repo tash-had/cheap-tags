@@ -286,7 +286,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 setTargetDirectory(newDirectoryLocation);
                 PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
                         "/activities/browse_imagefiles_view.fxml");
-                // update recently viewed on homescreen
+                // update recently viewed on home scene
                 UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
             } else {
                 setTargetDirectory(targetDirectory);
