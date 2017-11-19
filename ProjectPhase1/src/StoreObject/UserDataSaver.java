@@ -21,7 +21,7 @@ public class UserDataSaver implements java.io.Serializable {
     public static void SaveBeforeClose() throws FileNotFoundException,IOException{
         FileOutputStream OutputStream = new FileOutputStream("src/data/AllOfData.cheaptag");
         ObjectOutputStream tempOut = new ObjectOutputStream(OutputStream);
-        tempOut.writeObject((HashMap<String, ImageFile>)UserDataManager.getNameToImageFileMapForDataSaver());
+        //tempOut.writeObject((HashMap<String, ImageFile>)UserDataManager.getNameToImageFileMapForDataSaver());
         tempOut.writeObject(UserDataManager.previousPathsVisitedGetterForDataSaver());
         //tempOut.writeObject(TagManager.getTagList());
         tempOut.close();
