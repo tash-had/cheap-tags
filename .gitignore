@@ -16,4 +16,4 @@ out/
 *.log
 *.iml
 
-/data
+data/
