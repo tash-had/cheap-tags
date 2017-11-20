@@ -1,0 +1,39 @@
+Tash-had 
+======== 
+· utils/Alerts: showYesNoAlert, showFileExistsAlert, showErrorAlert
+· utils/JFXConfigure : 
+setFontOfLabeled, toggleHoverTextColorOfLabeled, populateListViewWithArrayList
+· utils/FileOperations: (all) 
+· managers/ImageFileOperationsManager: (all) 
+· managers/UserDataManager: (all) 
+· managers/StateManager: (wrote this class but used some of Renjie's code as he wrote some file writing functions earlier but wasn't able to fix the bug)
+· managers/SessionDataManager: (all) 
+· managers/PrimaryStageManager: (all) 
+· activities/BrowseImageFilesViewControlller (lines 438-553)
+· activities/HomeScreenViewController (all but openDirectory function)
+Renjie Li
+======
+· Implemented Model/ImageFile(all)
+· Implemented StoreObject/ObjectDeSerialization(all)
+· Implemented StoreObject/ObjectSerialization(all)
+· Implemented StoreObject/UserDataGetter(all)
+· Implemented StoreObject/UserDataSaver(all)
+· Helped to implement rename function.
+
+Tiffany
+=======
+· util/Alerts: showTagExists
+
+· managers/TagManager (all)
+
+· activities/TagScreenViewController: (all) 
+
+· activities/BrowseImageFilesViewController: chooseImageClick, renameImageButtonClick (partial), addButtonClick(partial), 
+· moveImageButtonClick, revertButtonClick, contributed to layout/formatting
+
+· activities/HomeScreenViewController: openDirectoryClick (partial)
+
+Caroline
+=====
+Model/tag (all)
+Activities/BrowseimageFilesViewControlller (layout of the screen, add, delete, rename, imageClicked)
