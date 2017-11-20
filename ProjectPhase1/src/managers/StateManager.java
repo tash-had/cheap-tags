@@ -23,7 +23,7 @@ public class StateManager {
     }
 
     public static void reloadState(){
-        File dataFile = new File("src/data/data.ctags");
+        File dataFile = new File("data/data.ctags");
         if (!dataFile.exists()){
             userData = new UserDataManager();
         }else{
@@ -45,7 +45,7 @@ public class StateManager {
     public static void saveState(UserDataManager userDataManager){
         FileOutputStream fileOutputStream = null;
         ObjectOutputStream objectOutputStream = null;
-        File dataFile = new File("src/data/data.ctags");
+        File dataFile = new File("data/data.ctags");
         try{
             if (!dataFile.exists()){
                 createDataFile(dataFile);
