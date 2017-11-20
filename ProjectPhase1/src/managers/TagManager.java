@@ -9,7 +9,7 @@ public class TagManager implements java.io.Serializable{
     /**
      * A list of all the tags in the system.
      */
-    private static ArrayList<Tag> tagList = new ArrayList<Tag>();
+    private static ArrayList<Tag> tagList = new ArrayList<>();
 
     /**
      * Add a new tag.
@@ -50,8 +50,8 @@ public class TagManager implements java.io.Serializable{
         return null;
     }
 
-    public static void tagListSetterForDataGetter(ArrayList<Tag> newList){
-        TagManager.tagList = newList;
+    public static void setTagList(ArrayList<Tag> newList){
+        tagList = newList;
     }
 
     /*

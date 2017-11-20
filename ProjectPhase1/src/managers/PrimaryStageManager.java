@@ -33,6 +33,7 @@ public abstract class PrimaryStageManager {
         if (primaryStage == null){
             primaryStage = stage;
         }
+        primaryStage.setOnCloseRequest(event -> StateManager.endSession());
     }
 
     /**

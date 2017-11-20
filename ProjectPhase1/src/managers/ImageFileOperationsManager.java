@@ -39,11 +39,12 @@ public class ImageFileOperationsManager implements java.io.Serializable {
         FileOperationsResponse response =  renameFile(currentImageFile, newName);
         if (response == SUCCESS){
             imageFile.generalReName(newName);
-            UserDataManager.resetImageFileKey(currentImageFile.getName());
+            StateManager.userData.resetImageFileKey(currentImageFile.getName());
+            StateManager.sessionData.resetImageFileKey(currentImageFile.getName());
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
         }else if (response == FILENAME_TAKEN){
             String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(), newName,
-                    UserDataManager.getImageFileNames());
+                    StateManager.userData.getImageFileNames());
             // User accepted to a suffixed filename
             if (suffixedFileName != null){
                 renameImageFile(imageFile, suffixedFileName);
@@ -97,7 +98,7 @@ public class ImageFileOperationsManager implements java.io.Serializable {
      * @return a collection of ImageFile's representing each image fetched
      */
     public static Collection<ImageFile> fetchImageFiles(File directory) {
-        Collection<ImageFile> sessionMapVals = UserDataManager.getNameToImageFileSessionMap().values();
+        Collection<ImageFile> sessionMapVals = StateManager.sessionData.getNameToImageFileMap().values();
         if (sessionMapVals.size() > 0) {
             return sessionMapVals;
         }
@@ -109,9 +110,9 @@ public class ImageFileOperationsManager implements java.io.Serializable {
             ArrayDeque<File> filesFromDir = fetchFromDirectory(directory, acceptedExtensions);
             for (File file : filesFromDir) {
                 String fileName = file.getName();
-                if (UserDataManager.existsInMap(fileName)) {
+                if (StateManager.userData.existsInMap(fileName)) {
                     // The file name already exists in our records
-                    ImageFile imageFile = UserDataManager.getImageFileWithName(fileName);
+                    ImageFile imageFile = StateManager.userData.getImageFileWithName(fileName);
                     String existingImageFilePath = imageFile.getThisFile().getParentFile().getAbsolutePath();
                     if (!existingImageFilePath.equals(directory.getAbsolutePath())) {
                         // The ImageFile that exists in our records has a different path from the one being imported!
@@ -124,7 +125,7 @@ public class ImageFileOperationsManager implements java.io.Serializable {
                             // Image is not the image that exists in directory! Ask user if they want to rename the image
                             // and make sure the entered name doesn't also exist in our database.
                             String chosenName = handleFilenameTakenByDatabase(file);
-                            while (UserDataManager.existsInMap(chosenName)) {
+                            while (StateManager.userData.existsInMap(chosenName)) {
                                 chosenName = handleFilenameTakenByDatabase(file);
                             }
                             // Rename the image with the given name + make sure the given name doesn't exist
@@ -201,10 +202,10 @@ public class ImageFileOperationsManager implements java.io.Serializable {
             fileToProcess = existingImageFIle;
         }else {
             fileToProcess = new ImageFile(file);
-            UserDataManager.addImageFileToMap(fileToProcess);
+            StateManager.userData.addImageFileToMap(fileToProcess);
         }
         list.add(fileToProcess);
-        UserDataManager.addImageFileToSessionMap(fileToProcess);
+        StateManager.sessionData.addImageFileToMap(fileToProcess);
     }
 
 }

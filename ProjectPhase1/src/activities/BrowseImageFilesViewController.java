@@ -26,10 +26,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 
-import managers.ImageFileOperationsManager;
-import managers.PrimaryStageManager;
-import managers.TagManager;
-import managers.UserDataManager;
+import managers.*;
 import model.ImageFile;
 import model.Tag;
 import utils.Alerts;
@@ -201,7 +198,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         prepImageSearchRegex();
         imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
-        imageNames = UserDataManager.getSessionImageFileNames();
+        imageNames = StateManager.sessionData.getImageFileNames();
 
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
         imageTilePane.setVgap(0);
@@ -262,7 +259,7 @@ public class BrowseImageFilesViewController implements Initializable {
         checkForUnsavedChanges();
         String selectedImage = imageNamesListView.getSelectionModel().getSelectedItem();
         if (imageNamesListView.getItems().indexOf(selectedImage) > -1){
-            selectedImageFile = UserDataManager.getImageFileWithName(selectedImage);
+            selectedImageFile = StateManager.sessionData.getImageFileWithName(selectedImage);
             if (selectedImageFile != null){
                 Image image = new Image(selectedImageFile.getThisFile().toURI().toString());
                 selectedImageView.setImage(image);
@@ -427,7 +424,7 @@ public class BrowseImageFilesViewController implements Initializable {
                             "/activities/browse_imagefiles_view.fxml");
                     // update recently viewed on home scene
                     selectedImageFile.setFile(movedFile);
-                    UserDataManager.addPathToVisitedList(newDirectoryLocation.toString());
+                    StateManager.userData.addPathToVisitedList(newDirectoryLocation.toString());
                 } else {
                     setTargetDirectory(targetDirectory);
                     PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
@@ -452,7 +449,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //    }
 
     static void setTargetDirectory(File directory) {
-        UserDataManager.setSession(directory.getPath());
+        StateManager.sessionData.setSession(directory.getPath());
         targetDirectory = directory;
     }
 
@@ -561,7 +558,7 @@ public class BrowseImageFilesViewController implements Initializable {
             for (String name:imageNames){
                 imageSearchMatcher = imageSearchPattern.matcher(name.toLowerCase());
                 if (imageSearchMatcher.find()){
-                    searchResultImageFileList.add(UserDataManager.getNameToImageFileSessionMap().get(name));
+                    searchResultImageFileList.add(StateManager.sessionData.getImageFileWithName(name));
                 }
             }
             for (ImageFile imf : searchResultImageFileList){

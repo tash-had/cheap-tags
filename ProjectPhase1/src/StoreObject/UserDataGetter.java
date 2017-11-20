@@ -1,5 +1,6 @@
 package StoreObject;
 
+import managers.StateManager;
 import managers.TagManager;
 import managers.UserDataManager;
 import model.ImageFile;
@@ -54,7 +55,7 @@ public class UserDataGetter implements java.io.Serializable {
                 ArrayList<String> tempPreviousPath = (ArrayList<String>) previousPathsVisited;
                 //ArrayList<Tag> tempTagList = (ArrayList<Tag>) tagList;
                 //UserDataManager.NameToImageFileMapSetterForDataGetter(tempNameToImage);
-                UserDataManager.previousPathsVisitedSetterForDataGetter(tempPreviousPath);
+                StateManager.userData.previousPathsVisitedSetterForDataGetter(tempPreviousPath);
                 //TagManager.tagListSetterForDataGetter(tempTagList);
             }
 
