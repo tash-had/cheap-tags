@@ -2,8 +2,11 @@
 
 Which part(s) of the program are responsible for reading the contents of the
 starting directory?
+activities/HomeScreenViewController to prompt the user for a new directory. 
+managers/ImageFileOperationsManager to request fetching images and processing them 
+utils/FileOperations to fetch and return files when ImageFileOperationsManager requests it. 
 
 What happens when a new tag is created?
 
-Which class is keeping track of the association between tags and files?
 
+Which class is keeping track of the association between tags and files?
