@@ -4,6 +4,7 @@ import StoreObject.UserDataGetter;
 import StoreObject.UserDataSaver;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
@@ -22,9 +23,7 @@ import utils.ConfigureJFXControl;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class HomeScreenViewController implements Initializable{
@@ -46,6 +45,8 @@ public class HomeScreenViewController implements Initializable{
 
     @FXML
     Button addTagsButton;
+
+   // FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("browse_imagefiles_view.fxml"));
 
     /*
      * TODO: Style buttons - material
@@ -76,13 +77,20 @@ public class HomeScreenViewController implements Initializable{
     public void openDirectoryClick(){
         File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
 
+        System.out.println("Clicked");
         if (selectedFile != null) {
             Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
+            //System.out.println(ImageFileOperationsManager.fetchImageFiles(selectedFile));
+            //imagesToLoad.addAll(ImageFileOperationsManager.fetchImageFiles(selectedFile));
             if (imagesToLoad.size() != 0) {
+                //System.out.println(imagesToLoad.toString());
                 UserDataManager.addPathToVisitedList(selectedFile.getPath());
+//                BrowseImageFilesViewController controller = fxmlLoader.getController();
+//                System.out.println(imagesToLoad);
+//                controller.setImagesToLoad(imagesToLoad);
                 switchToToBrowseImageFilesView(selectedFile);
             }
-            // else imagesToLoad size != 0
+             //else imagesToLoad size != 0
             else{
                 Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
                         " in the directory you loaded. Please select another");
