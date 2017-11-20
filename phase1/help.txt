@@ -1,1 +1,1 @@
-1. Run Main.java 
+Open in intellij, and run Main.java. 
