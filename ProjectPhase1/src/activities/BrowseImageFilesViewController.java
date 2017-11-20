@@ -1,6 +1,5 @@
 package activities;
 
-import StoreObject.UserDataGetter;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,13 +16,11 @@ import java.util.Collection;
 import java.util.Collections;
 
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 
 import managers.*;
@@ -122,7 +119,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     ListView<String> imageNamesListView;
 
-    ObservableList<String> imageFileNames;
+    private ObservableList<String> imageFileNames;
 
     /**
      * Stores the selected directory File object.
@@ -138,7 +135,7 @@ public class BrowseImageFilesViewController implements Initializable {
     private ObservableList<Tag> existingTagsOnImageFile;
     private ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
-    private Collection<ImageFile> imagesToLoad;
+    private static Collection<ImageFile> imagesToLoad;
     private boolean unsavedChanges = false;
 
     /**
@@ -197,7 +194,9 @@ public class BrowseImageFilesViewController implements Initializable {
 
 
         prepImageSearchRegex();
-        imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
+        if (imagesToLoad == null || imagesToLoad.size() == 0){
+            imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
+        }
         imageNames = StateManager.sessionData.getImageFileNames();
 
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
@@ -253,8 +252,8 @@ public class BrowseImageFilesViewController implements Initializable {
 //        }
     }
 
-    public void setImagesToLoad(Collection<ImageFile> fetchedImages){
-        this.imagesToLoad = fetchedImages;
+    public static void setImagesToLoad(Collection<ImageFile> fetchedImages){
+        imagesToLoad = fetchedImages;
     }
 
     @FXML
@@ -347,7 +346,6 @@ public class BrowseImageFilesViewController implements Initializable {
         }
         else {
             selectedImageFile.updateTagHistory(selectedImageFile.getTagList()); //Add the tag list to the tag history before updating.
-            System.out.println(selectedImageFile.getTagHistory());
 
             StringBuilder sb = new StringBuilder();
 

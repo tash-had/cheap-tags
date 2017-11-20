@@ -1,10 +1,6 @@
 package activities;
 
-import StoreObject.UserDataGetter;
-import StoreObject.UserDataSaver;
-
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
@@ -17,7 +13,6 @@ import javafx.scene.paint.Color;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.StateManager;
-import managers.UserDataManager;
 import model.ImageFile;
 import utils.Alerts;
 import utils.ConfigureJFXControl;
@@ -72,6 +67,7 @@ public class HomeScreenViewController implements Initializable{
 
         if (selectedFile != null) {
             Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
+            BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
             //System.out.println(ImageFileOperationsManager.fetchImageFiles(selectedFile));
             //imagesToLoad.addAll(ImageFileOperationsManager.fetchImageFiles(selectedFile));
             if (imagesToLoad.size() != 0) {

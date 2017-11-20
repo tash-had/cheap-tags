@@ -55,7 +55,7 @@ public class UserDataGetter implements java.io.Serializable {
                 ArrayList<String> tempPreviousPath = (ArrayList<String>) previousPathsVisited;
                 //ArrayList<Tag> tempTagList = (ArrayList<Tag>) tagList;
                 //UserDataManager.NameToImageFileMapSetterForDataGetter(tempNameToImage);
-                StateManager.userData.previousPathsVisitedSetterForDataGetter(tempPreviousPath);
+//                StateManager.userData.previousPathsVisitedSetterForDataGetter(tempPreviousPath);
                 //TagManager.tagListSetterForDataGetter(tempTagList);
             }
 

@@ -6,29 +6,38 @@ import exceptions.FileNotCreatedException;
 import java.io.*;
 
 /**
- * Class to set states
+ * A class to manage states for the program, including session state and user data state.
  */
 public class StateManager {
     public static UserDataManager userData;
     public static SessionDataManager sessionData;
 
+    /**
+     * Start a new session
+     */
     public static void startSession(){
         reloadState();
         sessionData = new SessionDataManager();
     }
 
-    public static void endSession(){
+    /**
+     * End a session
+     */
+    static void endSession(){
         userData.allTags = TagManager.getTagList();
         saveState(userData);
     }
 
-    public static void reloadState(){
+    /**
+     * Attempt to load a state from a previous session
+     */
+    private static void reloadState(){
         File dataFile = new File("data/data.ctags");
         if (!dataFile.exists()){
             userData = new UserDataManager();
         }else{
-            FileInputStream fileInputStream = null;
-            ObjectInputStream objectInputStream = null;
+            FileInputStream fileInputStream;
+            ObjectInputStream objectInputStream;
             try{
                 // Figure out storing multiple objects later
                 fileInputStream = new FileInputStream(dataFile);
@@ -42,9 +51,14 @@ public class StateManager {
         }
     }
 
-    public static void saveState(UserDataManager userDataManager){
-        FileOutputStream fileOutputStream = null;
-        ObjectOutputStream objectOutputStream = null;
+    /**
+     * Attempt to store all new data from this session, including ImageFiles and Tags.
+     *
+     * @param userDataManager the main data manager for this session.
+     */
+    private static void saveState(UserDataManager userDataManager){
+        FileOutputStream fileOutputStream;
+        ObjectOutputStream objectOutputStream;
         File dataFile = new File("data/data.ctags");
         try{
             if (!dataFile.exists()){
@@ -59,6 +73,7 @@ public class StateManager {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void createDataFile(File dataFile) {
         if (!dataFile.exists()) {
             File dir = new File(dataFile.getParentFile().getAbsolutePath());

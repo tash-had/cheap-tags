@@ -12,9 +12,6 @@ import managers.UserDataManager;
 import java.io.IOException;
 
 public class Main extends Application{
-    public static UserDataManager userData = null;
-    public static SessionDataManager sessionData = null;
-
     @Override
     public void start(Stage primaryStage) throws IOException {
         StateManager.startSession();

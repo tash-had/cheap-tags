@@ -41,7 +41,7 @@ public abstract class PrimaryStageManager {
      *
      * @return the primary stage being managed
      */
-    public static Stage getPrimaryStage(){
+    private static Stage getPrimaryStage(){
             return primaryStage;
     }
 
