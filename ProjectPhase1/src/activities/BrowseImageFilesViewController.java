@@ -5,30 +5,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-
-import java.util.Collection;
-import java.util.Collections;
-
-import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
-
-import managers.*;
+import managers.ImageFileOperationsManager;
+import managers.PrimaryStageManager;
+import managers.StateManager;
+import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
 import utils.Alerts;
 import utils.ConfigureJFXControl;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BrowseImageFilesViewController implements Initializable {
 
@@ -126,10 +122,10 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     private static File targetDirectory;
 
-    /**
-     * An ArrayList of File objects of all the images in the chosen directory.
-     */
-    private ArrayList<File> fileObjectsInDirectory = new ArrayList<>();
+//    /**
+//     * An ArrayList of File objects of all the images in the chosen directory.
+//     */
+//    private ArrayList<File> fileObjectsInDirectory = new ArrayList<>();
 
     private ObservableList<Tag> availableTagOptions;
     private ObservableList<Tag> existingTagsOnImageFile;
@@ -138,10 +134,10 @@ public class BrowseImageFilesViewController implements Initializable {
     private static Collection<ImageFile> imagesToLoad;
     private boolean unsavedChanges = false;
 
-    /**
-     * A String array containing accepted image file types.
-     */
-    private static String[] acceptedExtensions = new String[]{"jpg"};
+//    /**
+//     * A String array containing accepted image file types.
+//     */
+//    private static String[] acceptedExtensions = new String[]{"jpg"};
 
     private StringBuilder imageSearchPatternEnd;
 
@@ -150,23 +146,16 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     private ImageFile selectedImageFile = null;
 
-    /**
-     * A FilenameFilter which filters out files that are not accepted image types.
-     */
-    private static FilenameFilter imgFilter = (dir, name) -> {
-        for (String ext : acceptedExtensions)
-            if (name.endsWith("." + ext)) {
-                return true;
-            }
-        return false;
-    };
-
-
-
-    /**
-     * TODO; imageFile rename oldName to revisionLog
-     */
-
+//    /**
+//     * A FilenameFilter which filters out files that are not accepted image types.
+//     */
+//    private static FilenameFilter imgFilter = (dir, name) -> {
+//        for (String ext : acceptedExtensions)
+//            if (name.endsWith("." + ext)) {
+//                return true;
+//            }
+//        return false;
+//    };
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -186,9 +175,9 @@ public class BrowseImageFilesViewController implements Initializable {
         ConfigureJFXControl.setListViewToDisplayCustomObjects(existingTags);
         ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
         availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
-        if (targetDirectory.isDirectory()) {
-            Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
-        }
+//        if (targetDirectory.isDirectory()) {
+//            Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
+//        }
         toggleButton.setSelected(false);
         imagesViewToggle();
 
@@ -252,7 +241,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //        }
     }
 
-    public static void setImagesToLoad(Collection<ImageFile> fetchedImages){
+    static void setImagesToLoad(Collection<ImageFile> fetchedImages){
         imagesToLoad = fetchedImages;
     }
 
@@ -353,7 +342,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
             selectedImageFile.getTagList().addAll(existingTagsOnImageFile);
             for (Tag tag : existingTagsOnImageFile) {
-                sb.append("@" + tag + " ");
+                sb.append("@").append(tag).append(" ");
             }
             sb.append(selectedImageFile.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
             imageNames.remove(selectedImageFile.getCurrentName());
@@ -399,9 +388,6 @@ public class BrowseImageFilesViewController implements Initializable {
         selectedImageLog.addAll(selectedImageFile.getOldName());
     }
 
-    /*
-    TODO: bug after you move file, go to new directory, moved file doesn't show up.
-     */
     /**
      * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
      * directory or stay in the current directory.
@@ -445,6 +431,9 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     // Miscellaneous
+//    static void setImagesToLoad(Collection<ImageFile> input){
+//        imagesToLoad = input;
+//    }
 
     static void setTargetDirectory(File directory) {
         StateManager.sessionData.setSession(directory.getPath());
@@ -522,9 +511,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         availableTagOptions.clear();
         availableTagOptions.addAll(TagManager.getTagList());
-        for (Tag tag : existingTagsOnImageFile){
-            availableTagOptions.remove(tag);
-        }
+        availableTagOptions.removeAll(existingTagsOnImageFile);
         if (selectedImageLog != null){
             selectedImageLog.clear();
         }
@@ -571,14 +558,26 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void revertButtonClick() {
         int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
-        ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
-        selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
-        selectedImageFile.getTagList().clear();
-        //update the selected imageFiles tagList with the tags associated with oldName.
-        selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
-        //System.out.println(selectedImageFile.getTagList().toString());
-        updateImageLog();
-        nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+//        System.out.println(indexOfRevision);
+        if (indexOfRevision != -1) {
+            ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
+            selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
+            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
+            selectedImageFile.getTagList().clear();
+            //update the selected imageFiles tagList with the tags associated with oldName.
+            selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
+//            System.out.println(selectedImageFile.getTagList().toString());
+            updateImageLog();
+            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+            existingTagsOnImageFile.clear();
+            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
+            populateImageFileTagListViews();
+            for (Tag tag : availableTagOptions) {
+                if (selectedImageFile.getTagList().contains(tag)) {
+                    availableTagOptions.remove(tag);
+                }
+            }
+        }
 //        selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
     }
 
