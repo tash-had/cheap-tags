@@ -50,7 +50,7 @@ public class TagManager implements java.io.Serializable{
         return null;
     }
 
-    public static void setTagList(ArrayList<Tag> newList){
+    static void setTagList(ArrayList<Tag> newList){
         tagList = newList;
     }
 
