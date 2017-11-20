@@ -576,14 +576,24 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void revertButtonClick() {
         int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
-        ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
-        selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
-        selectedImageFile.getTagList().clear();
-        //update the selected imageFiles tagList with the tags associated with oldName.
-        selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
-        //System.out.println(selectedImageFile.getTagList().toString());
-        updateImageLog();
-        nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+        if (indexOfRevision != -1) {
+            ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
+            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
+            selectedImageFile.getTagList().clear();
+            //update the selected imageFiles tagList with the tags associated with oldName.
+            selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
+            //System.out.println(selectedImageFile.getTagList().toString());
+            updateImageLog();
+            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+            existingTagsOnImageFile.clear();
+            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
+            populateImageFileTagListViews();
+            for (Tag tag : availableTagOptions) {
+                if (selectedImageFile.getTagList().contains(tag)) {
+                    availableTagOptions.remove(tag);
+                }
+            }
+        }
 //        selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
     }
 

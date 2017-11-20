@@ -41,4 +41,17 @@ public class Tag implements java.io.Serializable{
     public String toString() {
         return name;
     }
+
+    public boolean equals(Object o){
+        if (o == null){
+            return false;
+        }
+        if (o.getClass() != this.getClass()){
+            return false;
+        }
+        else {
+            Tag newo = (Tag) o;
+            return newo.name.equals(this.name);
+        }
+    }
 }
