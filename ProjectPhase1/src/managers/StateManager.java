@@ -70,6 +70,9 @@ public class StateManager {
                         e.printStackTrace();
                     }
                 }
+            }else {
+                dir.delete();
+                dir.mkdirs();
             }
             try {
                 if (!dataFile.createNewFile()) {
