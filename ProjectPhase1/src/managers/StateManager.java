@@ -63,7 +63,7 @@ public class StateManager {
         if (!dataFile.exists()) {
             File dir = new File(dataFile.getParentFile().getAbsolutePath());
             if (!dir.exists()) {
-                if (!dir.mkdir()) {
+                if (!dir.mkdirs()) {
                     try {
                         throw new DirectoryCreationException("There was an error making a directory!");
                     } catch (DirectoryCreationException e) {
