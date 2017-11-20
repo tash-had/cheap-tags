@@ -573,13 +573,15 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void revertButtonClick() {
         int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
+        System.out.println(indexOfRevision);
         if (indexOfRevision != -1) {
             ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
+            selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
             selectedImageFile.getTagList().clear();
             //update the selected imageFiles tagList with the tags associated with oldName.
             selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
-            //System.out.println(selectedImageFile.getTagList().toString());
+            System.out.println(selectedImageFile.getTagList().toString());
             updateImageLog();
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
             existingTagsOnImageFile.clear();
