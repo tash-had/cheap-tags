@@ -18,17 +18,16 @@ public class UserDataGetter implements java.io.Serializable {
      * This Function is used to extract file.
      */
     public static void GetDataAfterOpen() throws IOException {
-
-
+        
         if (!new File("src/data").exists()) {
             File checkFile = new File("src/data");
             checkFile.mkdir();
-            File newFile = new File("src/data","AllOfData.cheaptag");
+            File newFile = new File("src/data/AllOfData.cheaptag");
             newFile.createNewFile();
 
         }
         else if(!new File("src/data/AllOfData.cheaptag").exists()){
-            File newFile = new File("src/data","AllOfData.cheaptag");
+            File newFile = new File("src/data/AllOfData.cheaptag");
             newFile.createNewFile();
         }
 
