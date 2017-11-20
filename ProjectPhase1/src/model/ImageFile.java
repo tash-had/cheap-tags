@@ -22,7 +22,6 @@ public class ImageFile implements Serializable{
     private String underWhichDirectory; //the path for the parent folder of this image.
     private File thisFile;
     private String imageType; //the type of the string(eg. ".jpeg")
-    private String suffixForDuplicate; //
     private ArrayList<ArrayList<Tag>> tagHistory;
 
 
@@ -40,19 +39,10 @@ public class ImageFile implements Serializable{
         String c= oneImageFile.getName();
         String[] split = c.split("\\.");
         imageType = ("."+split[split.length-1]);
-        suffixForDuplicate = "";
         tagList = new ArrayList<>();
         tagHistory = new ArrayList<>();
     }
 
-    /**
-     * Change the name
-     * @param newTag is the new tag which will be added to the file name)
-     * but this one is just to add tag not deleting tag!
-     * Also,the image would also be added to the arraylist in model.Tag class
-     *
-     *
-     */
     //public void addTagOnImage(Tag newTag){
       //  String tempName = currentName.toString();
         //newTag.addImage(this);
@@ -70,12 +60,6 @@ public class ImageFile implements Serializable{
     //}
 
 
-        /**
-         * Change the name
-         * @param oldTag is the old tag which will be added to the file name)
-         * but this one is just to remove tag not deleting tag!!!!!!!
-         * Also,the image would also be removed from the arraylist in model.Tag class
-         */
     //public void removeTagOnImage(Tag oldTag){
       //  String tempName = currentName.toString();
         //oldTag.deleteImage(this);
@@ -108,7 +92,7 @@ public class ImageFile implements Serializable{
 
     /**
      * Change inner information of an imagefile class based on given String
-     * @param newName
+     * @param newName The new name for imagefile
      */
     public void generalReName(String newName, ArrayList<Tag> newTagList){
         String tempName = currentName.toString();
@@ -127,7 +111,7 @@ public class ImageFile implements Serializable{
     /**
      * override the generalReNameFunction but only take one parameter.
      * Change inner information of an imagefile class based on given String
-     * @param newName
+     * @param newName the newname for the imagefile
      */
     public void generalReName(String newName){
         String tempName = currentName.toString();
