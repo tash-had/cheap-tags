@@ -256,9 +256,6 @@ public class BrowseImageFilesViewController implements Initializable {
 //        }
     }
 
-    public void setImagesToLoad(Collection<ImageFile> fetchedImages){
-        this.imagesToLoad = fetchedImages;
-    }
 
     @FXML
     public void chooseImageClick(){
@@ -450,6 +447,9 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     // Miscellaneous
+//    static void setImagesToLoad(Collection<ImageFile> input){
+//        imagesToLoad = input;
+//    }
 
     static void setTargetDirectory(File directory) {
         UserDataManager.setSession(directory.getPath());

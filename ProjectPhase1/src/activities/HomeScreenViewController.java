@@ -88,6 +88,7 @@ public class HomeScreenViewController implements Initializable{
 //                BrowseImageFilesViewController controller = fxmlLoader.getController();
 //                System.out.println(imagesToLoad);
 //                controller.setImagesToLoad(imagesToLoad);
+                //BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
                 switchToToBrowseImageFilesView(selectedFile);
             }
              //else imagesToLoad size != 0
