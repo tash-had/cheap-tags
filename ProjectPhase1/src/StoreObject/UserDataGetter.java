@@ -18,7 +18,7 @@ public class UserDataGetter implements java.io.Serializable {
      * This Function is used to extract file.
      */
     public static void GetDataAfterOpen() throws IOException {
-        
+
         if (!new File("src/data").exists()) {
             File checkFile = new File("src/data");
             checkFile.mkdir();
