@@ -13,10 +13,10 @@ public class UserDataSaver implements Serializable{
     /**
      * this function stores user data in "AllOfUserData.cheaptag" (first: nameToImageFileMap, second: previousPathsVisited
      * third: tagList)
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @throws FileNotFoundException filenotfoundexception
+     * @throws IOException IOException
      */
-    public static void SaveBeforeClose() throws FileNotFoundException,IOException{
+    private static void SaveBeforeClose() throws FileNotFoundException,IOException{
         FileOutputStream OutputStream = new FileOutputStream("src/data/AllOfData.cheaptag");
         ObjectOutputStream tempOut = new ObjectOutputStream(OutputStream);
         //tempOut.writeObject((HashMap<String, ImageFile>)UserDataManager.getNameToImageFileMapForDataSaver());
