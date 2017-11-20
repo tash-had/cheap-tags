@@ -186,15 +186,15 @@ public class BrowseImageFilesViewController implements Initializable {
 //
 //            stringsOfTags.add(tag.toString());
 //        }
-        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags );
-        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags );
+        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
 
         ConfigureJFXControl.setListViewToDisplayCustomObjects(existingTags);
         ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
-        availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView,TagManager.getTagList());
+        availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
         if (targetDirectory.isDirectory()) {
             Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
-    }
+        }
         toggleButton.setSelected(false);
         imagesViewToggle();
 
@@ -209,41 +209,55 @@ public class BrowseImageFilesViewController implements Initializable {
         populateImageTilePane();
         rename.setDisable(true);
 
-        if (existingTagsOnImageFile == null || existingTagsOnImageFile.size() == 0){
+        if (existingTagsOnImageFile == null || existingTagsOnImageFile.size() == 0) {
             Delete.setDisable(true);
         }
 
-//        if (imagesToLoad.size() != 0){
+//        if (imagesToLoad.size() != 0) {
 //            UserDataManager.addPathToVisitedList(targetDirectory.getPath());
 //        }
 //
-//        if (imagesToLoad.size()== 0){
+//        if (imagesToLoad.size() == 0) {
 //            Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
 //                    " in the directory you loaded. Please select another");
 //            File response = PrimaryStageManager.getDirectoryWithChooser();
+//
 //            if (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() != 0) {
 //                setTargetDirectory(response);
 //                initialize(location, resources);
 //                UserDataManager.addPathToVisitedList(response.getPath());
 //            }
-//            else if (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() == 0){
+//
+//            // response isn't null and is = 0
+//            else if (response != null) {
 //                while (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() == 0) {
 //                    Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
-//                        " in the directory you loaded. Please select another");
+//                            " in the directory you loaded. Please select another");
 //                    response = PrimaryStageManager.getDirectoryWithChooser();
 //                }
-//                if (ImageFileOperationsManager.fetchImageFiles(response).size() != 0){
+////                if (ImageFileOperationsManager.fetchImageFiles(response).size() != 0) {
+//                // when while loop ends, they have chosen something that isn't null and empty
+//                if (response == null){
+//                    PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+//                }
+//                else{
 //                    setTargetDirectory(response);
-//                    initialize(location,resources);
+//                    initialize(location, resources);
 //                    UserDataManager.addPathToVisitedList(response.getPath());
 //                }
 //            }
 //            else {
-//                PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
-////                initialize(location, resources);
-//
+////                PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+////                HomeScreenViewController.initialize();
+//                targetDirectory = null;
+//                initialize(location, resources);
+//                backButtonClick();
 //            }
 //        }
+    }
+
+    public void setImagesToLoad(Collection<ImageFile> fetchedImages){
+        this.imagesToLoad = fetchedImages;
     }
 
     @FXML
