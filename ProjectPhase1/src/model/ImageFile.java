@@ -13,7 +13,7 @@ import java.lang.StringBuilder;
 //after the filemanager passes the file to this class, model.ImageFile will construct an imagefile object
 //on it. But in this class, I haven't associated rename with tag.java
 //Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
-public class ImageFile implements java.io.Serializable{
+public class ImageFile implements Serializable{
     private StringBuilder currentName; //the most current name of this image
     private ArrayList<Tag> tagList; //the list of tag this image has.
     //oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]

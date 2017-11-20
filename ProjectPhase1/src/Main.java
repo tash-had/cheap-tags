@@ -1,21 +1,23 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
-import model.ImageFile;
-import utils.FileOperations;
+import managers.SessionDataManager;
+import managers.StateManager;
+import managers.UserDataManager;
 
 
 //import tests.FileOperationsTest;
 
 
-import java.io.File;
 import java.io.IOException;
 
 public class Main extends Application{
+    public static UserDataManager userData = null;
+    public static SessionDataManager sessionData = null;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        StateManager.startSession();
         PrimaryStageManager.setPrimaryStage(primaryStage);
         PrimaryStageManager.setDefaultStageWidth(1080);
         PrimaryStageManager.setDefaultStageHeight(720);

@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
+import managers.StateManager;
 import managers.UserDataManager;
 import model.ImageFile;
 import utils.Alerts;
@@ -46,23 +47,15 @@ public class HomeScreenViewController implements Initializable{
     @FXML
     Button addTagsButton;
 
-   // FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("browse_imagefiles_view.fxml"));
-
-    /*
-     * TODO: Style buttons - material
-     * add docstrings!
-     * remove the "Users/tash-had/Pictures" initial entry in listview
-     * */
-
     @Override
     public void initialize (URL location, ResourceBundle resources) {
-       UserDataGetter.loadDATA();
+//       UserDataGetter.loadDATA();
 
         Image logoImage = new Image("resources/images/logo_2.jpg", true);
         homeScreenImageView.setImage(logoImage);
 
         ConfigureJFXControl.populateListViewWithArrayList(previouslyViewedListView,
-                getHyperlinkArrayList(UserDataManager.getPreviousPathsVisited()));
+                getHyperlinkArrayList(StateManager.userData.getPreviousPathsVisited()));
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf",
                 15, previouslyViewedLabel);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Light.ttf",
@@ -77,17 +70,17 @@ public class HomeScreenViewController implements Initializable{
     public void openDirectoryClick(){
         File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
 
-        System.out.println("Clicked");
         if (selectedFile != null) {
             Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
             //System.out.println(ImageFileOperationsManager.fetchImageFiles(selectedFile));
             //imagesToLoad.addAll(ImageFileOperationsManager.fetchImageFiles(selectedFile));
             if (imagesToLoad.size() != 0) {
                 //System.out.println(imagesToLoad.toString());
-                UserDataManager.addPathToVisitedList(selectedFile.getPath());
+//                UserDataManager.addPathToVisitedList(selectedFile.getPath());
 //                BrowseImageFilesViewController controller = fxmlLoader.getController();
 //                System.out.println(imagesToLoad);
 //                controller.setImagesToLoad(imagesToLoad);
+                StateManager.userData.addPathToVisitedList(selectedFile.getPath());
                 switchToToBrowseImageFilesView(selectedFile);
             }
              //else imagesToLoad size != 0
@@ -97,7 +90,7 @@ public class HomeScreenViewController implements Initializable{
                 openDirectoryClick();
             }
         }
-        UserDataSaver.storeData();
+//        UserDataSaver.storeData();
     }
 
     /**
