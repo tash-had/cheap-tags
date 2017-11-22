@@ -1,0 +1,35 @@
+Features.txt
+=========
+Many of the behind-the-scenes work 
+
+
+Efficiency Features (clever processes to improve program efficiency)
+===================
+- Sessions 
+- 
+- 
+
+Cases (clever situations that we thought about and handled)
+=====
+-Checks to see if ImageFile exists in directory, if it does ask if it's the same, if it's not, ask user to switch name 
+
+Program Features
+===============
+- Searchabar with regex search
+- Onclose save listener 
+- 
+
+UI Features
+============
+- Fonts
+- Colors on hover 
+
+
+
+
+todo features
+=======
+- try increasing session load speed 
+- Searchbar that waits for the user to finish typing, only search through images in preexisting query 
+- name guessing? -> impement some google api... use google vision API!
+- increase visual appearance 
