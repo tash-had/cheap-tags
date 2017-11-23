@@ -7,7 +7,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import model.Tag;
 
 import java.util.ArrayList;
 

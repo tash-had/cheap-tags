@@ -131,7 +131,7 @@ public class BrowseImageFilesViewController implements Initializable {
     private ObservableList<Tag> existingTagsOnImageFile;
     private ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
-    private static Collection<ImageFile> imagesToLoad;
+//    private static Collection<ImageFile> imagesToLoad;
     private boolean unsavedChanges = false;
 
 //    /**
@@ -183,15 +183,15 @@ public class BrowseImageFilesViewController implements Initializable {
 
 
         prepImageSearchRegex();
-        if (imagesToLoad == null || imagesToLoad.size() == 0){
-            imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
-        }
+//        if (imagesToLoad == null || imagesToLoad.size() == 0){
+//            imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
+//        }
         imageNames = StateManager.sessionData.getImageFileNames();
 
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
         imageTilePane.setVgap(0);
-
         populateImageTilePane();
+
         rename.setDisable(true);
 
         if (existingTagsOnImageFile == null || existingTagsOnImageFile.size() == 0) {
@@ -208,7 +208,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //            File response = PrimaryStageManager.getDirectoryWithChooser();
 //
 //            if (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() != 0) {
-//                setTargetDirectory(response);
+//                setNewTargetDirectory(response);
 //                initialize(location, resources);
 //                UserDataManager.addPathToVisitedList(response.getPath());
 //            }
@@ -226,7 +226,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //                    PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
 //                }
 //                else{
-//                    setTargetDirectory(response);
+//                    setNewTargetDirectory(response);
 //                    initialize(location, resources);
 //                    UserDataManager.addPathToVisitedList(response.getPath());
 //                }
@@ -241,9 +241,9 @@ public class BrowseImageFilesViewController implements Initializable {
 //        }
     }
 
-    static void setImagesToLoad(Collection<ImageFile> fetchedImages){
-        imagesToLoad = fetchedImages;
-    }
+//    static void setImagesToLoad(Collection<ImageFile> fetchedImages){
+//        imagesToLoad = fetchedImages;
+//    }
 
     @FXML
     public void chooseImageClick(){
@@ -406,14 +406,14 @@ public class BrowseImageFilesViewController implements Initializable {
                         "to the new directory?");
                 if (response == ButtonType.YES) {
                     // set screen to new directory
-                    setTargetDirectory(newDirectoryLocation);
+                    setNewTargetDirectory(newDirectoryLocation);
                     PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
                             "/activities/browse_imagefiles_view.fxml");
                     // update recently viewed on home scene
                     selectedImageFile.setFile(movedFile);
                     StateManager.userData.addPathToVisitedList(newDirectoryLocation.toString());
                 } else {
-                    setTargetDirectory(targetDirectory);
+                    setNewTargetDirectory(targetDirectory);
                     PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
                             "/activities/browse_imagefiles_view.fxml");
                 }
@@ -435,8 +435,8 @@ public class BrowseImageFilesViewController implements Initializable {
 //        imagesToLoad = input;
 //    }
 
-    static void setTargetDirectory(File directory) {
-        StateManager.sessionData.setSession(directory.getPath());
+    static void setNewTargetDirectory(File directory) {
+        StateManager.sessionData.startNewSession(directory);
         targetDirectory = directory;
     }
 
@@ -453,7 +453,7 @@ public class BrowseImageFilesViewController implements Initializable {
     // ImageTile Pane Methods
 
     private void populateImageTilePane(){
-        for (ImageFile imageFile : imagesToLoad){
+        for (ImageFile imageFile : StateManager.sessionData.getNameToImageFileMap().values()){
             addImageToTilePane(imageFile);
         }
     }

@@ -9,7 +9,14 @@ import java.io.*;
  * A class to manage states for the program, including session state and user data state.
  */
 public class StateManager {
+    /**
+     * Container for all user data in records
+     */
     public static UserDataManager userData;
+
+    /**
+     * Container for all session data
+     */
     public static SessionDataManager sessionData;
 
     /**
@@ -98,6 +105,6 @@ public class StateManager {
             }
         }
     }
- }
+}
 
 

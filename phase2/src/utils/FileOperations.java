@@ -59,7 +59,7 @@ public class FileOperations {
      * @param parentDirectory the parent directory
      * @return a File object of the
      */
-    public static String getSuffixedFileName(File parentDirectory, String existingFileName){
+    static String getSuffixedFileName(File parentDirectory, String existingFileName){
         String fileExtension = getFileExtension(new File(parentDirectory, existingFileName));
         String nameWithoutExt = existingFileName.substring(0, existingFileName.length() - fileExtension.length());
 

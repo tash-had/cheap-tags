@@ -10,10 +10,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.StateManager;
-import model.ImageFile;
 import utils.Alerts;
 import utils.ConfigureJFXControl;
 
@@ -66,11 +64,12 @@ public class HomeScreenViewController implements Initializable{
         File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
 
         if (selectedFile != null) {
-            Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
-            BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
+//            Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
+//            BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
             //System.out.println(ImageFileOperationsManager.fetchImageFiles(selectedFile));
             //imagesToLoad.addAll(ImageFileOperationsManager.fetchImageFiles(selectedFile));
-            if (imagesToLoad.size() != 0) {
+
+//            if (imagesToLoad.size() != 0) {
                 //System.out.println(imagesToLoad.toString());
 //                UserDataManager.addPathToVisitedList(selectedFile.getPath());
 //                BrowseImageFilesViewController controller = fxmlLoader.getController();
@@ -79,13 +78,13 @@ public class HomeScreenViewController implements Initializable{
                 //BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
                 StateManager.userData.addPathToVisitedList(selectedFile.getPath());
                 switchToToBrowseImageFilesView(selectedFile);
-            }
+//            }
              //else imagesToLoad size != 0
-            else{
-                Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
-                        " in the directory you loaded. Please select another");
-                openDirectoryClick();
-            }
+//            else{
+//                Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+//                        " in the directory you loaded. Please select another");
+//                openDirectoryClick();
+//            }
         }
 //        UserDataSaver.storeData();
     }
@@ -122,10 +121,15 @@ public class HomeScreenViewController implements Initializable{
     }
 
     private void switchToToBrowseImageFilesView(File directoryPath){
-        BrowseImageFilesViewController.setTargetDirectory(directoryPath);
-        PrimaryStageManager.setScreen("Browse Images - [~" + directoryPath.getPath() + "]",
-                "/activities/browse_imagefiles_view.fxml");
-
+        BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
+        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0){
+            PrimaryStageManager.setScreen("Browse Images - [~" + directoryPath.getPath() + "]",
+                    "/activities/browse_imagefiles_view.fxml");
+        }else {
+            Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+                    " in the directory you loaded. Please select another");
+            openDirectoryClick();
+        }
     }
 
     public void openTagScreen(){

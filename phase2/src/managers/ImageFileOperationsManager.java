@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Collection;
 
 import static utils.FileOperations.*;
 import static utils.FileOperations.FileOperationsResponse.FILENAME_TAKEN;
@@ -95,15 +94,14 @@ public class ImageFileOperationsManager implements java.io.Serializable {
      * Fetch images in a given directory and handle various possible events.
      *
      * @param directory the directory to fetch from
-     * @return a collection of ImageFile's representing each image fetched
      */
-    public static Collection<ImageFile> fetchImageFiles(File directory) {
-        Collection<ImageFile> sessionMapVals = StateManager.sessionData.getNameToImageFileMap().values();
-        if (sessionMapVals.size() > 0) {
-            return sessionMapVals;
-        }
+    public static void fetchImageFiles(File directory) {
+//        Collection<ImageFile> sessionMapVals = StateManager.sessionData.getNameToImageFileMap().values();
+//        if (sessionMapVals.size() > 0) {
+//            return sessionMapVals;
+//        }
         ArrayDeque<String> acceptedExtensions = new ArrayDeque<>();
-        ArrayDeque<ImageFile> filesToLoad = new ArrayDeque<>();
+//        ArrayDeque<ImageFile> filesToLoad = new ArrayDeque<>();
         acceptedExtensions.addAll(Arrays.asList(ACCEPTED_EXTENSIONS));
         try {
             // Get a list of files from the directory that have an accepted extension
@@ -137,18 +135,18 @@ public class ImageFileOperationsManager implements java.io.Serializable {
                             if (chosenName != null && renameResponse == SUCCESS) {
                                 // Rename is a success. Process the renamed file as new
                                 File fileWithChosenName = new File(file.getParentFile().getAbsolutePath(), chosenName);
-                                processFetchedImageFile(filesToLoad, fileWithChosenName, null);}
+                                processFetchedImageFile(fileWithChosenName, null);}
                         } else {
                             // Image is same as existing image one in records. Update + process existing ImageFile
                             imageFile.setFile(file);
-                            processFetchedImageFile(filesToLoad, null, imageFile);}
+                            processFetchedImageFile(null, imageFile);}
                     } else {
                         // Image is exactly the same as one in our records. Process the existing ImageFile
-                        processFetchedImageFile(filesToLoad, null, imageFile);
+                        processFetchedImageFile(null, imageFile);
                     }
                 } else {
                     // Image is new. Process it as new
-                    processFetchedImageFile(filesToLoad, file, null);
+                    processFetchedImageFile(file, null);
                 }
             }
         } catch (InvalidArgumentException e) {
@@ -156,7 +154,7 @@ public class ImageFileOperationsManager implements java.io.Serializable {
             Alerts.showErrorAlert("Error", "Fetch Error",
                     "There was an error fetching your files.");
         }
-        return filesToLoad;
+//        return filesToLoad;
     }
 
     /**
@@ -191,11 +189,10 @@ public class ImageFileOperationsManager implements java.io.Serializable {
      * is not in our records. Pass in existingImageFile (from records) if the file being imported exists and we have
      * an ImageFile for the file.
      *
-     * @param list the list of files to load
      * @param file the file being imported (if this files ImageFile isn't stored already), null otherwise
      * @param existingImageFIle the ImageFile for the file being imported (iff it exists in records), null otherwise
      */
-    private static void processFetchedImageFile(ArrayDeque<ImageFile> list, @Nullable  File file,
+    private static void processFetchedImageFile(@Nullable  File file,
                                                    @Nullable  ImageFile existingImageFIle){
         ImageFile fileToProcess;
         if (file == null){
@@ -204,7 +201,7 @@ public class ImageFileOperationsManager implements java.io.Serializable {
             fileToProcess = new ImageFile(file);
             StateManager.userData.addImageFileToMap(fileToProcess);
         }
-        list.add(fileToProcess);
+//        list.add(fileToProcess);
         StateManager.sessionData.addImageFileToMap(fileToProcess);
     }
 
