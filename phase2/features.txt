@@ -31,5 +31,6 @@ todo features
 =======
 - try increasing session load speed 
 - Searchbar that waits for the user to finish typing, only search through images in preexisting query 
-- name guessing? -> impement some google api... use google vision API!
+- Use some sort of api?
 - increase visual appearance 
+- MAT Design - Checkboxes for tags, tableview for tag view 
