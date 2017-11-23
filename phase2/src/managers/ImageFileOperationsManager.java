@@ -21,7 +21,7 @@ import static utils.FileOperations.FileOperationsResponse.SUCCESS;
 /**
  * This class manages how file operations for ImageFiles are handled
  */
-public class ImageFileOperationsManager implements java.io.Serializable {
+public class ImageFileOperationsManager {
 
     public static String[] ACCEPTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tif"};
 
@@ -35,6 +35,19 @@ public class ImageFileOperationsManager implements java.io.Serializable {
     public static ImageFile renameImageFile(ImageFile imageFile, String newName){
         File currentImageFile = imageFile.getThisFile();
         Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
+
+        if (StateManager.userData.getNameToImageFileMap().containsKey(newName)){
+            String chosenName = handleFilenameTakenByDatabase(new File(newName),
+                    "It looks like the new name you chose exists in our database from " +
+                    StateManager.userData.getNameToImageFileMap().get(newName).getThisFile().getAbsolutePath() +
+                    ". Would you like to choose a new name? (If you select no, your file will not be renamed).");
+            if (chosenName == null){
+                // User denied to a rename.
+                return imageFile;
+            }else {
+                return renameImageFile(imageFile, chosenName);
+            }
+        }
         FileOperationsResponse response =  renameFile(currentImageFile, newName);
         if (response == SUCCESS){
             imageFile.generalReName(newName);
@@ -46,12 +59,13 @@ public class ImageFileOperationsManager implements java.io.Serializable {
                     StateManager.userData.getImageFileNames());
             // User accepted to a suffixed filename
             if (suffixedFileName != null){
-                renameImageFile(imageFile, suffixedFileName);
+                return renameImageFile(imageFile, suffixedFileName);
             }
         }else {
             // Show error alert dialog
             Alerts.showErrorAlert("Renaming Error", "Error", "There was an error renaming your file");
         }
+
         imageFile.setFile(imageFilePath.toFile());
         return imageFile;
     }
@@ -95,13 +109,8 @@ public class ImageFileOperationsManager implements java.io.Serializable {
      *
      * @param directory the directory to fetch from
      */
-    public static void fetchImageFiles(File directory) {
-//        Collection<ImageFile> sessionMapVals = StateManager.sessionData.getNameToImageFileMap().values();
-//        if (sessionMapVals.size() > 0) {
-//            return sessionMapVals;
-//        }
+    static void fetchImageFiles(File directory) {
         ArrayDeque<String> acceptedExtensions = new ArrayDeque<>();
-//        ArrayDeque<ImageFile> filesToLoad = new ArrayDeque<>();
         acceptedExtensions.addAll(Arrays.asList(ACCEPTED_EXTENSIONS));
         try {
             // Get a list of files from the directory that have an accepted extension
@@ -122,14 +131,17 @@ public class ImageFileOperationsManager implements java.io.Serializable {
                         if (imageIsExistingImage == ButtonType.NO) {
                             // Image is not the image that exists in directory! Ask user if they want to rename the image
                             // and make sure the entered name doesn't also exist in our database.
-                            String chosenName = handleFilenameTakenByDatabase(file);
-                            while (StateManager.userData.existsInMap(chosenName)) {
-                                chosenName = handleFilenameTakenByDatabase(file);
-                            }
-                            // Rename the image with the given name + make sure the given name doesn't exist
-                            // in the directory either
+                            String alertBody = "Would you like to rename this file? (If you chose no, the file will " +
+                                    "not be imported)";
+                            String chosenName = handleFilenameTakenByDatabase(file, alertBody);
+                            // If chosenName is null, function will continue to end of this if statement and terminate
+
+                            // Rename the image with the given name + remember to make sure the given name doesn't exist
+                            // in the directory being browsed either
                             FileOperationsResponse renameResponse = FileOperations.renameFile(file, chosenName);
                             if (renameResponse == FILENAME_TAKEN) {
+                                // Don't need to provide database as filter because we already ensured that the new name
+                                // doesn't exist in database with handleFilenameTakenByDatabase
                                 renameResponse = FileOperations.renameFile(file, Alerts.showFileExistsAlert(directory,
                                         chosenName, null));}
                             if (chosenName != null && renameResponse == SUCCESS) {
@@ -137,7 +149,8 @@ public class ImageFileOperationsManager implements java.io.Serializable {
                                 File fileWithChosenName = new File(file.getParentFile().getAbsolutePath(), chosenName);
                                 processFetchedImageFile(fileWithChosenName, null);}
                         } else {
-                            // Image is same as existing image one in records. Update + process existing ImageFile
+                            // User says image is same as existing image one in records.
+                            // Update location of existing ImageFile and process it
                             imageFile.setFile(file);
                             processFetchedImageFile(null, imageFile);}
                     } else {
@@ -154,7 +167,6 @@ public class ImageFileOperationsManager implements java.io.Serializable {
             Alerts.showErrorAlert("Error", "Fetch Error",
                     "There was an error fetching your files.");
         }
-//        return filesToLoad;
     }
 
     /**
@@ -163,11 +175,11 @@ public class ImageFileOperationsManager implements java.io.Serializable {
      * @param file the file they are trying to import
      * @return the new name they chose for the file, null if they said no to a new name.
      */
-    private static String handleFilenameTakenByDatabase(File file) {
+    private static String handleFilenameTakenByDatabase(File file, String alertBody) {
         String fileName = file.getName();
         ButtonType renameImage = Alerts.showYesNoAlert("Filename Exists in Database",
-                "Filename Taken", "Would you like to rename this file? (If you chose no, the file will " +
-                        "not be imported)");
+                "Filename Taken", alertBody);
+
         if (renameImage == ButtonType.YES) {
             TextInputDialog textDialog = new TextInputDialog();
             textDialog.setTitle("Choose a new name");
@@ -176,8 +188,15 @@ public class ImageFileOperationsManager implements java.io.Serializable {
             String result = textDialog.getResult();
             if (result == null || result.equals("")) {
                 return null;
+            }else {
+                result = result + FileOperations.getFileExtension(file, false);
             }
-            return result + FileOperations.getFileExtension(file);
+            // Ensure that the new name they gave us doesn't also exist in our database
+            if (StateManager.userData.existsInMap(result)){
+                return handleFilenameTakenByDatabase(new File(result), alertBody);
+            }else {
+                return result;
+            }
         } else {
             return null;
         }

@@ -22,7 +22,7 @@ public class StateManager {
     /**
      * Start a new session
      */
-    public static void startSession(){
+    public static void startSession() {
         reloadState();
         sessionData = new SessionDataManager();
     }
@@ -30,7 +30,7 @@ public class StateManager {
     /**
      * End a session
      */
-    static void endSession(){
+    static void endSession() {
         userData.allTags = TagManager.getTagList();
         saveState(userData);
     }
@@ -38,15 +38,14 @@ public class StateManager {
     /**
      * Attempt to load a state from a previous session
      */
-    private static void reloadState(){
+    private static void reloadState() {
         File dataFile = new File("data/data.ctags");
-        if (!dataFile.exists()){
+        if (!dataFile.exists()) {
             userData = new UserDataManager();
-        }else{
+        } else {
             FileInputStream fileInputStream;
             ObjectInputStream objectInputStream;
-            try{
-                // Figure out storing multiple objects later
+            try {
                 fileInputStream = new FileInputStream(dataFile);
                 objectInputStream = new ObjectInputStream(fileInputStream);
                 userData = (UserDataManager) objectInputStream.readObject();
@@ -54,6 +53,8 @@ public class StateManager {
                 objectInputStream.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                dataFile.delete();
+                PrimaryStageManager.closePrimaryStage();
             }
         }
     }
@@ -63,12 +64,12 @@ public class StateManager {
      *
      * @param userDataManager the main data manager for this session.
      */
-    private static void saveState(UserDataManager userDataManager){
+    private static void saveState(UserDataManager userDataManager) {
         FileOutputStream fileOutputStream;
         ObjectOutputStream objectOutputStream;
         File dataFile = new File("data/data.ctags");
-        try{
-            if (!dataFile.exists()){
+        try {
+            if (!dataFile.exists()) {
                 createDataFile(dataFile);
             }
             fileOutputStream = new FileOutputStream(dataFile);
@@ -92,7 +93,7 @@ public class StateManager {
                         e.printStackTrace();
                     }
                 }
-            }else {
+            } else {
                 dir.delete();
                 dir.mkdirs();
             }

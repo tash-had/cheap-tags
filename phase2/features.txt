@@ -12,6 +12,8 @@ Efficiency Features (clever processes to improve program efficiency)
 Cases (clever situations that we thought about and handled)
 =====
 -Checks to see if ImageFile exists in directory, if it does ask if it's the same, if it's not, ask user to switch name 
+- Make flowchart of cases handled by ImageFileOperationsManager
+
 
 Program Features
 ===============
@@ -33,4 +35,8 @@ todo features
 - Searchbar that waits for the user to finish typing, only search through images in preexisting query 
 - Use some sort of api?
 - increase visual appearance 
-- MAT Design - Checkboxes for tags, tableview for tag view 
+- MAT Design - Checkboxes for tags, tableview for tag view
+- only set tags if ImageFile's file attribute changes. (To replicate problem, try adding tag that results in a filename
+that exists in database. then save a new name... Filename will be new given name but tag will not be added but will still
+show as added)
+- update code to use TagManager through StateManager and serialize TagManager instead of just tagmanager arraylist

@@ -60,7 +60,7 @@ public class FileOperations {
      * @return a File object of the
      */
     static String getSuffixedFileName(File parentDirectory, String existingFileName){
-        String fileExtension = getFileExtension(new File(parentDirectory, existingFileName));
+        String fileExtension = getFileExtension(new File(parentDirectory, existingFileName), true);
         String nameWithoutExt = existingFileName.substring(0, existingFileName.length() - fileExtension.length());
 
         int suffix = 1;
@@ -82,12 +82,16 @@ public class FileOperations {
      * Get the extension of a normal file.
      *
      * @param file the file to check
+     * @param checkForValidity check whether the given file is infact a valid file with a valid extension. If false is
+     *                         passed in, the function will not perform validity checks and simply return the characters
+     *                         after the last "." in the file name.
      * @return the extension (includes the dot)
      */
-    public static String getFileExtension(File file){
+    public static String getFileExtension(File file, boolean checkForValidity){
         String fileExtension = null;
         String fileName = file.getName();
-        if (!file.isDirectory() && !file.isHidden() && fileName.contains(".")){
+        if ((checkForValidity && file.exists() && !file.isDirectory() && !file.isHidden() && fileName.contains(".")) ||
+                !checkForValidity){
             fileExtension = fileName.substring(fileName.lastIndexOf("."));
         }
         return fileExtension;
@@ -134,7 +138,7 @@ public class FileOperations {
 
         if (filesInDirectory != null){
             for (File file : filesInDirectory){
-                String fileExtension = FileOperations.getFileExtension(file);
+                String fileExtension = FileOperations.getFileExtension(file, true);
                 if ((fileExtension != null) &&
                         (acceptedExtensions == null || acceptedExtensions.contains(fileExtension))){
                     validFiles.add(file);

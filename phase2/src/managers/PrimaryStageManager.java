@@ -54,6 +54,13 @@ public abstract class PrimaryStageManager {
     }
 
     /**
+     * Close the primary stage window
+     */
+    public static void closePrimaryStage(){
+        getPrimaryStage().close();
+    }
+
+    /**
      * Set the scene for the entire primary stage using a given Scene object.
      *
      * @param windowTitle the title of the new window

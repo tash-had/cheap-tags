@@ -2,9 +2,10 @@ package managers;
 
 import model.Tag;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TagManager implements java.io.Serializable{
+public class TagManager implements Serializable{
 
     /**
      * A list of all the tags in the system.

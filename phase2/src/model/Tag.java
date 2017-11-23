@@ -1,10 +1,9 @@
 package model;
 
-import model.ImageFile;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Tag implements java.io.Serializable{
+public class Tag implements Serializable{
 
     /**
      * the name of the tag
