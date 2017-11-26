@@ -22,7 +22,6 @@ import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
 import utils.Alerts;
 import utils.ConfigureJFXControl;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -127,6 +126,10 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     ImageView shareWithInstagramBtn;
 
+    @FXML
+    TextField TagSearchBar;
+
+
     private ObservableList<String> imageFileNames;
 
     /**
@@ -152,6 +155,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //    private static String[] acceptedExtensions = new String[]{"jpg"};
 
     private StringBuilder imageSearchPatternEnd;
+
 
     /**
      * The File object that is the currently displayed image.
@@ -499,6 +503,29 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+
+    public void TagSearchTextChanged(){
+        String input = TagSearchBar.getText().toLowerCase();
+        ArrayList<Tag> searchResult = new ArrayList<>();
+        Pattern tagSearchPattern = Pattern.compile(input);
+        Matcher tagSearchMatcher;
+        availableTagOptions.clear();
+        if (input.isEmpty()){
+            searchResult.clear();
+            availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
+        }else {
+            for (Tag tag: TagManager.getTagList()){
+                tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
+                if (tagSearchMatcher.find()){
+                    searchResult.add(tag);
+                }
+            }
+            availableTagOptions.addAll(searchResult);
+
+            }
+
+    }
+
     /**
      * Reverts the current image to the selected previous name.
      */
@@ -527,6 +554,7 @@ public class BrowseImageFilesViewController implements Initializable {
             }
         }
     }
+
 
     /**
      * A function to handle the click action of the ImageView (the instagram icon) in the BrowseImageFilesView

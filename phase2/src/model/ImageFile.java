@@ -9,24 +9,51 @@ import java.nio.file.Path;
 import java.io.File;
 import java.lang.StringBuilder;
 
-
-//after the filemanager passes the file to this class, model.ImageFile will construct an imagefile object
-//on it. But in this class, I haven't associated rename with tag.java
-//Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
+/**
+ * After the filemanager passes the file to this class, model.ImageFile will construct an imagefile object on it.
+ * Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
+ */
 public class ImageFile implements Serializable, Comparable<ImageFile>{
-    private StringBuilder currentName; //the most current name of this image
-    private ArrayList<Tag> tagList; //the list of tag this image has.
-    //oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
-    private ArrayList<ArrayList<String>> oldName;
-    private String originalName; //the original name of this image without any tag.
-    private String underWhichDirectory; //the path for the parent folder of this image.
-    private File thisFile;
-    private String imageType; //the type of the string(eg. ".jpeg")
-    private ArrayList<ArrayList<Tag>> tagHistory;
-
+    /**
+     * the most current name of this image
+     */
+    private StringBuilder currentName;
 
     /**
-     * Construct a new model.ImageFile object.
+     * the list of tag this image has.
+     */
+    private ArrayList<Tag> tagList;
+
+    /**
+     * oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
+     */
+    private ArrayList<ArrayList<String>> oldName;
+
+    /**
+     * the original name of this image without any tag.
+     */
+    private String originalName;
+
+    /**
+     * the path for the parent folder of this image.
+     */
+    private String underWhichDirectory;
+
+    /**
+     * the actual file object
+     */
+    private File thisFile;
+
+    /**
+     * the type of the string(eg. ".jpeg")
+     */
+    private String imageType;
+
+
+    private ArrayList<ArrayList<Tag>> tagHistory;
+
+    /**
+     * Constructs a new model.ImageFile object.
      * @param oneImageFile is the actual imagefile(eg.image.jpeg)
      */
     public ImageFile(File oneImageFile){
@@ -43,55 +70,8 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
         tagHistory = new ArrayList<>();
     }
 
-    //public void addTagOnImage(Tag newTag){
-      //  String tempName = currentName.toString();
-        //newTag.addImage(this);
-      //  String tempTag ="@"+newTag.toString();
-       // if(!tagList.contains(tempTag)){
-        //    this.tagList.add(tempTag); }
-       // Long timeStamp = System.currentTimeMillis();
-       // currentName.insert(0,(tempTag+" "));
-        //String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
-        //this.oldName.add(tempLog);
-        //tempName = currentName.toString();
-        //String targetName = this.underWhichDirectory+tempName+this.imageType;
-        //this.thisFile = new File (targetName);
-
-    //}
-
-
-    //public void removeTagOnImage(Tag oldTag){
-      //  String tempName = currentName.toString();
-        //oldTag.deleteImage(this);
-        //String tempTag = oldTag.toString();
-        //if(!tagList.contains(tempTag)){
-          //  this.tagList.add(tempTag);
-        //}
-        //for(int i = 0;i<this.tagList.size();i++){
-          //  if(this.tagList.get(i).equals(tempTag)){
-            //    this.tagList.remove(i);
-            //}
-        //}
-        //Long timeStamp = System.currentTimeMillis();
-        //String[] currentNameSplit = tempName.split("\\b");
-        //currentName = new StringBuilder();
-        //for(String i:currentNameSplit){
-          //  if(i.equals(tempTag)){
-            //    continue;
-            //}
-            //else{
-             //   currentName.append(i);
-        //    }
-       // }
-        //String[] tempLog = {currentName.toString(),tempName,timeStamp.toString()};
-        //this.oldName.add(tempLog);
-        //tempName = currentName.toString();
-        //String targetName = this.underWhichDirectory+tempName+this.imageType;
-        //this.thisFile = new File (targetName);
-   //}
-
     /**
-     * Change inner information of an imagefile class based on given String
+     * Changes inner information of an imagefile class based on given String
      * @param newName The new name for imagefile
      */
     public void generalReName(String newName, ArrayList<Tag> newTagList){
@@ -106,7 +86,6 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
         String targetName = this.underWhichDirectory+tempName+this.imageType;
         this.thisFile = new File(targetName);
     }
-
 
     /**
      * override the generalReNameFunction but only take one parameter.
@@ -125,14 +104,14 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
         this.thisFile = new File(targetName);
     }
 
+    /**
+     * It updates tag history
+     * @param newEntry an arraylist of tag
+     */
     public void updateTagHistory(ArrayList<Tag> newEntry){
         ArrayList<Tag> temp = new ArrayList<>();
         temp.addAll(newEntry);
         this.tagHistory.add(temp);
-    }
-
-    public ArrayList<ArrayList<Tag>> getTagHistory(){
-        return this.tagHistory;
     }
 
     @Override
@@ -178,8 +157,12 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
     }
     public ArrayList<Tag> getTagList(){return this.tagList;}
     public String getImageType(){ return this.imageType; }
+    public ArrayList<ArrayList<Tag>> getTagHistory(){
+        return this.tagHistory;
+    }
 
 
+    //some setters
     public void setFile(File newFile){
         this.thisFile = newFile;
     }
