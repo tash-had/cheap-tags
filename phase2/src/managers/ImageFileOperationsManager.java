@@ -5,6 +5,7 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import model.ImageFile;
+import model.Tag;
 import org.apache.log4j.Logger;
 import org.apache.log4j.varia.NullAppender;
 import utils.Alerts;
@@ -220,6 +221,23 @@ public class ImageFileOperationsManager {
             fileToProcess = existingImageFIle;
         }else {
             fileToProcess = new ImageFile(file);
+
+            String[] beginningName = fileToProcess.getCurrentName().split("\\s");
+            for(String i: beginningName){
+                if(i.startsWith("@")){
+                    String withoutSymbol = i.substring(1,i.length());
+                    if(TagManager.getTagByString(withoutSymbol)==null){
+                        Tag tempTag = new Tag(withoutSymbol);
+                        fileToProcess.getTagList().add(tempTag);
+                        tempTag.images.add(fileToProcess);
+                        TagManager.addTag(tempTag);
+                    }
+
+                }
+            }
+
+
+
             StateManager.userData.addImageFileToMap(fileToProcess);
         }
 //        list.add(fileToProcess);

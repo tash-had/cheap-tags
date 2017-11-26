@@ -37,8 +37,7 @@ rocess videos?
 - only set tags if ImageFile's file attribute changes. (To replicate problem, try adding tag that results in a filename
 that exists in database. then save a new name... Filename will be new given name but tag will not be added but will still
 show as added)
-<!-- - We should implement logic that handles what happens when the user deletes a tag... ask them if they wan't to remove the
-tag from all their images [Done]. -->
+<!-- - We should implement logic that handles what happens when the user deletes a tag... ask them if they wan't to remove the tag from all their images [Done]. -->
 - Methods for alerts are created in Alerts.java so they can be reused and we don't have to keep writing Alert Dialog code (since we use alert dialogs so much). chooseFileAlert(), goToDirectoryYesNo() and fileContainsTagAlert() all do the exact same thing. It'd probably be better to just have one function for that dialog
 that takes a parameter for the body. (You can also use alertDialog.setHeader() to set the title on the dialog if you want).
 
