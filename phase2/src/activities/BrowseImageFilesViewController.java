@@ -127,6 +127,12 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     ImageView shareWithInstagramBtn;
 
+    @FXML
+    TextField TagSearchBar;
+
+    @FXML
+    Button AddTags;
+
     private ObservableList<String> imageFileNames;
 
     /**
