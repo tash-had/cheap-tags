@@ -5,14 +5,19 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import managers.PrimaryStageManager;
 import managers.TagManager;
+import model.ImageFile;
 import model.Tag;
 import org.omg.CORBA.INTERNAL;
 import utils.Alerts;
+
+import java.awt.*;
 import java.net.URL;
 import java.util.Observable;
 import java.util.ResourceBundle;
@@ -125,6 +130,9 @@ public class TagScreenViewController implements Initializable {
                 ButtonType renameReqResponse = Alerts.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With " +thisTag.images.size()+ " Image",
                         "Are You Sure You Want To Delete?");
                 if (renameReqResponse == ButtonType.YES){
+                    for(ImageFile j : thisTag.images){
+                        j.getTagList().remove(thisTag);
+                    }
                     tagView.getItems().remove(i);
                     TagManager.getTagList().remove(thisTag);
                 }
