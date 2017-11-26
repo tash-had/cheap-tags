@@ -53,7 +53,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
     private ArrayList<ArrayList<Tag>> tagHistory;
 
     /**
-     * Construct a new model.ImageFile object.
+     * Constructs a new model.ImageFile object.
      * @param oneImageFile is the actual imagefile(eg.image.jpeg)
      */
     public ImageFile(File oneImageFile){
@@ -71,7 +71,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
     }
 
     /**
-     * Change inner information of an imagefile class based on given String
+     * Changes inner information of an imagefile class based on given String
      * @param newName The new name for imagefile
      */
     public void generalReName(String newName, ArrayList<Tag> newTagList){

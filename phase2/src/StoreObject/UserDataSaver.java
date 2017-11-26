@@ -8,6 +8,9 @@ import model.ImageFile;
 import java.io.*;
 import java.util.HashMap;
 
+/**
+ * this class used to store data in given file
+ */
 public class UserDataSaver implements Serializable{
 
     /**
@@ -20,13 +23,16 @@ public class UserDataSaver implements Serializable{
         FileOutputStream OutputStream = new FileOutputStream("src/data/AllOfData.cheaptag");
         ObjectOutputStream tempOut = new ObjectOutputStream(OutputStream);
         //tempOut.writeObject((HashMap<String, ImageFile>)UserDataManager.getNameToImageFileMapForDataSaver());
-//        tempOut.writeObject(StateManager.userData.previousPathsVisitedGetterForDataSaver());
-//        tempOut.writeObject(StateManager.userData.getNameToImageFileMap());
+        //tempOut.writeObject(StateManager.userData.previousPathsVisitedGetterForDataSaver());
+        //tempOut.writeObject(StateManager.userData.getNameToImageFileMap());
 
         //tempOut.writeObject(TagManager.getTagList());
         tempOut.close();
     }
 
+    /**
+     * it is a helper function to store date in target file.
+     */
     public static void storeData(){
         try{UserDataSaver.SaveBeforeClose();}
         catch(IOException e){
