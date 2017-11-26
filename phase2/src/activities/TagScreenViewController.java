@@ -4,10 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -117,8 +114,19 @@ public class TagScreenViewController implements Initializable {
 //        for (int i : intArray) {
             int i = tagView.getSelectionModel().getSelectedIndex();
             if ( i > -1) {
-                Tag thisTag = tagView.getItems().remove(i);
-                TagManager.getTagList().remove(thisTag);
+                Tag thisTag = tagView.getItems().get(i);
+                if(thisTag.images.size() != 0 ){
+                ButtonType renameReqResponse = Alerts.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With " +thisTag.images.size()+ " Image",
+                        "Are You Sure You Want To Delete?");
+                if (renameReqResponse == ButtonType.YES){
+                    tagView.getItems().remove(i);
+                    TagManager.getTagList().remove(thisTag);
+                }
+            }
+            else{
+                    tagView.getItems().remove(i);
+                    TagManager.getTagList().remove(thisTag);
+                }
             }
 //        }
     }

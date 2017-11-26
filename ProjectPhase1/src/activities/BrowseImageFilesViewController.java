@@ -361,9 +361,9 @@ public class BrowseImageFilesViewController implements Initializable {
             if (imageFileNames!=null){
                 imageFileNames.add(selectedImageFile.getCurrentName());}
 
-//            for(Tag i : selectedImageFile.getTagList()){
-//                i.images.add(selectedImageFile);
-//            }
+            for(Tag i : selectedImageFile.getTagList()){
+                i.images.add(selectedImageFile);
+            }
         }
     }
 
