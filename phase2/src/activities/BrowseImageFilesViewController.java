@@ -169,16 +169,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // clear
-//        stringsOfTags.clear();
 
-
-        // import all tags from tagList to the scene
-
-//        for (Tag tag : TagManager.getTagList()) {
-//
-//            stringsOfTags.add(tag.toString());
-//        }
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
 
@@ -189,17 +180,13 @@ public class BrowseImageFilesViewController implements Initializable {
 
 
         availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
-//        if (targetDirectory.isDirectory()) {
-//            Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
-//        }
+
         toggleButton.setSelected(false);
         imagesViewToggle();
 
 
         prepImageSearchRegex();
-//        if (imagesToLoad == null || imagesToLoad.size() == 0){
-//            imagesToLoad = ImageFileOperationsManager.fetchImageFiles(targetDirectory);
-//        }
+
         imageNames = StateManager.sessionData.getImageFileNames();
 
         imageTilePane.setOrientation(Orientation.HORIZONTAL);
@@ -208,56 +195,9 @@ public class BrowseImageFilesViewController implements Initializable {
 
         rename.setDisable(true);
 
-        if (existingTagsOnImageFile == null || existingTagsOnImageFile.size() == 0) {
-            Delete.setDisable(true);
-        }
 
-//        if (imagesToLoad.size() != 0) {
-//            UserDataManager.addPathToVisitedList(targetDirectory.getPath());
-//        }
-//
-//        if (imagesToLoad.size() == 0) {
-//            Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
-//                    " in the directory you loaded. Please select another");
-//            File response = PrimaryStageManager.getDirectoryWithChooser();
-//
-//            if (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() != 0) {
-//                setNewTargetDirectory(response);
-//                initialize(location, resources);
-//                UserDataManager.addPathToVisitedList(response.getPath());
-//            }
-//
-//            // response isn't null and is = 0
-//            else if (response != null) {
-//                while (response != null && ImageFileOperationsManager.fetchImageFiles(response).size() == 0) {
-//                    Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
-//                            " in the directory you loaded. Please select another");
-//                    response = PrimaryStageManager.getDirectoryWithChooser();
-//                }
-////                if (ImageFileOperationsManager.fetchImageFiles(response).size() != 0) {
-//                // when while loop ends, they have chosen something that isn't null and empty
-//                if (response == null){
-//                    PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
-//                }
-//                else{
-//                    setNewTargetDirectory(response);
-//                    initialize(location, resources);
-//                    UserDataManager.addPathToVisitedList(response.getPath());
-//                }
-//            }
-//            else {
-////                PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
-////                HomeScreenViewController.initialize();
-//                targetDirectory = null;
-//                initialize(location, resources);
-//                backButtonClick();
-//            }
-//        }
     }
 
-//    static void setImagesToLoad(Collection<ImageFile> fetchedImages){
-//        imagesToLoad = fetchedImages;
-//    }
 
     @FXML
     public void chooseImageClick(){
@@ -310,22 +250,7 @@ public class BrowseImageFilesViewController implements Initializable {
         if (selectedImageFile == null) {
             Alerts.chooseFileAlert();
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
-            // find the matching tag in the images tagList and remove that object
-//            for (int i = 0; i < selectedImageFile.getTagList().size(); i++){
-//                if (selectedTag.name.equals(selectedImageFile.getTagList().get(i).name)){
-//                    selectedImageFile.getTagList().remove(i);
-//                    break;
-//                }
-//            }
-//            StringBuilder sb = new StringBuilder();
-//            for (Tag tag : selectedImageFile.getTagList()){
-//                sb.append("@" + tag + " ");
-//            }
-//            sb.append(selectedImageFile.getOriginalName());
-//            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
-//            updateImageLog();
 
-            
             existingTagsOnImageFile.remove(selectedTag);
             availableTagOptions.add(selectedTag);
 
@@ -334,7 +259,6 @@ public class BrowseImageFilesViewController implements Initializable {
             }
             unsavedChanges = true;
             rename.setDisable(false);
-            Delete.setDisable(true);
         }
     }
 

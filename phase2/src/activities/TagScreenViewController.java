@@ -1,9 +1,13 @@
 package activities;
 
+import com.sun.xml.internal.xsom.impl.scd.Iterators;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -11,8 +15,10 @@ import javafx.scene.layout.Pane;
 import managers.PrimaryStageManager;
 import managers.TagManager;
 import model.Tag;
+import org.omg.CORBA.INTERNAL;
 import utils.Alerts;
 import java.net.URL;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
 public class TagScreenViewController implements Initializable {
@@ -57,7 +63,8 @@ public class TagScreenViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-
+        Platform.runLater(() -> tagInput.requestFocus());
+       // tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         // clears tagView to prevent duplication after reinitializing the scene and re-adds all the tags from TagManager
             tagView.getItems().clear();
             for (Tag tag : TagManager.getTagList()) {
@@ -107,11 +114,14 @@ public class TagScreenViewController implements Initializable {
      */
     @FXML
     public void deleteButtonClicked(){
-        int index = tagView.getSelectionModel().getSelectedIndex();
-        if (index > -1){
-            Tag thisTag = tagView.getItems().remove(index);
-            TagManager.getTagList().remove(thisTag);
-        }
+//        ObservableList<Integer> intArray = tagView.getSelectionModel().getSelectedIndices();
+//        for (int i : intArray) {
+            int i = tagView.getSelectionModel().getSelectedIndex();
+            if ( i > -1) {
+                Tag thisTag = tagView.getItems().remove(i);
+                TagManager.getTagList().remove(thisTag);
+            }
+//        }
     }
 
     /**
@@ -133,8 +143,4 @@ public class TagScreenViewController implements Initializable {
             addButtonClicked();
         }
     }
-
-    /*
-    TODO: set initial focus on tagInput
-     */
 }
