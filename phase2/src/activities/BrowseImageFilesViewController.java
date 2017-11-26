@@ -14,6 +14,7 @@ import managers.StateManager;
 import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
+import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -29,6 +30,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -517,13 +519,24 @@ public class BrowseImageFilesViewController implements Initializable {
                 }
             }
         }
-//        selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
     }
 
+    /**
+     * A function to handle the click action of the ImageView (the instagram icon) in the BrowseImageFilesView
+     * This function prompts the user for their Instagram credentials and a caption, and then posts the current selected
+     * ImageFile to their Instagram.
+     */
     public void shareWithInstagram(){
+        if (selectedImageFile  == null) {
+            Alerts.showErrorAlert("Must select an image", "Select an Image",
+                    "You must select an image first!");
+            return;
+        }
         // Add imageview to alertdia
         String[] instagramCreds = Alerts.loginDialog("Login to Instagram",
                 "Enter your Instagram credentials ...", null);
+        // Disable logs
+        turnOffLog4J();
         if (instagramCreds[0] != null && instagramCreds[1] != null
                 && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0){
             Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0]).password(instagramCreds[1]).build();
@@ -532,17 +545,10 @@ public class BrowseImageFilesViewController implements Initializable {
                 instagram.login();
             } catch (IOException e) {
                 e.printStackTrace();
+                Alerts.showErrorAlert("Invalid Credentials", "Invalid Creds",
+                        "Please enter a valid username and password.");
             }
             try {
-//            InstagramSearchUsernameResult userResult = instagram.sendRequest(new InstagramSearchUsernameRequest("github"));
-//            if (userResult.getUser() != null){
-//                instagram.sendRequest(new InstagramFollowRequest(userResult.getUser().getPk()));
-//
-//
-//
-//            }else {
-//                System.out.println("nulll");
-//            }
                 String caption = Alerts.showTextInputDialog("Instagram Caption", "Caption?",
                         "Enter a caption for your photo");
                 if (caption == null){
@@ -558,6 +564,18 @@ public class BrowseImageFilesViewController implements Initializable {
             Alerts.showErrorAlert("Invalid Input", "No Input",
                     "You must enter valid credentials");
         }
+    }
+
+    /**
+     * A method to turn off all apache log4j loggers.
+     */
+    private void turnOffLog4J(){
+        Enumeration loggers = LogManager.getCurrentLoggers();
+        while (loggers.hasMoreElements()){
+            Logger logger = (Logger) loggers.nextElement();
+            logger.setLevel(Level.OFF);
+        }
+        LogManager.getRootLogger().setLevel(Level.OFF);
     }
 
 }
