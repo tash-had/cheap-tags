@@ -123,7 +123,7 @@ public class HomeScreenViewController implements Initializable{
     private void switchToToBrowseImageFilesView(File directoryPath){
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
         if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0){
-            PrimaryStageManager.setScreen("Browse Images - [~" + directoryPath.getPath() + "]",
+            PrimaryStageManager.setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
                     "/activities/browse_imagefiles_view.fxml");
         }else {
             Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
