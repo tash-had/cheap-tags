@@ -532,6 +532,9 @@ public class BrowseImageFilesViewController implements Initializable {
      * A function to handle the click action of the ImageView (the instagram icon) in the BrowseImageFilesView
      * This function prompts the user for their Instagram credentials and a caption, and then posts the current selected
      * ImageFile to their Instagram.
+     *
+     * Note that this function uses Instagram's private API because their public API does not allow photo upload from
+     * third parties.
      */
     public void shareWithInstagram() {
         if (selectedImageFile == null) {
@@ -560,12 +563,11 @@ public class BrowseImageFilesViewController implements Initializable {
                             InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                     instagram.sendRequest(photoRequest);
                 } catch (IOException | RuntimeException e) {
-//                e.printStackTrace();
                     Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
-                            "uploading your photo to Instagram. Make sure you've entered the right credentials.");
+                            "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
+                            "that your photo is of type JPEG");
                 }
             } catch (IOException e) {
-//                e.printStackTrace();
                 Alerts.showErrorAlert("Invalid Credentials", "Invalid Creds",
                         "Please enter a valid username and password.");
             }
