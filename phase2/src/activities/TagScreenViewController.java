@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.TagManager;
 import model.ImageFile;
@@ -19,6 +20,7 @@ import utils.Alerts;
 
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
@@ -133,6 +135,21 @@ public class TagScreenViewController implements Initializable {
                 if (renameReqResponse == ButtonType.YES){
                     for(ImageFile j : thisTag.images){
                         j.getTagList().remove(thisTag);
+
+                        ArrayList<Tag> tempList = new ArrayList<>();
+                        tempList.addAll(j.getTagList());
+
+                        StringBuilder sb = new StringBuilder();
+
+                        j.getTagList().clear(); //clear all tags, since .addAll adds everything again.
+
+                        j.getTagList().addAll(tempList);
+
+                        for (Tag tag : tempList) {
+                            sb.append("@").append(tag).append(" ");
+                        }
+                        sb.append(j.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
+                        ImageFileOperationsManager.renameImageFile(j, sb.toString());
                     }
                     tagView.getItems().remove(i);
                     TagManager.getTagList().remove(thisTag);
