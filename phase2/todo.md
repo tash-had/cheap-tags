@@ -30,8 +30,8 @@ rocess videos?
 # #
 
 # Critical Bugs
-- Revision log not working as expected 
-- Make sure directory doesn't get renamed when using the revert button
+<!-- - Revision log not working as expected [Done] -->
+<!-- - Make sure directory doesn't get renamed when using the revert button [Done] -->
 
 # Mild Bugs/Flaws 
 - only set tags if ImageFile's file attribute changes. (To replicate problem, try adding tag that results in a filename
