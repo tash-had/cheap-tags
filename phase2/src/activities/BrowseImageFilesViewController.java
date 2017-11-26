@@ -14,11 +14,18 @@ import managers.StateManager;
 import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import org.brunocvcunha.instagram4j.Instagram4j;
+import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
 import utils.Alerts;
 import utils.ConfigureJFXControl;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -115,6 +122,9 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     ListView<String> imageNamesListView;
 
+    @FXML
+    ImageView shareWithInstagramBtn;
+
     private ObservableList<String> imageFileNames;
 
     /**
@@ -174,6 +184,10 @@ public class BrowseImageFilesViewController implements Initializable {
 
         ConfigureJFXControl.setListViewToDisplayCustomObjects(existingTags);
         ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
+
+        //// CANCEL BUTTON FIX WARNING FOR INSTAGRAM DIAg
+
+
         availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
 //        if (targetDirectory.isDirectory()) {
 //            Collections.addAll(fileObjectsInDirectory, targetDirectory.listFiles(imgFilter));
@@ -557,6 +571,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void revertButtonClick() {
+        Logger.getRootLogger().info("hey");
         int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
 //        System.out.println(indexOfRevision);
         if (indexOfRevision != -1) {
@@ -579,6 +594,46 @@ public class BrowseImageFilesViewController implements Initializable {
             }
         }
 //        selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
+    }
+
+    public void shareWithInstagram(){
+        // Add imageview to alertdia
+        String[] instagramCreds = Alerts.loginDialog("Login to Instagram",
+                "Enter your Instagram credentials ...", null);
+        if (instagramCreds[0] != null && instagramCreds[1] != null
+                && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0){
+            Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0]).password(instagramCreds[1]).build();
+            instagram.setup();
+            try {
+                instagram.login();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+//            InstagramSearchUsernameResult userResult = instagram.sendRequest(new InstagramSearchUsernameRequest("github"));
+//            if (userResult.getUser() != null){
+//                instagram.sendRequest(new InstagramFollowRequest(userResult.getUser().getPk()));
+//
+//
+//
+//            }else {
+//                System.out.println("nulll");
+//            }
+                String caption = Alerts.showTextInputDialog("Instagram Caption", "Caption?",
+                        "Enter a caption for your photo");
+                if (caption == null){
+                    caption = "";
+                }
+                instagram.sendRequest(new InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
+                        "uploading your photo to Instagram. Make sure you've entered the right credentials.");
+            }
+        }else {
+            Alerts.showErrorAlert("Invalid Input", "No Input",
+                    "You must enter valid credentials");
+        }
     }
 
 }

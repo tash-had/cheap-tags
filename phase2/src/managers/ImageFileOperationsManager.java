@@ -5,6 +5,8 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import model.ImageFile;
+import org.apache.log4j.Logger;
+import org.apache.log4j.varia.NullAppender;
 import utils.Alerts;
 import utils.FileOperations;
 
@@ -164,8 +166,11 @@ public class ImageFileOperationsManager {
             }
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
+            Logger.getRootLogger().removeAllAppenders();
+            Logger.getRootLogger().addAppender(new NullAppender());
             Alerts.showErrorAlert("Error", "Fetch Error",
-                    "There was an error fetching your files.");
+                    "There was an error fetching your files. You sure that folder exists?");
+
         }
     }
 
@@ -181,11 +186,8 @@ public class ImageFileOperationsManager {
                 "Filename Taken", alertBody);
 
         if (renameImage == ButtonType.YES) {
-            TextInputDialog textDialog = new TextInputDialog();
-            textDialog.setTitle("Choose a new name");
-            textDialog.setContentText("Enter a new name for " + fileName);
-            textDialog.showAndWait();
-            String result = textDialog.getResult();
+            String result = Alerts.showTextInputDialog("Enter a new name", null,
+                    "Enter a new name for " + fileName);
             if (result == null || result.equals("")) {
                 return null;
             }else {
