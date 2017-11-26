@@ -14,15 +14,49 @@ import java.lang.StringBuilder;
 //after the filemanager passes the file to this class, model.ImageFile will construct an imagefile object
 //on it. But in this class, I haven't associated rename with tag.java
 //Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
+
+/**
+ * after the filemanager passes the file to this class, model.ImageFile will construct an imagefile object on it.
+ * But in this class, I haven't associated rename with tag.java
+ * Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
+ */
 public class ImageFile implements Serializable, Comparable<ImageFile>{
-    private StringBuilder currentName; //the most current name of this image
-    private ArrayList<Tag> tagList; //the list of tag this image has.
-    //oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
+    /**
+     * the most current name of this image
+     */
+    private StringBuilder currentName;
+
+    /**
+     * the list of tag this image has.
+     */
+    private ArrayList<Tag> tagList;
+
+    /**
+     * oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
+     */
     private ArrayList<ArrayList<String>> oldName;
-    private String originalName; //the original name of this image without any tag.
-    private String underWhichDirectory; //the path for the parent folder of this image.
+
+    /**
+     * the original name of this image without any tag.
+     */
+    private String originalName;
+
+    /**
+     * the path for the parent folder of this image.
+     */
+    private String underWhichDirectory;
+
+    /**
+     * the actual file object
+     */
     private File thisFile;
-    private String imageType; //the type of the string(eg. ".jpeg")
+
+    /**
+     * the type of the string(eg. ".jpeg")
+     */
+    private String imageType;
+
+
     private ArrayList<ArrayList<Tag>> tagHistory;
 
 
