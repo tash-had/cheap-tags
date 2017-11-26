@@ -410,9 +410,12 @@ public class BrowseImageFilesViewController implements Initializable {
     private void addImageToTilePane(ImageFile imageFile){
         Image image = null;
         try {
-            image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 300, 300, true, true);
+            image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 300,
+                    300, true, true);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            Alerts.showErrorAlert("Gallery Error", "Error", "There was an error adding " +
+            imageFile.getThisFile().getAbsolutePath() + " to the gallery. You sure it exists?");
         }
         ImageView imageView = new ImageView();
         imageView.setImage(image);
@@ -431,7 +434,8 @@ public class BrowseImageFilesViewController implements Initializable {
             populateImageFileTagListViews();
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Alerts.showErrorAlert("Image Error", "Error", "There was an error fetching " +
+                    imageFile.getThisFile().getAbsolutePath() + " from the gallery. You sure it exists?");
         }
     }
 
@@ -579,21 +583,19 @@ public class BrowseImageFilesViewController implements Initializable {
             instagram.setup();
             try {
                 instagram.login();
-                if (instagram.isLoggedIn()){
-                    try {
-                        String caption = Alerts.showTextInputDialog("Instagram Caption", "Caption?",
-                                "Enter a caption for your photo");
-                        if (caption == null) {
-                            caption = "";
-                        }
-                        InstagramUploadPhotoRequest photoRequest = new
-                                InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
-                        instagram.sendRequest(photoRequest);
-                    } catch (IOException | RuntimeException e) {
-//                e.printStackTrace();
-                        Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
-                                "uploading your photo to Instagram. Make sure you've entered the right credentials.");
+                try {
+                    String caption = Alerts.showTextInputDialog("Instagram Caption", "Caption?",
+                            "Enter a caption for your photo");
+                    if (caption == null) {
+                        caption = "";
                     }
+                    InstagramUploadPhotoRequest photoRequest = new
+                            InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
+                    instagram.sendRequest(photoRequest);
+                } catch (IOException | RuntimeException e) {
+//                e.printStackTrace();
+                    Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
+                            "uploading your photo to Instagram. Make sure you've entered the right credentials.");
                 }
             } catch (IOException e) {
 //                e.printStackTrace();

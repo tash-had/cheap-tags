@@ -118,6 +118,7 @@ public class TagScreenViewController implements Initializable {
     /**
      * Handles when delete button is clicked. Removes selected Tag from the list on screen and removes selected Tag
      * from list in TagManager.
+     * When the selected tag associated with existing images, the program will show a warning box to ask user for permission.
      */
     @FXML
     public void deleteButtonClicked(){
