@@ -49,6 +49,12 @@ public class TagScreenViewController implements Initializable {
     TextField tagInput;
 
     /**
+     * A TextField for users to search tags
+     */
+    @FXML
+    TextField tagSearch;
+
+    /**
      * Displays currently existing tags on the screen.
      */
     @FXML
@@ -121,6 +127,7 @@ public class TagScreenViewController implements Initializable {
                 Tag thisTag = tagView.getItems().remove(i);
                 TagManager.getTagList().remove(thisTag);
             }
+            repopulateTagView();
 //        }
     }
 
@@ -141,6 +148,37 @@ public class TagScreenViewController implements Initializable {
     public void handleEnterPressed(KeyEvent ke){
         if (ke.getCode() == KeyCode.ENTER){
             addButtonClicked();
+        }
+    }
+
+    /**
+     *
+     */
+    @FXML
+    public void searchInputChanged(){
+        String input = tagSearch.getText().toLowerCase();
+        if (input.equals("")){
+            repopulateTagView();
+        }
+        else{
+            for (int i = 0; i < tagView.getItems().size(); i++){
+                Tag curr = tagView.getItems().get(i);
+                if (input.length() <= curr.name.length()) {
+                    if (!curr.name.substring(0, input.length()).equals(input)) {
+                        tagView.getItems().remove(i);
+                    }
+                }
+                else {
+                    tagView.getItems().remove(i);
+                }
+            }
+        }
+    }
+
+    public void repopulateTagView() {
+        tagView.getItems().clear();
+        for (Tag tag : TagManager.getTagList()) {
+            tagView.getItems().add(tag);
         }
     }
 }
