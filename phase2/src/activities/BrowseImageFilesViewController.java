@@ -306,6 +306,9 @@ public class BrowseImageFilesViewController implements Initializable {
             imageNames.add(selectedImageFile.getCurrentName());
             if (imageFileNames!=null){
                 imageFileNames.add(selectedImageFile.getCurrentName());}
+            for(Tag i : selectedImageFile.getTagList()){
+             i.images.add(selectedImageFile);
+            }
         }
     }
 
@@ -532,8 +535,8 @@ public class BrowseImageFilesViewController implements Initializable {
      * This function prompts the user for their Instagram credentials and a caption, and then posts the current selected
      * ImageFile to their Instagram.
      */
-    public void shareWithInstagram(){
-        if (selectedImageFile  == null) {
+    public void shareWithInstagram() {
+        if (selectedImageFile == null) {
             Alerts.showErrorAlert("Must select an image", "Select an Image",
                     "You must select an image first!");
             return;
@@ -544,29 +547,33 @@ public class BrowseImageFilesViewController implements Initializable {
         // Disable logs
         turnOffLog4J();
         if (instagramCreds[0] != null && instagramCreds[1] != null
-                && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0){
+                && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {
             Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0]).password(instagramCreds[1]).build();
             instagram.setup();
             try {
                 instagram.login();
+                if (instagram.isLoggedIn()){
+                    try {
+                        String caption = Alerts.showTextInputDialog("Instagram Caption", "Caption?",
+                                "Enter a caption for your photo");
+                        if (caption == null) {
+                            caption = "";
+                        }
+                        InstagramUploadPhotoRequest photoRequest = new
+                                InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
+                        instagram.sendRequest(photoRequest);
+                    } catch (IOException | RuntimeException e) {
+//                e.printStackTrace();
+                        Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
+                                "uploading your photo to Instagram. Make sure you've entered the right credentials.");
+                    }
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
                 Alerts.showErrorAlert("Invalid Credentials", "Invalid Creds",
                         "Please enter a valid username and password.");
             }
-            try {
-                String caption = Alerts.showTextInputDialog("Instagram Caption", "Caption?",
-                        "Enter a caption for your photo");
-                if (caption == null){
-                    caption = "";
-                }
-                instagram.sendRequest(new InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption));
-            } catch (IOException e) {
-                e.printStackTrace();
-                Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
-                        "uploading your photo to Instagram. Make sure you've entered the right credentials.");
-            }
-        }else {
+        } else {
             Alerts.showErrorAlert("Invalid Input", "No Input",
                     "You must enter valid credentials");
         }
