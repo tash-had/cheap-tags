@@ -135,6 +135,4 @@ public class HomeScreenViewController implements Initializable{
     public void openTagScreen(){
         PrimaryStageManager.setScreen("My Tags", "/activities/tag_screen_view.fxml");
     }
-
-
 }
