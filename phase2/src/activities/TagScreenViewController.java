@@ -1,6 +1,5 @@
 package activities;
 
-import com.sun.xml.internal.xsom.impl.scd.Iterators;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

@@ -3,6 +3,7 @@ package model;
 import model.ImageFile;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class Tag implements java.io.Serializable{
 
@@ -14,7 +15,7 @@ public class Tag implements java.io.Serializable{
     /**
      * the arraylist stores all images that have this tag
      */
-    public ArrayList<ImageFile> images = new ArrayList<>();
+    public TreeSet<ImageFile> images = new TreeSet<ImageFile>();
 
     public Tag(String name) {
         this.name = name;

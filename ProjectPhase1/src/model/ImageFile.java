@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.lang.StringBuilder;
 //after the filemanager passes the file to this class, model.ImageFile will construct an imagefile object
 //on it. But in this class, I haven't associated rename with tag.java
 //Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
-public class ImageFile implements Serializable{
+public class ImageFile implements Serializable, Comparable<ImageFile>{
     private StringBuilder currentName; //the most current name of this image
     private ArrayList<Tag> tagList; //the list of tag this image has.
     //oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
@@ -134,6 +135,32 @@ public class ImageFile implements Serializable{
     public ArrayList<ArrayList<Tag>> getTagHistory(){
         return this.tagHistory;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof ImageFile)){
+            return false;
+        }
+        else{
+            ImageFile temp = (ImageFile) obj;
+            if(this.currentName.equals(temp.currentName)){
+                return true; }
+            return false; }
+    }
+
+    //override compareto method, let the image can be ordered in alphabetical order.
+    public int compareTo(ImageFile i){
+        if (this.originalName.charAt(0)<i.originalName.charAt(0)){
+            return -1;
+        }
+        else if(this.originalName.charAt(0)>i.originalName.charAt(0)){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+
 
 
     //some getters

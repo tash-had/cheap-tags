@@ -3,6 +3,7 @@ package activities;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -108,10 +109,24 @@ public class TagScreenViewController implements Initializable {
     @FXML
     public void deleteButtonClicked(){
         int index = tagView.getSelectionModel().getSelectedIndex();
-        if (index > -1){
-            Tag thisTag = tagView.getItems().remove(index);
-            TagManager.getTagList().remove(thisTag);
-        }
+        Tag thisTag = tagView.getItems().remove(index);
+        TagManager.getTagList().remove(thisTag);
+
+//        if (index > -1){
+//            Tag thisTag = tagView.getItems().get(index);
+//            if(thisTag.images.size() != 0 ){
+//                ButtonType renameReqResponse = Alerts.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With At Least One Image",
+//                        "Are You Sure You Want To Delete?");
+//                if (renameReqResponse == ButtonType.OK){
+//                    thisTag = tagView.getItems().remove(index);
+//                    TagManager.getTagList().remove(thisTag);
+//                }
+//            }
+//            else {
+//                thisTag = tagView.getItems().remove(index);
+//                TagManager.getTagList().remove(thisTag);
+//            }
+//        }
     }
 
     /**
