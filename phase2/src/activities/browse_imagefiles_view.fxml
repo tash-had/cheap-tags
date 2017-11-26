@@ -51,7 +51,7 @@
                   <Image url="@../resources/images/instagram-logo.png" />
                </image>
             </ImageView>
-            <TextField fx:id="TagSearchBar" layoutX="524.0" layoutY="602.0" prefHeight="27.0" prefWidth="215.0" promptText="Search tag by text or regex" />
+            <TextField fx:id="TagSearchBar" layoutX="524.0" layoutY="602.0" onKeyReleased="#TagSearchTextChanged" prefHeight="27.0" prefWidth="215.0" promptText="Search tag by text or regex" />
             <Button fx:id="AddTags" layoutX="655.0" layoutY="629.0" mnemonicParsing="false" onAction="#addButtonClick" text="Add Tag(s)" />
          </children></AnchorPane>
   </items>

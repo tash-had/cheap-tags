@@ -501,6 +501,32 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    public void TagSearchTextChanged(){
+        String input = TagSearchBar.getText().toLowerCase();
+        if (input.equals("")){
+            populateTagsViewAgain();
+        }
+        else{
+            for (int i = 0; i < availableTagOptions.size(); i++){
+                Tag curr = availableTagOptions.get(i);
+                if (input.length() <= curr.name.length()) {
+                    if (!curr.name.substring(0, input.length()).equals(input)) {
+                        availableTagOptions.remove(i);
+                    }
+                }
+                else {
+                    availableTagOptions.remove(i);
+                }
+
+
+            }        }
+    }
+
+    public void populateTagsViewAgain(){
+        availableTagOptions.clear();
+        availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
+
+    }
     /**
      * Reverts the current image to the selected previous name.
      */
@@ -529,6 +555,7 @@ public class BrowseImageFilesViewController implements Initializable {
             }
         }
     }
+
 
     /**
      * A function to handle the click action of the ImageView (the instagram icon) in the BrowseImageFilesView
