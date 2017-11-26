@@ -520,9 +520,8 @@ public class BrowseImageFilesViewController implements Initializable {
                 else {
                     availableTagOptions.remove(i);
                 }
-
-
-            }        }
+            }
+        }
     }
 
     public void populateTagsViewAgain(){
