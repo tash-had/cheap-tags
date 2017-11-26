@@ -22,7 +22,6 @@ import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
 import utils.Alerts;
 import utils.ConfigureJFXControl;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
