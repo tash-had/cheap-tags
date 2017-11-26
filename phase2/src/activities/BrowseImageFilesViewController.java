@@ -129,8 +129,6 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     TextField TagSearchBar;
 
-    @FXML
-    Button AddTags;
 
     private ObservableList<String> imageFileNames;
 
@@ -157,6 +155,7 @@ public class BrowseImageFilesViewController implements Initializable {
 //    private static String[] acceptedExtensions = new String[]{"jpg"};
 
     private StringBuilder imageSearchPatternEnd;
+
 
     /**
      * The File object that is the currently displayed image.
@@ -504,31 +503,29 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+
     public void TagSearchTextChanged(){
         String input = TagSearchBar.getText().toLowerCase();
-        if (input.equals("")){
-            populateTagsViewAgain();
-        }
-        else{
-            for (int i = 0; i < availableTagOptions.size(); i++){
-                Tag curr = availableTagOptions.get(i);
-                if (input.length() <= curr.name.length()) {
-                    if (!curr.name.substring(0, input.length()).equals(input)) {
-                        availableTagOptions.remove(i);
-                    }
-                }
-                else {
-                    availableTagOptions.remove(i);
+        ArrayList<Tag> searchResult = new ArrayList<>();
+        Pattern tagSearchPattern = Pattern.compile(input);
+        Matcher tagSearchMatcher;
+        availableTagOptions.clear();
+        if (input.isEmpty()){
+            searchResult.clear();
+            availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
+        }else {
+            for (Tag tag: TagManager.getTagList()){
+                tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
+                if (tagSearchMatcher.find()){
+                    searchResult.add(tag);
                 }
             }
-        }
-    }
+            availableTagOptions.addAll(searchResult);
 
-    public void populateTagsViewAgain(){
-        availableTagOptions.clear();
-        availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
+            }
 
     }
+
     /**
      * Reverts the current image to the selected previous name.
      */

@@ -17,12 +17,15 @@ import model.ImageFile;
 import model.Tag;
 import org.omg.CORBA.INTERNAL;
 import utils.Alerts;
+import utils.ConfigureJFXControl;
 
 import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TagScreenViewController implements Initializable {
 
@@ -116,6 +119,10 @@ public class TagScreenViewController implements Initializable {
             }
         }
     }
+    public void handleMultipleSelection(){
+        tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+    }
 
     /**
      * Handles when delete button is clicked. Removes selected Tag from the list on screen and removes selected Tag
@@ -127,6 +134,8 @@ public class TagScreenViewController implements Initializable {
 //        ObservableList<Integer> intArray = tagView.getSelectionModel().getSelectedIndices();
 //        for (int i : intArray) {
             int i = tagView.getSelectionModel().getSelectedIndex();
+            tagView.getSelectionModel().getSelectedItems();
+
             if ( i > -1) {
                 Tag thisTag = tagView.getItems().get(i);
                 if(thisTag.images.size() != 0 ){
@@ -189,22 +198,39 @@ public class TagScreenViewController implements Initializable {
      */
     @FXML
     public void searchInputChanged(){
+//        String input = tagSearch.getText().toLowerCase();
+//        if (input.equals("")){
+//            repopulateTagView();
+//        }
+//        else{
+//            for (int i = 0; i < tagView.getItems().size(); i++){
+//                Tag curr = tagView.getItems().get(i);
+//                if (input.length() <= curr.name.length()) {
+//                    if (!curr.name.substring(0, input.length()).equals(input)) {
+//                        tagView.getItems().remove(i);
+//                    }
+//                }
+//                else {
+//                    tagView.getItems().remove(i);
+//                }
+//            }
         String input = tagSearch.getText().toLowerCase();
-        if (input.equals("")){
+        ArrayList<Tag> searchResult = new ArrayList<>();
+        Pattern tagSearchPattern = Pattern.compile(input);
+        Matcher tagSearchMatcher;
+        tagView.getItems().clear();
+        if (input.isEmpty()){
+            searchResult.clear();
             repopulateTagView();
-        }
-        else{
-            for (int i = 0; i < tagView.getItems().size(); i++){
-                Tag curr = tagView.getItems().get(i);
-                if (input.length() <= curr.name.length()) {
-                    if (!curr.name.substring(0, input.length()).equals(input)) {
-                        tagView.getItems().remove(i);
-                    }
-                }
-                else {
-                    tagView.getItems().remove(i);
+        }else {
+            for (Tag tag: TagManager.getTagList()){
+                tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
+                if (tagSearchMatcher.find()){
+                    searchResult.add(tag);
                 }
             }
+            tagView.getItems().addAll(searchResult);
+
         }
     }
 
