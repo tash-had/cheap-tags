@@ -13,5 +13,6 @@
       <Button fx:id="add" layoutX="580.0" layoutY="667.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="54.0" prefWidth="175.0" text="Add" />
       <Button fx:id="delete" layoutX="755.0" layoutY="666.0" mnemonicParsing="false" onAction="#deleteButtonClicked" prefHeight="55.0" prefWidth="168.0" text="Delete" />
       <Button fx:id="back" layoutX="921.0" layoutY="666.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="55.0" prefWidth="162.0" text="Back" />
+      <TextField fx:id="tagSearch" layoutX="723.0" layoutY="-3.0" onKeyReleased="#searchInputChanged" prefHeight="37.0" prefWidth="305.0" />
    </children>
 </Pane>
