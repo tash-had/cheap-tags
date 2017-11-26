@@ -40,6 +40,9 @@ public class HomeScreenViewController implements Initializable{
     @FXML
     Button addTagsButton;
 
+    @FXML
+    Button importFromInstagramBtn;
+
     @Override
     public void initialize (URL location, ResourceBundle resources) {
 //       UserDataGetter.loadDATA();
@@ -136,5 +139,9 @@ public class HomeScreenViewController implements Initializable{
         PrimaryStageManager.setScreen("My Tags", "/activities/tag_screen_view.fxml");
     }
 
+    @FXML
+    public void importFromInstagram(){
+
+    }
 
 }

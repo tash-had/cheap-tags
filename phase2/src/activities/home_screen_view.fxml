@@ -29,15 +29,16 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="addTagsButton" mnemonicParsing="false" onAction="#openTagScreen" text="My Tags">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Button>
+                              <Button fx:id="importFromInstagramBtn" mnemonicParsing="false" onAction="#importFromInstagram" prefHeight="27.0" prefWidth="210.0" text="Import photos from Instagram" />
                            </children>
                         </VBox>
                      </children>
                   </HBox>
+                  <Button fx:id="addTagsButton" mnemonicParsing="false" onAction="#openTagScreen" text="My Tags">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
             </VBox>
          </children></AnchorPane>
