@@ -118,10 +118,6 @@ public class TagScreenViewController implements Initializable {
             }
         }
     }
-    public void handleMultipleSelection(){
-        tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-    }
 
     /**
      * Handles when delete button is clicked. Removes selected Tag from the list on screen and removes selected Tag
