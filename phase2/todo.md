@@ -5,6 +5,8 @@
 
 ### Cases (clever situations that we thought about and handled)
 * Checks to see if ImageFile exists in directory, if it does ask if it's the same, if it's not, ask user to switch name 
+* Check to ensure user doesn't have unsaved changes when they click a new image 
+* Checks associated images during tag deletion and renames those images
 
 ### Program Features
 * Searchabar with regex search
@@ -38,25 +40,26 @@ About goToDirectoryYesNo(), there's was already a showYesNoAlert() method in Ale
 * Facebook share btn
 * Import facebook friends as tags?
 * Try increasing session load speed 
-*Searchbar that waits for the user to finish typing, only search through images in preexisting query tag from all their images.
+* Searchbar that waits for the user to finish typing, only search through images in preexisting query tag from all their images.
 
 ## TODO (Required) 
 
 ### Documentation & Tests
 * Include good Javadoc. See the [How to Javadoc](http://www.teach.cs.toronto.edu/~csc207h/winter/lectures/javadoc.pdf) * "For more motivation, try typing javadoc */*.java" 
 * Choose two interesting classes and write unit tests for them. You are not
+* Add better in-line comments
 
 ### Code 
 * Make PrimaryStageManager inherit
 * update code to use TagManager through StateManager and serialize TagManager instead of just tagmanager arraylist
-* Images in a directory chosen, may include tags that aren't in the tag set. Any such tags should be automatically added to the tag set.
+* [done] Images in a directory chosen, may include tags that aren't in the tag set. Any such tags should be automatically added to the tag set.
 * When viewing an image, the user can select multiple tags at once and apply them to the current image. The user can also remove tags from the image.
 * The user should also be able to open (directly in their OS's file viewer) the directory containing the current image file.
-** The user wants to be able to view and revert to older file names for the current image. Provided that an image has not been manually moved or renamed using the OS, the user can view all the names that a file has had. This should persist through a quit and restart.
+* The user wants to be able to view and revert to older file names for the current image. Provided that an image has not been manually moved or renamed using the OS, the user can view all the names that a file has had. This should persist through a quit and restart.
 
 * The user wants to be able to view and revert to older file names for the current image. Provided that an image has not been manually moved or renamed using the OS, the user can view all the names that a file has had. This should persist through a quit and restart.
 * The user wants a log of all renaming ever done to all files (old name, new name, and timestamp), and this log should be viewable by the application.
-Have name of image under each image in tilepane 
+* [done] Have name of image under each image in tilepane 
 
 
 ### Design 

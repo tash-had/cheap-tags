@@ -76,7 +76,7 @@ public class HomeScreenViewController implements Initializable{
 //                System.out.println(imagesToLoad);
 //                controller.setImagesToLoad(imagesToLoad);
                 //BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
-                StateManager.userData.addPathToVisitedList(selectedFile.getPath());
+
                 switchToToBrowseImageFilesView(selectedFile);
 //            }
              //else imagesToLoad size != 0
@@ -121,6 +121,7 @@ public class HomeScreenViewController implements Initializable{
     }
 
     private void switchToToBrowseImageFilesView(File directoryPath){
+        StateManager.userData.addPathToVisitedList(directoryPath.getPath());
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
         if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0){
             PrimaryStageManager.setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",

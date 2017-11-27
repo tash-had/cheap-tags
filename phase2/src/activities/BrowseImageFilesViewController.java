@@ -3,11 +3,17 @@ package activities;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.StateManager;
@@ -176,15 +182,15 @@ public class BrowseImageFilesViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        // Set fonts of some elements
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
 
+        // Enable listviews to be able to display objects with the same type as their type parameter
         ConfigureJFXControl.setListViewToDisplayCustomObjects(existingTags);
         ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
 
-        //// CANCEL BUTTON FIX WARNING FOR INSTAGRAM DIAg
-
-
+        // Populate the listview of tag options
         availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
 
         toggleButton.setSelected(false);
@@ -318,6 +324,7 @@ public class BrowseImageFilesViewController implements Initializable {
             imageNamesListView.setVisible(true);
             ArrayList<String> imageNamesArrayList = new ArrayList<>();
             imageNamesArrayList.addAll(imageNames);
+            // set imageFileNames for the toggle that allows images to be viewed as text (file names)
             if (imageFileNames != null){
                 imageFileNames.clear();
             }
@@ -397,17 +404,24 @@ public class BrowseImageFilesViewController implements Initializable {
         imageSearchPatternEnd.append(")\\b");
     }
 
-    // ImageTile Pane Methods
-
+    /**
+     * Populate the ImageTilePane with all the images in this session
+     */
     private void populateImageTilePane(){
         for (ImageFile imageFile : StateManager.sessionData.getNameToImageFileMap().values()){
             addImageToTilePane(imageFile);
         }
     }
 
+    /**
+     * Add a new image to the tilepane using its corresponding ImageFile object
+     *
+     * @param imageFile the ImageFile of the image to add
+     */
     private void addImageToTilePane(ImageFile imageFile){
         Image image = null;
         try {
+            // Set the Image object to show the image associated with this ImageFile
             image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 300,
                     300, true, true);
         } catch (MalformedURLException e) {
@@ -415,14 +429,36 @@ public class BrowseImageFilesViewController implements Initializable {
             Alerts.showErrorAlert("Gallery Error", "Error", "There was an error adding " +
             imageFile.getThisFile().getAbsolutePath() + " to the gallery. You sure it exists?");
         }
+        // Construct an ImageView for the image
         ImageView imageView = new ImageView();
         imageView.setImage(image);
         imageView.setOnMouseClicked(event -> imageClicked(imageFile));
-        imageTilePane.getChildren().add(imageView);
+
+        // Setup VBox to display both image and a label with the imagename
+        VBox tilePaneVBox = new VBox();
+
+        // Construct a BEAUTIFUL label
+        Label label = new Label(imageFile.getCurrentName());
+        label.setPadding(new Insets(20, 0, 0, 0));
+        tilePaneVBox.setAlignment(Pos.CENTER); 
+        label.setTextFill(Color.web("#000000"));
+        ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196f3"), Color.web("#000000"), label);
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 17, label);
+
+        // Add imageview and label to vbox + add vbox to tilepane
+        tilePaneVBox.getChildren().addAll(imageView, label);
+        imageTilePane.getChildren().add(tilePaneVBox);
+
     }
 
+    /**
+     * Process a click on an image on the tile pane
+     *
+     * @param imageFile the ImageFile that was clicked
+     */
     private void imageClicked(ImageFile imageFile){
         try {
+            // Before navigating to the clicked image, alert the user if they have unset tags
             checkForUnsavedChanges();
 
             // Keep a reference to the selected image and set up right pane attributes for selected image
@@ -438,7 +474,7 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     /**
-     * check if users save their changes or not
+     * Check if the user has unsaved changes and alert them if they do.
      */
     private void checkForUnsavedChanges(){
         if (unsavedChanges){
@@ -471,6 +507,9 @@ public class BrowseImageFilesViewController implements Initializable {
                 selectedImageFile.getOldName());
     }
 
+    /**
+     * Handle text changed on the image search bar
+     */
     public void imageSearchTextChanged(){
         String input = imageSearchBar.getText().toLowerCase().replace("@", "");
         ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();
@@ -503,7 +542,6 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
-
     public void TagSearchTextChanged(){
         String input = TagSearchBar.getText().toLowerCase();
         ArrayList<Tag> searchResult = new ArrayList<>();
@@ -531,7 +569,6 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void revertButtonClick() {
-        Logger.getRootLogger().info("hey");
         int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
 //        System.out.println(indexOfRevision);
         if (indexOfRevision != -1) {
@@ -570,14 +607,14 @@ public class BrowseImageFilesViewController implements Initializable {
                     "You must select an image first!");
             return;
         }
-        // Add imageview to alertdia
         String[] instagramCreds = Alerts.loginDialog("Login to Instagram",
                 "Enter your Instagram credentials ...", null);
         // Disable logs
         turnOffLog4J();
         if (instagramCreds[0] != null && instagramCreds[1] != null
                 && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {
-            Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0]).password(instagramCreds[1]).build();
+            Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0])
+                    .password(instagramCreds[1]).build();
             instagram.setup();
             try {
                 instagram.login();
@@ -591,9 +628,9 @@ public class BrowseImageFilesViewController implements Initializable {
                             InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                     instagram.sendRequest(photoRequest);
                 } catch (IOException | RuntimeException e) {
-                    Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
-                            "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
-                            "that your photo is of type JPEG");
+                    Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error "
+                            + "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
+                            "that your photo is of type JPEG.");
                 }
             } catch (IOException e) {
                 Alerts.showErrorAlert("Invalid Credentials", "Invalid Creds",

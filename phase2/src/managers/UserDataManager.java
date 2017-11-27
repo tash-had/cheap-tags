@@ -86,9 +86,9 @@ public class UserDataManager implements Serializable {
      * @param path the path to add
      */
     public void addPathToVisitedList(String path){
-        if (!previousPathsVisited.contains(path)){
-            previousPathsVisited.add(path);
-        }
+        if (previousPathsVisited.contains(path)){
+            previousPathsVisited.remove(path);
+        }previousPathsVisited.add(path);
     }
 
     /**
