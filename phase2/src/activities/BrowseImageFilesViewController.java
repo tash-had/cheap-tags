@@ -6,8 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,7 +13,6 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import managers.ImageFileOperationsManager;
-import managers.PrimaryStageManager;
 import managers.StateManager;
 import managers.TagManager;
 import model.ImageFile;
@@ -23,15 +20,14 @@ import model.Tag;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
-import utils.Alerts;
+import utils.Dialogs;
 import utils.ConfigureJFXControl;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +35,8 @@ import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 public class BrowseImageFilesViewController implements Initializable {
 
@@ -235,12 +233,12 @@ public class BrowseImageFilesViewController implements Initializable {
     public void addButtonClick(){
         Tag selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
-            Alerts.chooseFileAlert();
+            Dialogs.chooseFileAlert();
 
         }
         else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
             if (selectedImageFile.getTagList().contains(selectedTag)){
-                Alerts.fileContainsTagAlert();
+                Dialogs.fileContainsTagAlert();
             }
             else {
                 availableTagOptions.remove(selectedTag);
@@ -260,7 +258,7 @@ public class BrowseImageFilesViewController implements Initializable {
     public void deleteButtonClick() {
         Tag selectedTag = existingTags.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
-            Alerts.chooseFileAlert();
+            Dialogs.chooseFileAlert();
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
 
             existingTagsOnImageFile.remove(selectedTag);
@@ -281,7 +279,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void renameButtonClick() {
         if (selectedImageFile == null) {
-            Alerts.chooseFileAlert();
+            Dialogs.chooseFileAlert();
         }
         else {
             selectedImageFile.updateTagHistory(selectedImageFile.getTagList()); //Add the tag list to the tag history before updating.
@@ -350,25 +348,25 @@ public class BrowseImageFilesViewController implements Initializable {
     public void moveImageButtonClick() {
         checkForUnsavedChanges();
         if (selectedImageFile == null){
-            Alerts.chooseFileAlert();
+            Dialogs.chooseFileAlert();
         }
         else {
             File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
             if (movedFile != null) {
                 File newDirectoryLocation = movedFile.getParentFile();
-                ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
+                ButtonType response = Dialogs.showYesNoAlert("Go To Directory", null, "Would you like to go " +
                         "to the new directory?");
                 if (response == ButtonType.YES) {
                     // set screen to new directory
                     setNewTargetDirectory(newDirectoryLocation);
-                    PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
+                    getPrimaryStageManager().setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
                             "/activities/browse_imagefiles_view.fxml");
                     // update recently viewed on home scene
                     selectedImageFile.setFile(movedFile);
                     StateManager.userData.addPathToVisitedList(newDirectoryLocation.toString());
                 } else {
                     setNewTargetDirectory(targetDirectory);
-                    PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                    getPrimaryStageManager().setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
                             "/activities/browse_imagefiles_view.fxml");
                 }
             }
@@ -381,7 +379,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void backButtonClick() {
         checkForUnsavedChanges();
-        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+        getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
     // Miscellaneous
@@ -426,7 +424,7 @@ public class BrowseImageFilesViewController implements Initializable {
                     300, true, true);
         } catch (MalformedURLException e) {
 //            e.printStackTrace();
-            Alerts.showErrorAlert("Gallery Error", "Error", "There was an error adding " +
+            Dialogs.showErrorAlert("Gallery Error", "Error", "There was an error adding " +
             imageFile.getThisFile().getAbsolutePath() + " to the gallery. You sure it exists?");
         }
         // Construct an ImageView for the image
@@ -468,7 +466,7 @@ public class BrowseImageFilesViewController implements Initializable {
             populateImageFileTagListViews();
 
         } catch (MalformedURLException e) {
-            Alerts.showErrorAlert("Image Error", "Error", "There was an error fetching " +
+            Dialogs.showErrorAlert("Image Error", "Error", "There was an error fetching " +
                     imageFile.getThisFile().getAbsolutePath() + " from the gallery. You sure it exists?");
         }
     }
@@ -478,7 +476,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     private void checkForUnsavedChanges(){
         if (unsavedChanges){
-            ButtonType saveChangesResponse = Alerts.showYesNoAlert("Save Your Changes", "Save Changes?",
+            ButtonType saveChangesResponse = Dialogs.showYesNoAlert("Save Your Changes", "Save Changes?",
                     "You forgot to hit Set Tags! Would you like us to set your new tags?");
             if (saveChangesResponse == ButtonType.YES){
                 renameButtonClick();
@@ -603,11 +601,11 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     public void shareWithInstagram() {
         if (selectedImageFile == null) {
-            Alerts.showErrorAlert("Must select an image", "Select an Image",
+            Dialogs.showErrorAlert("Must select an image", "Select an Image",
                     "You must select an image first!");
             return;
         }
-        String[] instagramCreds = Alerts.loginDialog("Login to Instagram",
+        String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
                 "Enter your Instagram credentials ...", null);
         // Disable logs
         turnOffLog4J();
@@ -619,7 +617,7 @@ public class BrowseImageFilesViewController implements Initializable {
             try {
                 instagram.login();
                 try {
-                    String caption = Alerts.showTextInputDialog("Instagram Caption", "Caption?",
+                    String caption = Dialogs.showTextInputDialog("Instagram Caption", "Caption?",
                             "Enter a caption for your photo");
                     if (caption == null) {
                         caption = "";
@@ -628,16 +626,16 @@ public class BrowseImageFilesViewController implements Initializable {
                             InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                     instagram.sendRequest(photoRequest);
                 } catch (IOException | RuntimeException e) {
-                    Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error "
+                    Dialogs.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error "
                             + "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
                             "that your photo is of type JPEG.");
                 }
             } catch (IOException e) {
-                Alerts.showErrorAlert("Invalid Credentials", "Invalid Creds",
+                Dialogs.showErrorAlert("Invalid Credentials", "Invalid Creds",
                         "Please enter a valid username and password.");
             }
         } else {
-            Alerts.showErrorAlert("Invalid Input", "No Input",
+            Dialogs.showErrorAlert("Invalid Input", "No Input",
                     "You must enter valid credentials");
         }
     }

@@ -1,13 +1,11 @@
 package activities;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -16,17 +14,15 @@ import managers.PrimaryStageManager;
 import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
-import org.omg.CORBA.INTERNAL;
-import utils.Alerts;
-import utils.ConfigureJFXControl;
+import utils.Dialogs;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 public class TagScreenViewController implements Initializable {
 
@@ -108,7 +104,7 @@ public class TagScreenViewController implements Initializable {
 
             // duplicate is not 0, so there was an already existing tag which matched the name.
             if (duplicateExists != 0) {
-                Alerts.showTagExistsAlert();
+                Dialogs.showTagExistsAlert();
                 tagInput.clear();
             }
 
@@ -138,7 +134,7 @@ public class TagScreenViewController implements Initializable {
             if ( i-deleteNum > -1) {
                 Tag thisTag = tagView.getItems().get(i-deleteNum);
                 if(thisTag.images.size() != 0 ){
-                ButtonType renameReqResponse = Alerts.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With " +thisTag.images.size()+ " Image",
+                ButtonType renameReqResponse = Dialogs.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With " +thisTag.images.size()+ " Image",
                         "Are You Sure You Want To Delete?");
                 if (renameReqResponse == ButtonType.YES){
                     for(ImageFile j : thisTag.images){
@@ -179,7 +175,7 @@ public class TagScreenViewController implements Initializable {
      */
     @FXML
     public void backButtonClicked(){
-        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+        getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
     /**

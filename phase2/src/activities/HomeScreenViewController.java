@@ -10,14 +10,15 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import managers.PrimaryStageManager;
 import managers.StateManager;
-import utils.Alerts;
+import utils.Dialogs;
 import utils.ConfigureJFXControl;
 
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+
+import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 
 public class HomeScreenViewController implements Initializable{
@@ -61,7 +62,7 @@ public class HomeScreenViewController implements Initializable{
      * Function to handle "Open Directory" button click on Home screen.
      */
     public void openDirectoryClick(){
-        File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
+        File selectedFile = Dialogs.getDirectoryWithChooser();
 
         if (selectedFile != null) {
 //            Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
@@ -81,7 +82,7 @@ public class HomeScreenViewController implements Initializable{
 //            }
              //else imagesToLoad size != 0
 //            else{
-//                Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+//                Dialogs.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
 //                        " in the directory you loaded. Please select another");
 //                openDirectoryClick();
 //            }
@@ -124,16 +125,16 @@ public class HomeScreenViewController implements Initializable{
         StateManager.userData.addPathToVisitedList(directoryPath.getPath());
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
         if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0){
-            PrimaryStageManager.setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
+            getPrimaryStageManager().setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
                     "/activities/browse_imagefiles_view.fxml");
         }else {
-            Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+            Dialogs.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
                     " in the directory you loaded. Please select another");
             openDirectoryClick();
         }
     }
 
     public void openTagScreen(){
-        PrimaryStageManager.setScreen("My Tags", "/activities/tag_screen_view.fxml");
+        getPrimaryStageManager().setScreen("My Tags", "/activities/tag_screen_view.fxml");
     }
 }

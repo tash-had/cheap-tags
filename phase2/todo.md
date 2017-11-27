@@ -65,7 +65,7 @@ About goToDirectoryYesNo(), there's was already a showYesNoAlert() method in Ale
 * The user wants to be able to view and revert to older file names for the current image. Provided that an image has not been manually moved or renamed using the OS, the user can view all the names that a file has had. This should persist through a quit and restart.
 * The user wants a log of all renaming ever done to all files (old name, new name, and timestamp), and this log should be viewable by the application.
 * [done] Have name of image under each image in tilepane 
-
+* Make sure the user knows they can add/delete multiple tags simultaneously 
 
 ### Design 
 * Change home screen image

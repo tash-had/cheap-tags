@@ -5,6 +5,8 @@ import exceptions.FileNotCreatedException;
 
 import java.io.*;
 
+import static managers.PrimaryStageManager.getPrimaryStageManager;
+
 /**
  * A class to manage states for the program, including session state and user data state.
  */
@@ -54,7 +56,7 @@ public class StateManager {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 dataFile.delete();
-                PrimaryStageManager.closePrimaryStage();
+                getPrimaryStageManager().closeStage();
             }
         }
     }

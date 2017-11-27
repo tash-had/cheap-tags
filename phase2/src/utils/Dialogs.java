@@ -3,22 +3,22 @@ package utils;
 import com.sun.istack.internal.Nullable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
 
+import static managers.PrimaryStageManager.getPrimaryStageManager;
 
-public class Alerts {
+
+public class Dialogs {
     //citing this from JavaFx Tut5th.
     public static void displayWarning(String message){
         Stage window = new Stage();
@@ -76,7 +76,7 @@ public class Alerts {
             suffixedFileName = FileOperations.getSuffixedFileName(directory, suffixedFileName);
         }
         // Ask user if they would like a suffixed name on the image
-        ButtonType renameReqResponse = Alerts.showYesNoAlert("Could not rename file",
+        ButtonType renameReqResponse = Dialogs.showYesNoAlert("Could not rename file",
                 "Filename Taken",
                 fileName +" already exists. Would you like to name it "+suffixedFileName+"?");
         if (renameReqResponse == ButtonType.OK){
@@ -124,7 +124,6 @@ public class Alerts {
      * @param windowTitle the title of the dialog window
      * @param header the header text for the dialog
      * @param body the body text
-     * @param dialogImage the image to be shown within this dialog
      * @return a String array containing the username and password and indexes 0 and 1, respectively
      */
     public static String[] loginDialog(String windowTitle, String header, @Nullable String body){
@@ -178,6 +177,18 @@ public class Alerts {
         });
         return loginCreds;
     }
+
+    /**
+     * Prompt the user to select a directory using a DirectoryChooser Dialog, and return the selected directory.
+     *
+     * @return the directory chosen by the user. returns null if no file selected.
+     */
+    public static File getDirectoryWithChooser(){
+        DirectoryChooser directoryChooser=  new DirectoryChooser();
+        directoryChooser.setTitle("Select a directory");
+        return directoryChooser.showDialog(getPrimaryStageManager().getStage());
+    }
+
     /**
      * Tell the user that a tag already exists with the same name.
      */
