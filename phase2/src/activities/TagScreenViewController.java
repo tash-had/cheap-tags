@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -76,12 +77,14 @@ public class TagScreenViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources){
         Platform.runLater(() -> tagInput.requestFocus());
-       // tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         // clears tagView to prevent duplication after reinitializing the scene and re-adds all the tags from TagManager
             tagView.getItems().clear();
             for (Tag tag : TagManager.getTagList()) {
                 tagView.getItems().add(tag);
             }
+
+
     }
 
     /**
@@ -119,10 +122,6 @@ public class TagScreenViewController implements Initializable {
             }
         }
     }
-    public void handleMultipleSelection(){
-        tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-    }
 
     /**
      * Handles when delete button is clicked. Removes selected Tag from the list on screen and removes selected Tag
@@ -131,13 +130,13 @@ public class TagScreenViewController implements Initializable {
      */
     @FXML
     public void deleteButtonClicked(){
-//        ObservableList<Integer> intArray = tagView.getSelectionModel().getSelectedIndices();
-//        for (int i : intArray) {
-            int i = tagView.getSelectionModel().getSelectedIndex();
-            tagView.getSelectionModel().getSelectedItems();
+        ArrayList<Integer> intArray = new ArrayList<>();
+                intArray.addAll(tagView.getSelectionModel().getSelectedIndices());
+        int deleteNum = 0;
+        for (int i : intArray) {
 
-            if ( i > -1) {
-                Tag thisTag = tagView.getItems().get(i);
+            if ( i-deleteNum > -1) {
+                Tag thisTag = tagView.getItems().get(i-deleteNum);
                 if(thisTag.images.size() != 0 ){
                 ButtonType renameReqResponse = Alerts.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With " +thisTag.images.size()+ " Image",
                         "Are You Sure You Want To Delete?");
@@ -160,17 +159,19 @@ public class TagScreenViewController implements Initializable {
                         sb.append(j.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
                         ImageFileOperationsManager.renameImageFile(j, sb.toString());
                     }
-                    tagView.getItems().remove(i);
+                    tagView.getItems().remove(i-deleteNum);
                     TagManager.getTagList().remove(thisTag);
+                    deleteNum++;
                 }
             }
             else{
-                    tagView.getItems().remove(i);
+                    tagView.getItems().remove(i-deleteNum);
                     TagManager.getTagList().remove(thisTag);
+                    deleteNum++;
                 }
             }
-            repopulateTagView();
-//        }
+        }
+        repopulateTagView();
     }
 
     /**

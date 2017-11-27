@@ -8,7 +8,7 @@
 
 <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="activities.TagScreenViewController">
    <children>
-      <ListView fx:id="tagView" layoutX="56.0" layoutY="66.0" onMouseClicked="#handleMultipleSelection" prefHeight="560.0" prefWidth="963.0" />
+      <ListView fx:id="tagView" layoutX="56.0" layoutY="66.0" prefHeight="560.0" prefWidth="963.0" />
       <TextField fx:id="tagInput" layoutX="63.0" layoutY="639.0" onKeyPressed="#handleEnterPressed" prefHeight="47.0" prefWidth="525.0" promptText="Example: model.Tag" />
       <Button fx:id="add" layoutX="612.0" layoutY="639.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="46.0" prefWidth="117.0" text="Add" />
       <Button fx:id="delete" layoutX="755.0" layoutY="640.0" mnemonicParsing="false" onAction="#deleteButtonClicked" prefHeight="44.0" prefWidth="118.0" text="Delete" />

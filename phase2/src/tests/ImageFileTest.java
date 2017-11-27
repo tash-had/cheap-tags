@@ -11,7 +11,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ImageFileTest {
-    @Test
+    private static final int timeOut = 3000;
+
+    @Test (timeout = timeOut)
     public void testGeneralRename(){
         File testFile = new File("src/resources/images/logo_2.jpg");
         ImageFile testImage = new ImageFile(testFile);
@@ -19,7 +21,7 @@ public class ImageFileTest {
         assertEquals("@Tag1 logo_2",testImage.getCurrentName());
     }
 
-    @Test
+    @Test (timeout = timeOut)
     public void testGeneralRenameWithTwoParameter(){
         Tag t1 = new Tag("TAG1");
         Tag t2 = new Tag("TAG2");

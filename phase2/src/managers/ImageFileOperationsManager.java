@@ -4,6 +4,8 @@ import com.sun.istack.internal.Nullable;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.control.ButtonType;
 import model.ImageFile;
+
+import model.Tag;
 import utils.Alerts;
 import utils.FileOperations;
 
@@ -215,6 +217,23 @@ public class ImageFileOperationsManager {
             fileToProcess = existingImageFIle;
         }else {
             fileToProcess = new ImageFile(file);
+
+            String[] beginningName = fileToProcess.getCurrentName().split("\\s");
+            for(String i: beginningName){
+                if(i.startsWith("@")){
+                    String withoutSymbol = i.substring(1,i.length());
+                    if(TagManager.getTagByString(withoutSymbol)==null){
+                        Tag tempTag = new Tag(withoutSymbol);
+                        fileToProcess.getTagList().add(tempTag);
+                        tempTag.images.add(fileToProcess);
+                        TagManager.addTag(tempTag);
+                    }
+
+                }
+            }
+
+
+
             StateManager.userData.addImageFileToMap(fileToProcess);
         }
 //        list.add(fileToProcess);
