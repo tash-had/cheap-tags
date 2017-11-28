@@ -12,7 +12,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
+import managers.StageManager;
 import managers.StateManager;
 import managers.TagManager;
 import model.ImageFile;
@@ -38,6 +40,8 @@ import java.util.regex.Pattern;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
+import utils.Log;
+
 public class BrowseImageFilesViewController implements Initializable {
 
 
@@ -56,8 +60,8 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * A ListView of String displaying the past names that the File has had.
      */
-    @FXML
-    ListView<ArrayList<String>> revisionLog;
+//    @FXML
+//    ListView<ArrayList<String>> revisionLog;
 
     /**
      * Displays the currently selected file.
@@ -92,8 +96,8 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Reverts selected image to the selected old name.
      */
-    @FXML
-    Button revert;
+//    @FXML
+//    Button revert;
 
     /**
      * Labels allTagsListView as "Tags".
@@ -133,6 +137,9 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     TextField TagSearchBar;
 
+    @FXML
+    Button revisionLogButton;
+
 
     private ObservableList<String> imageFileNames;
 
@@ -148,7 +155,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private ObservableList<Tag> availableTagOptions;
     private ObservableList<Tag> existingTagsOnImageFile;
-    static ObservableList<ArrayList<String>> selectedImageLog;
+//    private ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
 //    private static Collection<ImageFile> imagesToLoad;
     private boolean unsavedChanges = false;
@@ -164,7 +171,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * The File object that is the currently displayed image.
      */
-    private ImageFile selectedImageFile = null;
+    public ImageFile selectedImageFile = null;
 
 //    /**
 //     * A FilenameFilter which filters out files that are not accepted image types.
@@ -298,7 +305,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 imageFileNames.remove(selectedImageFile.getCurrentName());
             }
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
-            updateImageLog();
+//            updateImageLog();
             unsavedChanges = false;
             rename.setDisable(true);
             if (existingTagsOnImageFile.size() != 0) {
@@ -335,10 +342,10 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
 
-    private void updateImageLog(){
-        selectedImageLog.clear();
-        selectedImageLog.addAll(selectedImageFile.getOldName());
-    }
+//    public void updateImageLog(){
+//        selectedImageLog.clear();
+//        selectedImageLog.addAll(selectedImageFile.getOldName());
+//    }
 
     /**
      * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
@@ -488,7 +495,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Populate a list view of tags under the image file
      */
-    private void populateImageFileTagListViews(){
+    public void populateImageFileTagListViews(){
         if (existingTagsOnImageFile != null){
             existingTagsOnImageFile.clear();
         }
@@ -497,12 +504,11 @@ public class BrowseImageFilesViewController implements Initializable {
         availableTagOptions.clear();
         availableTagOptions.addAll(TagManager.getTagList());
         availableTagOptions.removeAll(existingTagsOnImageFile);
-        if (selectedImageLog != null){
-            selectedImageLog.clear();
-        }
-        // Populate selectedImageLog with pre-existing logs
-        selectedImageLog = ConfigureJFXControl.populateListViewWithArrayList(revisionLog,
-                selectedImageFile.getOldName());
+//        if (selectedImageLog != null){
+//            selectedImageLog.clear();
+//        }
+//        // Populate selectedImageLog with pre-existing logs
+//        selectedImageLog.addAll(selectedImageFile.getOldName());
     }
 
     /**
@@ -565,65 +571,65 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Reverts the current image to the selected previous name.
      */
-    @FXML
-    public void revertButtonClick() {
-        int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
-//        System.out.println(indexOfRevision);
-        if (indexOfRevision != -1) {
-            ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
-            selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
-            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
-
-
-
-
-            selectedImageFile.getTagList().clear();
-                         //update the selected imageFiles tagList with the tags associated with oldName.
-            //selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
-
-
-            String[] beginningName = selectedImageFile.getCurrentName().split("\\s");
-            for(String i: beginningName){
-                if(i.startsWith("@")){
-                    String withoutSymbol = i.substring(1,i.length());
-                    Tag findTheTag = TagManager.getTagByString(withoutSymbol);
-                    if(findTheTag==null){
-                        Tag tempTag = new Tag(withoutSymbol);
-                        selectedImageFile.getTagList().add(tempTag);
-                        tempTag.images.add(selectedImageFile);
-                        TagManager.addTag(tempTag);
-                    }
-                    else{findTheTag.images.add(selectedImageFile);
-                    selectedImageFile.getTagList().add(findTheTag);
-                    }
-                }
-            }
-
-
-//            System.out.println(selectedImageFile.getTagList().toString());
-
-
-
-//            updateImageLog();
-//            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
-//            existingTagsOnImageFile.clear();
-//            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
-//            for(Tag j : selectedImageFile.getTagList()){
-//                if(!TagManager.getTagList().contains(j)){
-//                    TagManager.addTag(j);
+//    @FXML
+//    public void revertButtonClick() {
+//        int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
+////        System.out.println(indexOfRevision);
+//        if (indexOfRevision != -1) {
+//            ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
+//            selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
+//            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
+//
+//
+//
+//
+//            selectedImageFile.getTagList().clear();
+//                         //update the selected imageFiles tagList with the tags associated with oldName.
+//            //selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
+//
+//
+//            String[] beginningName = selectedImageFile.getCurrentName().split("\\s");
+//            for(String i: beginningName){
+//                if(i.startsWith("@")){
+//                    String withoutSymbol = i.substring(1,i.length());
+//                    Tag findTheTag = TagManager.getTagByString(withoutSymbol);
+//                    if(findTheTag==null){
+//                        Tag tempTag = new Tag(withoutSymbol);
+//                        selectedImageFile.getTagList().add(tempTag);
+//                        tempTag.images.add(selectedImageFile);
+//                        TagManager.addTag(tempTag);
+//                    }
+//                    else{findTheTag.images.add(selectedImageFile);
+//                    selectedImageFile.getTagList().add(findTheTag);
+//                    }
 //                }
 //            }
-            populateImageFileTagListViews();
-//            for (Tag tag : availableTagOptions) {
-//                if (selectedImageFile.getTagList().contains(tag)) {
-//                    availableTagOptions.remove(tag);
-//                }
-//            }
-
-
-
-        }
-    }
+//
+//
+////            System.out.println(selectedImageFile.getTagList().toString());
+//
+//
+//
+////            updateImageLog();
+////            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+////            existingTagsOnImageFile.clear();
+////            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
+////            for(Tag j : selectedImageFile.getTagList()){
+////                if(!TagManager.getTagList().contains(j)){
+////                    TagManager.addTag(j);
+////                }
+////            }
+//            populateImageFileTagListViews();
+////            for (Tag tag : availableTagOptions) {
+////                if (selectedImageFile.getTagList().contains(tag)) {
+////                    availableTagOptions.remove(tag);
+////                }
+////            }
+//
+//
+//
+//        }
+//    }
 
 
     /**
@@ -685,6 +691,27 @@ public class BrowseImageFilesViewController implements Initializable {
             logger.setLevel(Level.OFF);
         }
         LogManager.getRootLogger().setLevel(Level.OFF);
+    }
+
+    /**
+     * A function handle the click of revision log button
+     * pops up new window with revision history
+     * stores current page to revision log view controller
+     */
+    @FXML
+    public void revisionLogButtonClick(){
+        if (selectedImageFile == null){
+            Dialogs.chooseFileAlert();
+        }
+        else{
+            RevisionLogViewController.setBrowseController(this);
+            StageManager revisionLog = new StageManager(new Stage());
+            revisionLog.setDefaultScreenHeight(400);
+            revisionLog.setDefaultScreenWidth(600);
+            revisionLog.setScreen("Revision History", "/activities/revision_log_view.fxml");
+            revisionLog.showStage();
+        }
+
     }
 
 }
