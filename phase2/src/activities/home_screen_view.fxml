@@ -30,6 +30,7 @@
                                  </VBox.margin>
                               </Button>
                               <Button fx:id="importFromInstagramBtn" mnemonicParsing="false" onAction="#importFromInstagram" prefHeight="27.0" prefWidth="210.0" text="Import photos from Instagram" />
+                              <Button fx:id="tumblrBtn" mnemonicParsing="false" onAction="#tumblrButtonClicked" prefHeight="27.0" prefWidth="209.0" text="Import From Tumblr" />
                            </children>
                         </VBox>
                      </children>

@@ -560,7 +560,7 @@ public class BrowseImageFilesViewController implements Initializable {
                             InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                     instagram.sendRequest(photoRequest);
                 } catch (IOException | RuntimeException e) {
-//                e.printStackTrace();
+                e.printStackTrace();
                     Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
                             "uploading your photo to Instagram. Make sure you've entered the right credentials.");
                 }
