@@ -148,7 +148,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private ObservableList<Tag> availableTagOptions;
     private ObservableList<Tag> existingTagsOnImageFile;
-    private ObservableList<ArrayList<String>> selectedImageLog;
+    static ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
 //    private static Collection<ImageFile> imagesToLoad;
     private boolean unsavedChanges = false;
@@ -573,25 +573,55 @@ public class BrowseImageFilesViewController implements Initializable {
             ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
             selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
-            selectedImageFile.getTagList().clear();
-            //update the selected imageFiles tagList with the tags associated with oldName.
-            selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
+
+
+
+
+            //selectedImageFile.getTagList().clear();
+                         //update the selected imageFiles tagList with the tags associated with oldName.
+            //selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
+
+
+            String[] beginningName = selectedImageFile.getCurrentName().split("\\s");
+            for(String i: beginningName){
+                if(i.startsWith("@")){
+                    String withoutSymbol = i.substring(1,i.length());
+                    Tag findTheTag = TagManager.getTagByString(withoutSymbol);
+                    if(findTheTag==null){
+                        Tag tempTag = new Tag(withoutSymbol);
+                        selectedImageFile.getTagList().add(tempTag);
+                        tempTag.images.add(selectedImageFile);
+                        TagManager.addTag(tempTag);
+                    }
+                    else{findTheTag.images.add(selectedImageFile);
+                    selectedImageFile.getTagList().add(findTheTag);
+                    }
+                }
+            }
+
+
 //            System.out.println(selectedImageFile.getTagList().toString());
-            updateImageLog();
-            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
-            existingTagsOnImageFile.clear();
-            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
-            for(Tag j : selectedImageFile.getTagList()){
-                if(!TagManager.getTagList().contains(j)){
-                    TagManager.addTag(j);
-                }
-            }
+
+
+
+//            updateImageLog();
+//            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+//            existingTagsOnImageFile.clear();
+//            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
+//            for(Tag j : selectedImageFile.getTagList()){
+//                if(!TagManager.getTagList().contains(j)){
+//                    TagManager.addTag(j);
+//                }
+//            }
             populateImageFileTagListViews();
-            for (Tag tag : availableTagOptions) {
-                if (selectedImageFile.getTagList().contains(tag)) {
-                    availableTagOptions.remove(tag);
-                }
-            }
+//            for (Tag tag : availableTagOptions) {
+//                if (selectedImageFile.getTagList().contains(tag)) {
+//                    availableTagOptions.remove(tag);
+//                }
+//            }
+
+
+
         }
     }
 
