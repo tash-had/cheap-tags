@@ -577,7 +577,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
 
 
-            //selectedImageFile.getTagList().clear();
+            selectedImageFile.getTagList().clear();
                          //update the selected imageFiles tagList with the tags associated with oldName.
             //selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
 
