@@ -581,6 +581,11 @@ public class BrowseImageFilesViewController implements Initializable {
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
             existingTagsOnImageFile.clear();
             existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
+            for(Tag j : selectedImageFile.getTagList()){
+                if(!TagManager.getTagList().contains(j)){
+                    TagManager.addTag(j);
+                }
+            }
             populateImageFileTagListViews();
             for (Tag tag : availableTagOptions) {
                 if (selectedImageFile.getTagList().contains(tag)) {
