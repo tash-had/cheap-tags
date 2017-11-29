@@ -24,8 +24,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
-import utils.Dialogs;
 import utils.ConfigureJFXControl;
+import utils.Dialogs;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +39,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
-
-import utils.Log;
 
 public class BrowseImageFilesViewController implements Initializable {
 
