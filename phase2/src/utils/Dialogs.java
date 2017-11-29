@@ -20,31 +20,6 @@ import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 public class Dialogs {
 
-    //citing this from JavaFx Tut5th.
-//    public static void displayWarning(String message){
-//        Stage window = new Stage();
-//
-//        //this one should be taken care of first
-//        window.initModality(Modality.APPLICATION_MODAL);
-//        window.setTitle("WARNING!!!");
-//        window.setMinWidth(300);
-//
-//        Label text = new Label();
-//        text.setText(message);
-//        Button button = new Button("I Know, Close This Window");
-//        button.setOnAction(event -> window.close());
-//
-//        VBox layout = new VBox(15);
-//        layout.getChildren().add(text);
-//        layout.getChildren().add(button);
-//        layout.setAlignment(Pos.CENTER);
-//
-//        Scene scene = new Scene(layout);
-//        window.setScene(scene);
-//        window.showAndWait();//display this window that needed to be
-//        //close to further process other things.
-//    }
-
     /**
      * Show an alert dialog with yes/no options
      *
@@ -160,7 +135,6 @@ public class Dialogs {
         gridPane.add(username, 0, 0);
         gridPane.add(password, 0, 1);
 
-//        Node loginBtn = dialog.getDialogPane().lookupButton(loginBtnType);
         dialog.getDialogPane().setContent(gridPane);
 
         dialog.setResultConverter(dialogBtn -> {

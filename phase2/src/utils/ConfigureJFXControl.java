@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 /** A series of convenience functions for javafx.scene.control.Control objects */
 public abstract class ConfigureJFXControl {
+
     /**
      * Set the font text font of any item that is an instance of Labeled, using a font file.
      *
@@ -65,6 +66,7 @@ public abstract class ConfigureJFXControl {
         });
 
     }
+
     /**
      * Populate a given ListView with a given ArrayList of data by adding the data to an ObservableList (which acts
      * as the data source for the ListView). Returns a reference to the ObservableList so the user can modify

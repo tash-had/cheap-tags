@@ -1,7 +1,6 @@
 package utils;
 
 import com.sun.istack.internal.Nullable;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.io.File;
 import java.io.IOException;
@@ -129,21 +128,26 @@ public class FileOperations {
      * @return an arraylist of the fetched files (as File objects)
      */
     public static ArrayDeque<File> fetchFromDirectory(File directory, @Nullable Collection acceptedExtensions)
-            throws InvalidArgumentException {
+            throws IllegalArgumentException {
         if (!directory.isDirectory()){
-            throw new InvalidArgumentException(new String[]{"File passed in is not a directory."});
+            throw new IllegalArgumentException("File passed in is not a directory.");
         }
         File[] filesInDirectory = directory.listFiles();
         ArrayDeque<File> validFiles = new ArrayDeque<>();
 
         if (filesInDirectory != null){
             for (File file : filesInDirectory){
-                String fileExtension = FileOperations.getFileExtension(file, true);
-                if ((fileExtension != null) &&
-                        (acceptedExtensions == null || acceptedExtensions.contains(fileExtension))){
-                    validFiles.add(file);
+                if (file.isDirectory()){
+                    validFiles.addAll(fetchFromDirectory(file, acceptedExtensions));
+                }else {
+                    String fileExtension = FileOperations.getFileExtension(file, true);
+                    if ((fileExtension != null) &&
+                            (acceptedExtensions == null || acceptedExtensions.contains(fileExtension))){
+                        validFiles.add(file);
+                    }
                 }
             }
+
         }
         return validFiles;
     }

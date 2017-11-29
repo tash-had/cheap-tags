@@ -3,6 +3,7 @@ package activities;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -93,7 +94,8 @@ public class HomeScreenViewController implements Initializable {
     Button masterLogButton;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize (URL location, ResourceBundle resources) {
+        Image logoImage = new Image("resources/images/logo_2.jpg", true);
         ConfigureJFXControl.populateListViewWithArrayList(previouslyViewedListView,
                 getHyperlinkArrayList(StateManager.userData.getPreviousPathsVisited()));
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf",
@@ -108,10 +110,10 @@ public class HomeScreenViewController implements Initializable {
      * Function to handle "Open Directory" button click on Home screen. Opens the chosen directory and moves to
      * the image-browsing screen.
      */
-    public void openDirectoryClick(){
+    public void openDirectoryClick() {
         File selectedFile = Dialogs.getDirectoryWithChooser();
         if (selectedFile != null) {
-                switchToToBrowseImageFilesView(selectedFile);
+            switchToToBrowseImageFilesView(selectedFile);
         }
     }
 

@@ -1,11 +1,9 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import managers.*;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
-
-//import tests.FileOperationsTest;
-
 
 import java.io.IOException;
 
@@ -17,6 +15,7 @@ public class Main extends Application{
         getPrimaryStageManager().setDefaultScreenWidth(1080);
         getPrimaryStageManager().setDefaultScreenHeight(720);
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+        primaryStage.initStyle(StageStyle.DECORATED);
         getPrimaryStageManager().showStage();
 
     }

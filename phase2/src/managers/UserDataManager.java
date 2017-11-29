@@ -9,7 +9,9 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class UserDataManager implements Serializable {
+
     private ArrayList<String> previousPathsVisited = new ArrayList<>();
+
     /**
      * An arraylist of all the tags
      */
