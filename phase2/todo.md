@@ -29,6 +29,7 @@
 * only set tags if ImageFile's file attribute changes. (To replicate problem, try adding tag that results in a filename
 that exists in database. then save a new name... Filename will be new given name but tag will not be added but will still
 show as added)
+* Remove duplicate Tag search functions and replace with 1 (TagScreenViewController +BrowseImageFilesViewController)
 
 <!-- - We should implement logic that handles what happens when the user deletes a tag... ask them if they wan't to remove the tag from all their images [Done]. -->
 - Methods for alerts are created in Alerts.java so they can be reused and we don't have to keep writing Alert Dialog code (since we use alert dialogs so much). chooseFileAlert(), goToDirectoryYesNo() and fileContainsTagAlert() all do the exact same thing. It'd probably be better to just have one function for that dialog

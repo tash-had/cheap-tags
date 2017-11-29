@@ -9,7 +9,9 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class UserDataManager implements Serializable {
+
     private ArrayList<String> previousPathsVisited = new ArrayList<>();
+
     /**
      * An arraylist of all the tags
      */
@@ -18,7 +20,7 @@ public class UserDataManager implements Serializable {
     /**
      * The name to image file map
      */
-    HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>();
+    public HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>();
 
     /**
      * Get the ImageFile associated with the given name

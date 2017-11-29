@@ -9,12 +9,28 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
+/**
+ * A class to act as the manager for windows - "stages" - in this program.
+ */
 public class StageManager {
+    /**
+     * The stage this StageManager manages
+     */
     private Stage stage;
 
+    /**
+     * The default Screen Width for the window this StageManager will create
+     */
     private double defaultScreenWidth = 1080;
+
+    /**
+     * The default Screen Height for the window this StageManager will create
+     */
     private double defaultScreenHeight = 720;
+
+    /**
+     * A record of all StageManagers within this session
+     */
     private static ArrayList<StageManager> stageManagers;
 
     public StageManager(Stage stage){
@@ -34,7 +50,6 @@ public class StageManager {
 
     /**
      * Show the primary stage window
-     *
      */
     public void showStage(){
         getStage().show();
@@ -53,6 +68,7 @@ public class StageManager {
      * @param windowTitle the title of the new window
      * @param scene the scene to set
      */
+    @SuppressWarnings("unused")
     public void setScreen(String windowTitle, Scene scene){
         getStage().setTitle(windowTitle);
         getStage().setScene(scene);
@@ -68,19 +84,6 @@ public class StageManager {
         getStage().setTitle(windowTitle);
         getStage().setScene(new Scene(getParentWithFXMLPath(fxmlPath),
                 getDefaultScreenWidth(), getDefaultScreenHeight()));
-    }
-
-    /**
-     * Set the scene for the entire primary stage using a given FXML file, a width, and a height
-     *
-     * @param windowTitle the title of the new window
-     * @param fxmlPath the path of the FXML file relative to this class.
-     * @param width the width the main scene in the stage
-     * @param height the height of the main scene in the stage
-     */
-    public void setScreen(String windowTitle, String fxmlPath, double width, double height){
-        getStage().setTitle(windowTitle);
-        getStage().setScene(new Scene(getParentWithFXMLPath(fxmlPath), width, height));
     }
 
     /**
@@ -113,6 +116,7 @@ public class StageManager {
      *
      * @param width the width to set as default.
      * */
+    @SuppressWarnings("ALL")
     public void setDefaultScreenWidth(double width) {
         defaultScreenWidth = width;
     }
@@ -132,6 +136,7 @@ public class StageManager {
      *
      * @param height the height to set as default
      */
+    @SuppressWarnings("ALL")
     public void setDefaultScreenHeight(double height) {
         defaultScreenHeight = height;
     }
