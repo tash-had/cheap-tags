@@ -45,16 +45,18 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
     private String underWhichDirectory;
 
     /**
-     * the actual file object
+     * the actual file object.
      */
     private File thisFile;
 
     /**
-     * the type of the string(eg. ".jpeg")
+     * the type of the string(eg. ".jpeg").
      */
     private String imageType;
 
-
+    /**
+     * stores the tag history for ImageFile.
+     */
     private ArrayList<ArrayList<Tag>> tagHistory;
 
     /**
