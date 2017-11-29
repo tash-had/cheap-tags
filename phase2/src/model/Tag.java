@@ -1,9 +1,14 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.TreeSet;
 
+/**
+ * the {@code Tag} class is used to take users input in the program
+ * and convert the input to a Tag object for further use
+ *
+ * @author Caroline Ming
+ */
 public class Tag implements Serializable{
 
     /**
@@ -16,6 +21,10 @@ public class Tag implements Serializable{
      */
     public TreeSet<ImageFile> images = new TreeSet<>();
 
+    /**
+     * Construct a new model.Tag object
+     * @param name
+     */
     public Tag(String name) {
         this.name = name;
     }
@@ -36,11 +45,19 @@ public class Tag implements Serializable{
         this.images.remove(image);
     }
 
-
+    /**
+     * Convert tag object to string
+     * @return String
+     */
     public String toString() {
         return name;
     }
 
+    /**
+     * Compare the object 0 with this
+     * @param o
+     * @return boolean
+     */
     public boolean equals(Object o){
         if (o == null){
             return false;
