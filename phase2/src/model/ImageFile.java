@@ -12,8 +12,13 @@ import java.lang.StringBuilder;
 /**
  * After the filemanager passes the file to this class, model.ImageFile will construct an imagefile object on it.
  * Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
+ * @author Renjie Li
+ * @see managers.ImageFileOperationsManager
+ * @see Tag
+ * @since 1.0
  */
 public class ImageFile implements Serializable, Comparable<ImageFile>{
+
     /**
      * the most current name of this image
      */
