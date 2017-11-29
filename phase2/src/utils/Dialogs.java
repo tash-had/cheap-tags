@@ -158,8 +158,6 @@ public class Dialogs {
         gridPane.add(username, 0, 0);
         gridPane.add(password, 0, 1);
 
-
-//        Node loginBtn = dialog.getDialogPane().lookupButton(loginBtnType);
         dialog.getDialogPane().setContent(gridPane);
 
         dialog.setResultConverter(dialogBtn -> {

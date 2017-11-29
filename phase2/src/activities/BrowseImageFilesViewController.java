@@ -9,9 +9,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.StageStyle;
 import managers.ImageFileOperationsManager;
 import managers.StateManager;
 import managers.TagManager;
@@ -133,6 +133,8 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     TextField TagSearchBar;
 
+    @FXML
+    SplitPane splitPane;
 
     private ObservableList<String> imageFileNames;
 
@@ -204,7 +206,6 @@ public class BrowseImageFilesViewController implements Initializable {
         populateImageTilePane();
 
         rename.setDisable(true);
-
 
     }
 
@@ -382,11 +383,11 @@ public class BrowseImageFilesViewController implements Initializable {
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
-    // Miscellaneous
-//    static void setImagesToLoad(Collection<ImageFile> input){
-//        imagesToLoad = input;
-//    }
-
+    /**
+     * Set a new target directory to browse
+     *
+     * @param directory the new target directory
+     */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);
         targetDirectory = directory;
@@ -438,10 +439,10 @@ public class BrowseImageFilesViewController implements Initializable {
         // Construct a BEAUTIFUL label
         Label label = new Label(imageFile.getCurrentName());
         label.setPadding(new Insets(20, 0, 0, 0));
-        tilePaneVBox.setAlignment(Pos.CENTER); 
         label.setTextFill(Color.web("#000000"));
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196f3"), Color.web("#000000"), label);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 17, label);
+        tilePaneVBox.setAlignment(Pos.CENTER);
 
         // Add imageview and label to vbox + add vbox to tilepane
         tilePaneVBox.getChildren().addAll(imageView, label);
@@ -486,14 +487,16 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     /**
-     * Populate a list view of tags under the image file
+     * Populate all listviews to correspond to the newly selected ImageFile
      */
     private void populateImageFileTagListViews(){
+        // Clear "Existing Tags" listview from previous image then set for new image
         if (existingTagsOnImageFile != null){
             existingTagsOnImageFile.clear();
         }
         existingTagsOnImageFile = ConfigureJFXControl.populateListViewWithArrayList(existingTags, selectedImageFile.getTagList());
 
+        // Reset the available tag options, and remove all the tags that already belong to the selected ImageFile
         availableTagOptions.clear();
         availableTagOptions.addAll(TagManager.getTagList());
         availableTagOptions.removeAll(existingTagsOnImageFile);
@@ -559,7 +562,6 @@ public class BrowseImageFilesViewController implements Initializable {
             availableTagOptions.addAll(searchResult);
 
             }
-
     }
 
     /**
@@ -574,10 +576,13 @@ public class BrowseImageFilesViewController implements Initializable {
             selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
             selectedImageFile.getTagList().clear();
+
             //update the selected imageFiles tagList with the tags associated with oldName.
             selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
 //            System.out.println(selectedImageFile.getTagList().toString());
             updateImageLog();
+
+
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
             existingTagsOnImageFile.clear();
             existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
@@ -614,29 +619,38 @@ public class BrowseImageFilesViewController implements Initializable {
             Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0])
                     .password(instagramCreds[1]).build();
             instagram.setup();
-            try {
-                instagram.login();
-                try {
-                    String caption = Dialogs.showTextInputDialog("Instagram Caption", "Caption?",
-                            "Enter a caption for your photo");
-                    if (caption == null) {
-                        caption = "";
-                    }
-                    InstagramUploadPhotoRequest photoRequest = new
-                            InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
-                    instagram.sendRequest(photoRequest);
-                } catch (IOException | RuntimeException e) {
-                    Dialogs.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error "
-                            + "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
-                            "that your photo is of type JPEG.");
-                }
-            } catch (IOException e) {
-                Dialogs.showErrorAlert("Invalid Credentials", "Invalid Creds",
-                        "Please enter a valid username and password.");
-            }
+            sendInstagramPostRequest(instagram);
         } else {
             Dialogs.showErrorAlert("Invalid Input", "No Input",
                     "You must enter valid credentials");
+        }
+    }
+
+    /**
+     * A helper function for shareWithInstagram. This function logs in and sends the photo request to instagram.
+     *
+     * @param instagram the instance of Instagam4j used to setup Instagam4j
+     */
+    private void sendInstagramPostRequest(Instagram4j instagram){
+        try {
+            instagram.login();
+            try {
+                String caption = Dialogs.showTextInputDialog("Instagram Caption", "Caption?",
+                        "Enter a caption for your photo");
+                if (caption == null) {
+                    caption = "";
+                }
+                InstagramUploadPhotoRequest photoRequest = new
+                        InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
+                instagram.sendRequest(photoRequest);
+            } catch (IOException | RuntimeException e) {
+                Dialogs.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error "
+                        + "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
+                        "that your photo is of type JPEG.");
+            }
+        } catch (IOException e) {
+            Dialogs.showErrorAlert("Invalid Credentials", "Invalid Creds",
+                    "Please enter a valid username and password.");
         }
     }
 

@@ -38,17 +38,9 @@ public class ImageFileOperationsManager {
         Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
 
         if (StateManager.userData.getNameToImageFileMap().containsKey(newName)){
-            String chosenName = handleFilenameTakenByDatabase(new File(newName),
-                    "It looks like the new name you chose exists in our database from " +
-                    StateManager.userData.getNameToImageFileMap().get(newName).getThisFile().getAbsolutePath() +
-                    ". Would you like to choose a new name? (If you select no, your file will not be renamed).");
-            if (chosenName == null){
-                // User denied to a rename.
-                return imageFile;
-            }else {
-                return renameImageFile(imageFile, chosenName);
-            }
+            return handleNewNameExists(imageFile, newName);
         }
+
         FileOperationsResponse response =  renameFile(currentImageFile, newName);
         if (response == SUCCESS){
             imageFile.generalReName(newName);
@@ -64,11 +56,32 @@ public class ImageFileOperationsManager {
             }
         }else {
             // Show error alert dialog
-            Dialogs.showErrorAlert("Renaming Error", "Error", "There was an error renaming your file");
+            Dialogs.showErrorAlert("Renaming Error", "Error",
+                    "There was an error renaming your file");
         }
 
         imageFile.setFile(imageFilePath.toFile());
         return imageFile;
+    }
+
+    /**
+     * Helper function to handle the case where the new name for an ImageFile already exists in the database
+     *
+     * @param imageFile the ImageFile being renamed
+     * @param newName the new name the user is attempting to give the ImageFile
+     * @return the ImageFile with a newer name of the users choice if they accept a rename. The old ImageFile otherwise.
+     */
+    private static ImageFile handleNewNameExists(ImageFile imageFile, String newName){
+            String chosenName = handleFilenameTakenByDatabase(new File(newName),
+                    "It looks like the new name you chose exists in our database from " +
+                            StateManager.userData.getNameToImageFileMap().get(newName).getThisFile().getAbsolutePath() +
+                            ". Would you like to choose a new name? (If you select no, your file will not be renamed).");
+            if (chosenName == null){
+                // User denied to a rename.
+                return imageFile;
+            }else {
+                return renameImageFile(imageFile, chosenName);
+            }
     }
 
     /**
@@ -123,37 +136,7 @@ public class ImageFileOperationsManager {
                     ImageFile imageFile = StateManager.userData.getImageFileWithName(fileName);
                     String existingImageFilePath = imageFile.getThisFile().getParentFile().getAbsolutePath();
                     if (!existingImageFilePath.equals(directory.getAbsolutePath())) {
-                        // The ImageFile that exists in our records has a different path from the one being imported!
-                        // Ask the user if this file is the same!
-                        ButtonType imageIsExistingImage = Dialogs.showYesNoAlert("Filename Exists in Database",
-                                "Filename Taken", "It looks like " + fileName + " exists in our records " +
-                                        "from another directory you imported. Is this the same image from "
-                                        + existingImageFilePath + "?");
-                        if (imageIsExistingImage == ButtonType.NO) {
-                            // Image is not the image that exists in directory! Ask user if they want to rename the image
-                            // and make sure the entered name doesn't also exist in our database.
-                            String alertBody = "Would you like to rename this file? (If you chose no, the file will " +
-                                    "not be imported)";
-                            String chosenName = handleFilenameTakenByDatabase(file, alertBody);
-                            // If chosenName is null, function will continue to end of this if statement and terminate
-
-                            // Rename the image with the given name + remember to make sure the given name doesn't exist
-                            // in the directory being browsed either
-                            FileOperationsResponse renameResponse = FileOperations.renameFile(file, chosenName);
-                            if (renameResponse == FILENAME_TAKEN) {
-                                // Don't need to provide database as filter because we already ensured that the new name
-                                // doesn't exist in database with handleFilenameTakenByDatabase
-                                renameResponse = FileOperations.renameFile(file, Dialogs.showFileExistsAlert(directory,
-                                        chosenName, null));}
-                            if (chosenName != null && renameResponse == SUCCESS) {
-                                // Rename is a success. Process the renamed file as new
-                                File fileWithChosenName = new File(file.getParentFile().getAbsolutePath(), chosenName);
-                                processFetchedImageFile(fileWithChosenName, null);}
-                        } else {
-                            // User says image is same as existing image one in records.
-                            // Update location of existing ImageFile and process it
-                            imageFile.setFile(file);
-                            processFetchedImageFile(null, imageFile);}
+                        handleImageExistsWithDifferentPath(directory, file, imageFile);
                     } else {
                         // Image is exactly the same as one in our records. Process the existing ImageFile
                         processFetchedImageFile(null, imageFile);
@@ -164,11 +147,54 @@ public class ImageFileOperationsManager {
                 }
             }
         } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             Dialogs.showErrorAlert("Error", "Fetch Error",
                     "There was an error fetching your files. You sure that folder exists?");
 
         }
+    }
+
+    /**
+     * A helper function to handle the case where an image being fetched has the same name but different location as
+     * an image that already exists in the database.
+     *
+     * @param directory the firectory being queried
+     * @param duplicateImage the duplicate named image
+     * @param exisitngImage the existing ImageFile
+     */
+    private static void handleImageExistsWithDifferentPath(File directory, File duplicateImage,
+                                                           ImageFile exisitngImage){
+        // The ImageFile that exists in our records has a different path from the one being imported!
+        // Ask the user if this file is the same!
+        ButtonType imageIsExistingImage = Dialogs.showYesNoAlert("Filename Exists in Database",
+                "Filename Taken", "It looks like " + duplicateImage.getName() + " exists in our records "+
+                        "from another directory you imported. Is this the same image from "
+                        + exisitngImage.getThisFile().getPath() + "?");
+        if (imageIsExistingImage == ButtonType.NO) {
+            // Image is not the image that exists in directory! Ask user if they want to rename the image
+            // and make sure the entered name doesn't also exist in our database.
+            String alertBody = "Would you like to rename this file? (If you chose no, the file will " +
+                    "not be imported)";
+            String chosenName = handleFilenameTakenByDatabase(duplicateImage, alertBody);
+            // If chosenName is null, function will continue to end of this if statement and terminate
+
+            // Rename the image with the given name + remember to make sure the given name doesn't exist
+            // in the directory being browsed either
+            FileOperationsResponse renameResponse = FileOperations.renameFile(duplicateImage, chosenName);
+            if (renameResponse == FILENAME_TAKEN) {
+                // Don't need to provide database as filter because we already ensured that the new name
+                // doesn't exist in database with handleFilenameTakenByDatabase
+                renameResponse = FileOperations.renameFile(duplicateImage, Dialogs.showFileExistsAlert(directory,
+                        chosenName, null));}
+            if (chosenName != null && renameResponse == SUCCESS) {
+                // Rename is a success. Process the renamed file as new
+                File fileWithChosenName = new File(duplicateImage.getParentFile().getAbsolutePath(), chosenName);
+                processFetchedImageFile(fileWithChosenName, null);}
+        } else {
+            // User says image is same as existing image one in records.
+            // Update location of existing ImageFile and process it
+            exisitngImage.setFile(duplicateImage);
+            processFetchedImageFile(null, exisitngImage);}
     }
 
     /**
@@ -218,6 +244,7 @@ public class ImageFileOperationsManager {
         }else {
             fileToProcess = new ImageFile(file);
 
+            // Check to see if there are tags in the new file, that don't already exist in our database
             String[] beginningName = fileToProcess.getCurrentName().split("\\s");
             for(String i: beginningName){
                 if(i.startsWith("@")){
@@ -231,14 +258,10 @@ public class ImageFileOperationsManager {
 
                 }
             }
-
-
-
             StateManager.userData.addImageFileToMap(fileToProcess);
         }
         StateManager.sessionData.addImageFileToMap(fileToProcess);
     }
-
 }
 
 

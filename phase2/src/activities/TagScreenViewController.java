@@ -195,22 +195,6 @@ public class TagScreenViewController implements Initializable {
      */
     @FXML
     public void searchInputChanged(){
-//        String input = tagSearch.getText().toLowerCase();
-//        if (input.equals("")){
-//            repopulateTagView();
-//        }
-//        else{
-//            for (int i = 0; i < tagView.getItems().size(); i++){
-//                Tag curr = tagView.getItems().get(i);
-//                if (input.length() <= curr.name.length()) {
-//                    if (!curr.name.substring(0, input.length()).equals(input)) {
-//                        tagView.getItems().remove(i);
-//                    }
-//                }
-//                else {
-//                    tagView.getItems().remove(i);
-//                }
-//            }
         String input = tagSearch.getText().toLowerCase();
         ArrayList<Tag> searchResult = new ArrayList<>();
         Pattern tagSearchPattern = Pattern.compile(input);

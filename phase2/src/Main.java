@@ -1,11 +1,9 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import managers.*;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
-
-//import tests.FileOperationsTest;
-
 
 import java.io.IOException;
 
@@ -17,14 +15,14 @@ public class Main extends Application{
         getPrimaryStageManager().setDefaultScreenWidth(1080);
         getPrimaryStageManager().setDefaultScreenHeight(720);
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+        primaryStage.initStyle(StageStyle.DECORATED);
         getPrimaryStageManager().showStage();
 
-        StageManager sm = new StageManager(primaryStage);
-        sm.setDefaultScreenWidth(100);
-        sm.setDefaultScreenWidth(200);
-        sm.getStage().setHeight(100);
-        sm.getStage().setWidth(100);
-        sm.showStage();
+//        StageManager sm = new StageManager(new Stage());
+//        sm.setDefaultScreenWidth(1000);
+//        sm.setDefaultScreenHeight(300);
+//        sm.setScreen("Window Title", "/activities/tag_screen_view.fxml");
+//        sm.showStage();
     }
     public static void main(String[] args){
         launch(args);

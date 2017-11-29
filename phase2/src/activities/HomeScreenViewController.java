@@ -43,8 +43,6 @@ public class HomeScreenViewController implements Initializable{
 
     @Override
     public void initialize (URL location, ResourceBundle resources) {
-//       UserDataGetter.loadDATA();
-
         Image logoImage = new Image("resources/images/logo_2.jpg", true);
         homeScreenImageView.setImage(logoImage);
 
@@ -61,33 +59,12 @@ public class HomeScreenViewController implements Initializable{
     /**
      * Function to handle "Open Directory" button click on Home screen.
      */
-    public void openDirectoryClick(){
+    public void openDirectoryClick() {
         File selectedFile = Dialogs.getDirectoryWithChooser();
 
         if (selectedFile != null) {
-//            Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
-//            BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
-            //System.out.println(ImageFileOperationsManager.fetchImageFiles(selectedFile));
-            //imagesToLoad.addAll(ImageFileOperationsManager.fetchImageFiles(selectedFile));
-
-//            if (imagesToLoad.size() != 0) {
-                //System.out.println(imagesToLoad.toString());
-//                UserDataManager.addPathToVisitedList(selectedFile.getPath());
-//                BrowseImageFilesViewController controller = fxmlLoader.getController();
-//                System.out.println(imagesToLoad);
-//                controller.setImagesToLoad(imagesToLoad);
-                //BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
-
-                switchToToBrowseImageFilesView(selectedFile);
-//            }
-             //else imagesToLoad size != 0
-//            else{
-//                Dialogs.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
-//                        " in the directory you loaded. Please select another");
-//                openDirectoryClick();
-//            }
+            switchToToBrowseImageFilesView(selectedFile);
         }
-//        UserDataSaver.storeData();
     }
 
     /**

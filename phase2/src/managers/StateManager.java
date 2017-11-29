@@ -10,6 +10,7 @@ import static managers.PrimaryStageManager.getPrimaryStageManager;
 /**
  * A class to manage states for the program, including session state and user data state.
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class StateManager {
     /**
      * Container for all user data in records
@@ -83,7 +84,6 @@ public class StateManager {
         }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void createDataFile(File dataFile) {
         if (!dataFile.exists()) {
             File dir = new File(dataFile.getParentFile().getAbsolutePath());
