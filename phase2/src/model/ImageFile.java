@@ -10,10 +10,16 @@ import java.io.File;
 import java.lang.StringBuilder;
 
 /**
- * After the filemanager passes the file to this class, model.ImageFile will construct an imagefile object on it.
+ * Am object to represent actual image file in operating system.
+ * After the filemanager passes the file to this class, model.ImageFile will construct an ImageFile object on it.
  * Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
+ * @author Renjie Li
+ * @see managers.ImageFileOperationsManager
+ * @see Tag
+ * @since 1.0
  */
 public class ImageFile implements Serializable, Comparable<ImageFile>{
+
     /**
      * the most current name of this image
      */
@@ -40,16 +46,18 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
     private String underWhichDirectory;
 
     /**
-     * the actual file object
+     * the actual file object.
      */
     private File thisFile;
 
     /**
-     * the type of the string(eg. ".jpeg")
+     * the type of the string(eg. ".jpeg").
      */
     private String imageType;
 
-
+    /**
+     * stores the tag history for ImageFile.
+     */
     private ArrayList<ArrayList<Tag>> tagHistory;
 
     /**
