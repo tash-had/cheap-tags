@@ -112,6 +112,12 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label nameOfSelectedFile;
 
+//    /**
+//     * Displays the absolute path name of the currently selected file.
+//     */
+//    @FXML
+//    Label absolutePathSelectedFile;
+
     /**
      *Load a list view of names of all images
      */
@@ -247,12 +253,12 @@ public class BrowseImageFilesViewController implements Initializable {
     public void addButtonClick(){
         Tag selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
-            Dialogs.chooseFileAlert();
+            Dialogs.showErrorAlert("Error","Nothing selected","No image file has been selected yet. Please select a image file first.");
 
         }
         else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
             if (selectedImageFile.getTagList().contains(selectedTag)){
-                Dialogs.fileContainsTagAlert();
+                Dialogs.showErrorAlert("Error","","The selected file already contains this tag.");
             }
             else {
                 availableTagOptions.remove(selectedTag);
@@ -272,7 +278,7 @@ public class BrowseImageFilesViewController implements Initializable {
     public void deleteButtonClick() {
         Tag selectedTag = existingTags.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
-            Dialogs.chooseFileAlert();
+            Dialogs.showErrorAlert("Error","Nothing selected","No image file has been selected yet. Please select a image file first.");
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
 
             existingTagsOnImageFile.remove(selectedTag);
@@ -293,7 +299,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void renameButtonClick() {
         if (selectedImageFile == null) {
-            Dialogs.chooseFileAlert();
+            Dialogs.showErrorAlert("Error","Nothing selected ","No image file has been selected yet. Please select a image file first.");
         }
         else {
             selectedImageFile.updateTagHistory(selectedImageFile.getTagList()); //Add the tag list to the tag history before updating.
@@ -361,7 +367,7 @@ public class BrowseImageFilesViewController implements Initializable {
     public void moveImageButtonClick() {
         checkForUnsavedChanges();
         if (selectedImageFile == null){
-            Dialogs.chooseFileAlert();
+            Dialogs.showErrorAlert("Error","Nothing selected","No image file has been selected yet. Please select a image file first.");
         }
         else {
             File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
@@ -648,7 +654,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void revisionLogButtonClick(){
         if (selectedImageFile == null){
-            Dialogs.chooseFileAlert();
+            Dialogs.showErrorAlert("Error","Nothing selected","No image file has been selected yet. Please select a image file first.");
         }
         else{
             // store the data on the current screen for revisionLogViewController

@@ -17,47 +17,34 @@ public class Tag implements Serializable{
     public String name;
 
     /**
-     * the arraylist stores all images that have this tag
+     * the ArrayList stores all images that have this tag
      */
     public TreeSet<ImageFile> images = new TreeSet<>();
 
     /**
-     * Construct a new model.Tag object
-     * @param name
+     * Constructs a new model Tag object.
+     *
+     * @param name the name of the tag
      */
     public Tag(String name) {
         this.name = name;
     }
 
     /**
-     * Add the image with this tag
-     * @param image the image to be added to the arraylist
-     */
-    public void addImage(ImageFile image){
-        this.images.add(image);
-    }
-
-    /**
-     * Delete the image if the user delete the tag under the image
-     * @param image the image to be deleted in the arraylist
-     */
-    public void deleteImage(ImageFile image){
-        this.images.remove(image);
-    }
-
-
-    /**
-     * Convert tag object to string
-     * @return String
+     * Returns the string representation of the Tag i.e. the name.
+     *
+     * @return String returns the tag objects name value
      */
     public String toString() {
         return name;
     }
 
     /**
-     * Compare the object 0 with this
-     * @param o
-     * @return boolean
+     * Return true if the object compared is also a Tag with the same name.
+     *
+     * @param o the object being compared
+     *
+     * @return boolean True if the object is a Tag with the same name, return false otherwise.
      */
     public boolean equals(Object o){
         if (o == null){

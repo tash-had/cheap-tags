@@ -2,48 +2,18 @@ package utils;
 
 import com.sun.istack.internal.Nullable;
 import javafx.geometry.Insets;
-//import javafx.geometry.Pos;
-//import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-//import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-//import javafx.stage.Modality;
-//import javafx.stage.Stage;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
-
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
-
+/**
+ * A class containing all the popup windows in the system. Contains alerts and directory-choosing popups.
+ */
 public class Dialogs {
-
-    //citing this from JavaFx Tut5th.
-//    public static void displayWarning(String message){
-//        Stage window = new Stage();
-//
-//        //this one should be taken care of first
-//        window.initModality(Modality.APPLICATION_MODAL);
-//        window.setTitle("WARNING!!!");
-//        window.setMinWidth(300);
-//
-//        Label text = new Label();
-//        text.setText(message);
-//        Button button = new Button("I Know, Close This Window");
-//        button.setOnAction(event -> window.close());
-//
-//        VBox layout = new VBox(15);
-//        layout.getChildren().add(text);
-//        layout.getChildren().add(button);
-//        layout.setAlignment(Pos.CENTER);
-//
-//        Scene scene = new Scene(layout);
-//        window.setScene(scene);
-//        window.showAndWait();//display this window that needed to be
-//        //close to further process other things.
-//    }
 
     /**
      * Show an alert dialog with yes/no options
@@ -95,7 +65,7 @@ public class Dialogs {
      * @param body the body text
      */
     public static void showErrorAlert(String windowTitle, String header, String body){
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR, body, ButtonType.OK);
+        Alert errorAlert = new Alert(Alert.AlertType.NONE, body, ButtonType.OK);
         errorAlert.setTitle(windowTitle);
         errorAlert.setHeaderText(header);
         errorAlert.showAndWait();
@@ -189,32 +159,4 @@ public class Dialogs {
         directoryChooser.setTitle("Select a directory");
         return directoryChooser.showDialog(getPrimaryStageManager().getStage());
     }
-
-    /**
-     * Tells the user that a tag already exists with the same name.
-     */
-    public static void showTagExistsAlert(){
-        Alert tagExistsDialog = new Alert(Alert.AlertType.NONE, "A tag with this name already exists. " +
-                "Please select a different name.", ButtonType.CLOSE);
-        tagExistsDialog.showAndWait();
-    }
-
-    /**
-     * Tells the user that actions cannot be performed on a file because they haven't chosen one yet.
-     */
-    public static void chooseFileAlert(){
-        Alert needToChooseFile = new Alert(Alert.AlertType.NONE, "No image file has been selected yet.\n" +
-                "Please select a image file first.", ButtonType.CLOSE );
-        needToChooseFile.showAndWait();
-    }
-
-    /**
-     * Tells the user that the selected file already has that tag.
-     */
-    public static void fileContainsTagAlert(){
-        Alert fileContainsTag = new Alert(Alert.AlertType.NONE, "The selected file already contains this tag." +
-                "", ButtonType.CLOSE);
-        fileContainsTag.showAndWait();
-    }
-
 }

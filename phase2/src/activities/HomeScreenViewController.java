@@ -114,7 +114,7 @@ public class HomeScreenViewController implements Initializable {
      * Given an array of paths, get an arrayList of hyperlinked paths
      *
      * @param pathArray an array of paths
-     * @return an arraylist of hyperlinked paths
+     * @return an ArrayList of hyperlinked paths
      */
     private ArrayList<Hyperlink> getHyperlinkArrayList(String[] pathArray) {
         ArrayList<Hyperlink> hyperlinkArrayList = new ArrayList<>();

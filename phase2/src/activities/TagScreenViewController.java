@@ -103,7 +103,7 @@ public class TagScreenViewController implements Initializable {
 
             // duplicate is not 0, so there was an already existing tag which matched the name.
             if (duplicateExists != 0) {
-                Dialogs.showTagExistsAlert();
+                Dialogs.showErrorAlert("Error","Duplicate Tags", "A tag with this name already exists.Please select a different name.");
                 tagInput.clear();
             }
 
