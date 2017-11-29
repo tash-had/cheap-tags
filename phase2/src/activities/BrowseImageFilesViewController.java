@@ -694,7 +694,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * A function handle the click of revision log button
      * pops up new window with revision history
-     * stores current page to revision log view controller
+     * stores current page to revision log view controller.
      */
     @FXML
     public void revisionLogButtonClick(){
