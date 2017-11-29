@@ -55,11 +55,6 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     ListView<Tag> existingTags;
 
-    /**
-     * A ListView of String displaying the past names that the File has had.
-     */
-//    @FXML
-//    ListView<ArrayList<String>> revisionLog;
 
     /**
      * Displays the currently selected file.
@@ -91,11 +86,6 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Button back;
 
-    /**
-     * Reverts selected image to the selected old name.
-     */
-//    @FXML
-//    Button revert;
 
     /**
      * Labels allTagsListView as "Tags".
@@ -122,23 +112,40 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label nameOfSelectedFile;
 
+    /**
+     *Load a list view of names of all images
+     */
     @FXML
     ToggleButton toggleButton;
 
 
+    /**
+     * Display names of images as a list view
+     */
     @FXML
     ListView<String> imageNamesListView;
 
+    /**
+     * Show the image of instagram
+     */
     @FXML
     ImageView shareWithInstagramBtn;
 
+    /**
+     * Quick search for tags
+     */
     @FXML
     TextField TagSearchBar;
 
+    /**
+     * take user to the revision history window
+     */
     @FXML
     Button revisionLogButton;
 
-
+    /**
+     * Store the image files names as an observable list
+     */
     private ObservableList<String> imageFileNames;
 
     /**
@@ -146,23 +153,30 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     private static File targetDirectory;
 
-//    /**
-//     * An ArrayList of File objects of all the images in the chosen directory.
-//     */
-//    private ArrayList<File> fileObjectsInDirectory = new ArrayList<>();
-
+    /**
+     * Store available tag options in an observable list
+     */
     private ObservableList<Tag> availableTagOptions;
+
+    /**
+     * Store existing tags on image file in an observable list
+     */
     private ObservableList<Tag> existingTagsOnImageFile;
-//    private ObservableList<ArrayList<String>> selectedImageLog;
+
+    /**
+     * Store the image names
+     */
     private Collection<String> imageNames;
-//    private static Collection<ImageFile> imagesToLoad;
+
+    /**
+     * check if the change that user made on the image is saved or not
+     */
     private boolean unsavedChanges = false;
 
-//    /**
-//     * A String array containing accepted image file types.
-//     */
-//    private static String[] acceptedExtensions = new String[]{"jpg"};
 
+    /**
+     * Use to prepare for image search by regex
+     */
     private StringBuilder imageSearchPatternEnd;
 
 
@@ -171,16 +185,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     public ImageFile selectedImageFile = null;
 
-//    /**
-//     * A FilenameFilter which filters out files that are not accepted image types.
-//     */
-//    private static FilenameFilter imgFilter = (dir, name) -> {
-//        for (String ext : acceptedExtensions)
-//            if (name.endsWith("." + ext)) {
-//                return true;
-//            }
-//        return false;
-//    };
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -213,7 +218,10 @@ public class BrowseImageFilesViewController implements Initializable {
 
     }
 
-
+    /**
+     * Handle the click on the image view in the tile pane
+     * Display the selected image view to the screen, and load data for the image
+     */
     @FXML
     public void chooseImageClick(){
         checkForUnsavedChanges();
@@ -230,6 +238,7 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     // Button click handlers
+
     /**
      * Handles when a tag is clicked and add the selected tag under the selected image and removes the tag from
      * allTagsListView.
@@ -319,6 +328,10 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * Handles the click of the toggleButton
+     * show the list view of the names of image files
+     */
     @FXML
     public void imagesViewToggle(){
         if (toggleButton.isSelected()){
@@ -339,11 +352,6 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
-
-//    public void updateImageLog(){
-//        selectedImageLog.clear();
-//        selectedImageLog.addAll(selectedImageFile.getOldName());
-//    }
 
     /**
      * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
@@ -387,16 +395,18 @@ public class BrowseImageFilesViewController implements Initializable {
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
-    // Miscellaneous
-//    static void setImagesToLoad(Collection<ImageFile> input){
-//        imagesToLoad = input;
-//    }
-
+    /**
+     * Handles the click on move directory button
+     * @param directory
+     */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);
         targetDirectory = directory;
     }
 
+    /**
+     * Prepares for the search by regular expression in the image search bar
+     */
     private void prepImageSearchRegex(){
         imageSearchPatternEnd = new StringBuilder(".*\\b(");
         for (String extension :ImageFileOperationsManager.ACCEPTED_EXTENSIONS){
@@ -428,7 +438,7 @@ public class BrowseImageFilesViewController implements Initializable {
             image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 300,
                     300, true, true);
         } catch (MalformedURLException e) {
-//            e.printStackTrace();
+
             Dialogs.showErrorAlert("Gallery Error", "Error", "There was an error adding " +
             imageFile.getThisFile().getAbsolutePath() + " to the gallery. You sure it exists?");
         }
@@ -502,11 +512,7 @@ public class BrowseImageFilesViewController implements Initializable {
         availableTagOptions.clear();
         availableTagOptions.addAll(TagManager.getTagList());
         availableTagOptions.removeAll(existingTagsOnImageFile);
-//        if (selectedImageLog != null){
-//            selectedImageLog.clear();
-//        }
-//        // Populate selectedImageLog with pre-existing logs
-//        selectedImageLog.addAll(selectedImageFile.getOldName());
+
     }
 
     /**
@@ -544,6 +550,10 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * Handles the text field as a search bar
+     * Loads the input from user and search it through the list of tags
+     */
     public void TagSearchTextChanged(){
         String input = TagSearchBar.getText().toLowerCase();
         ArrayList<Tag> searchResult = new ArrayList<>();
@@ -566,68 +576,6 @@ public class BrowseImageFilesViewController implements Initializable {
 
     }
 
-    /**
-     * Reverts the current image to the selected previous name.
-     */
-//    @FXML
-//    public void revertButtonClick() {
-//        int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
-////        System.out.println(indexOfRevision);
-//        if (indexOfRevision != -1) {
-//            ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
-//            selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
-//            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
-//
-//
-//
-//
-//            selectedImageFile.getTagList().clear();
-//                         //update the selected imageFiles tagList with the tags associated with oldName.
-//            //selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
-//
-//
-//            String[] beginningName = selectedImageFile.getCurrentName().split("\\s");
-//            for(String i: beginningName){
-//                if(i.startsWith("@")){
-//                    String withoutSymbol = i.substring(1,i.length());
-//                    Tag findTheTag = TagManager.getTagByString(withoutSymbol);
-//                    if(findTheTag==null){
-//                        Tag tempTag = new Tag(withoutSymbol);
-//                        selectedImageFile.getTagList().add(tempTag);
-//                        tempTag.images.add(selectedImageFile);
-//                        TagManager.addTag(tempTag);
-//                    }
-//                    else{findTheTag.images.add(selectedImageFile);
-//                    selectedImageFile.getTagList().add(findTheTag);
-//                    }
-//                }
-//            }
-//
-//
-////            System.out.println(selectedImageFile.getTagList().toString());
-//
-//
-//
-////            updateImageLog();
-////            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
-////            existingTagsOnImageFile.clear();
-////            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
-////            for(Tag j : selectedImageFile.getTagList()){
-////                if(!TagManager.getTagList().contains(j)){
-////                    TagManager.addTag(j);
-////                }
-////            }
-//            populateImageFileTagListViews();
-////            for (Tag tag : availableTagOptions) {
-////                if (selectedImageFile.getTagList().contains(tag)) {
-////                    availableTagOptions.remove(tag);
-////                }
-////            }
-//
-//
-//
-//        }
-//    }
 
 
     /**
@@ -694,7 +642,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * A function handle the click of revision log button
      * pops up new window with revision history
-     * stores current page to revision log view controller
+     * stores current page to revision log view controller.
      */
     @FXML
     public void revisionLogButtonClick(){
@@ -702,6 +650,7 @@ public class BrowseImageFilesViewController implements Initializable {
             Dialogs.chooseFileAlert();
         }
         else{
+            // store the data on the current screen for revisionLogViewController
             RevisionLogViewController.setBrowseController(this);
             StageManager revisionLog = new StageManager(new Stage());
             revisionLog.setDefaultScreenHeight(400);

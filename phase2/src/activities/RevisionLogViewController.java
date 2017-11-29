@@ -127,5 +127,9 @@ public class RevisionLogViewController implements Initializable {
 
         }
     }
+    public void revisionLogSearchBar(){
+        String input = revisionHistorySearchBar.getText().toLowerCase();
+
+    }
 
 }

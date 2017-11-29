@@ -27,23 +27,16 @@ public class DisplayTagsView {
     public static Scene getScene(Button back) {
 
         // Create an arrayList store all user input and visualize it.
-
         myData = new ArrayList<>();
-
-
         myData.add("May");
         myData.add("June");
-
         tagsView = new ListView<>();
-
-
         tagsView.setItems(ConfigureJFXControl.populateListViewWithArrayList(tagsView,myData));
 
         //Catch User Input
         tagInput = new TextField();
         tagInput.setPromptText("Example: model.Tag");
         tagInput.setMinWidth(100);
-
 
         //AddButton
         Button addButton = new Button("Add");
@@ -58,7 +51,6 @@ public class DisplayTagsView {
             Tag myTag = new Tag(s);
             TagManager.addTag(myTag);
         }
-
 
         //Set a row for user to do all the operations.
 
@@ -85,5 +77,4 @@ public class DisplayTagsView {
 
     public static void deleteButtonClicked(){
     }
-
     }
