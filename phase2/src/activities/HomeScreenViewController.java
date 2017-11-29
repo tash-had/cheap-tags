@@ -5,6 +5,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import managers.StageManager;
 import managers.StateManager;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -86,6 +88,9 @@ public class HomeScreenViewController implements Initializable {
      */
     @FXML
     ImageView logo;
+
+    @FXML
+    Button masterLogButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -359,5 +364,16 @@ public class HomeScreenViewController implements Initializable {
      */
     public void openTagScreen(){
         getPrimaryStageManager().setScreen("My Tags", "/activities/tag_screen_view.fxml");
+    }
+
+    /**
+     * Change the current screen to the tag screen
+     */
+    public void openMasterLog(){
+        StageManager masterLog = new StageManager(new Stage());
+        masterLog.setDefaultScreenHeight(400);
+        masterLog.setDefaultScreenWidth(600);
+        masterLog.setScreen("All Revision History", "/activities/master_log_view.fxml");
+        masterLog.showStage();
     }
 }

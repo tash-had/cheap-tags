@@ -18,7 +18,7 @@ public class UserDataManager implements Serializable {
     /**
      * The name to image file map
      */
-    HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>();
+    public HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>();
 
     /**
      * Get the ImageFile associated with the given name
