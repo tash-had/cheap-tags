@@ -23,7 +23,9 @@ import org.brunocvcunha.instagram4j.requests.payload.InstagramUser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import utils.Alerts;
+import utils.Dialogs;
+import managers.StateManager;
+import utils.Dialogs;
 import utils.ConfigureJFXControl;
 
 import javax.imageio.ImageIO;
@@ -40,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 //import org.json.simple.JSONObject;
+
+import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 
 public class HomeScreenViewController implements Initializable {
@@ -86,7 +90,7 @@ public class HomeScreenViewController implements Initializable {
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf",
                 15, previouslyViewedLabel);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Light.ttf",
-                15, openDirectoryButton, addTagsButton);
+                15, openDirectoryButton, addTagsButton, importFromInstagramBtn, tumblrBtn);
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196fe"),
                 Color.BLACK, openDirectoryButton, addTagsButton);
     }
@@ -94,8 +98,8 @@ public class HomeScreenViewController implements Initializable {
     /**
      * Function to handle "Open Directory" button click on Home screen.
      */
-    public void openDirectoryClick() {
-        File selectedFile = PrimaryStageManager.getDirectoryWithChooser();
+    public void openDirectoryClick(){
+        File selectedFile = Dialogs.getDirectoryWithChooser();
 
         if (selectedFile != null) {
 //            Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
@@ -109,13 +113,18 @@ public class HomeScreenViewController implements Initializable {
 //                BrowseImageFilesViewController controller = fxmlLoader.getController();
 //                System.out.println(imagesToLoad);
 //                controller.setImagesToLoad(imagesToLoad);
+
             //BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
-            StateManager.userData.addPathToVisitedList(selectedFile.getPath());
-            switchToToBrowseImageFilesView(selectedFile);
+//            StateManager.userData.addPathToVisitedList(selectedFile.getPath());
+//            switchToToBrowseImageFilesView(selectedFile);
+
+                //BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
+
+                switchToToBrowseImageFilesView(selectedFile);
 //            }
             //else imagesToLoad size != 0
 //            else{
-//                Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+//                Dialogs.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
 //                        " in the directory you loaded. Please select another");
 //                openDirectoryClick();
 //            }
@@ -154,21 +163,19 @@ public class HomeScreenViewController implements Initializable {
         return hyperlink;
     }
 
-    private void switchToToBrowseImageFilesView(File directoryPath) {
+    private void switchToToBrowseImageFilesView(File directoryPath){
+        StateManager.userData.addPathToVisitedList(directoryPath.getPath());
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
-        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0) {
-            PrimaryStageManager.setScreen("Browse Images - [~" + directoryPath.getPath() + "]",
+        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0){
+            getPrimaryStageManager().setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
                     "/activities/browse_imagefiles_view.fxml");
-        } else {
-            Alerts.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
+        }else {
+            Dialogs.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
                     " in the directory you loaded. Please select another");
             openDirectoryClick();
         }
     }
 
-    public void openTagScreen() {
-        PrimaryStageManager.setScreen("My Tags", "/activities/tag_screen_view.fxml");
-    }
 
     @FXML
     public void importFromInstagram() throws IOException {
@@ -236,7 +243,7 @@ public class HomeScreenViewController implements Initializable {
 
     @FXML
     public void tumblrButtonClicked(){
-        File chosenDirectory = PrimaryStageManager.getDirectoryWithChooser();
+        File chosenDirectory = Dialogs.getDirectoryWithChooser();
         if (chosenDirectory != null) {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setContentText("Enter a tumblr blog:");
@@ -342,5 +349,9 @@ public class HomeScreenViewController implements Initializable {
 
             i++;
         }
+    }
+
+    public void openTagScreen(){
+        getPrimaryStageManager().setScreen("My Tags", "/activities/tag_screen_view.fxml");
     }
 }

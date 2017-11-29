@@ -1,7 +1,6 @@
 package activities;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,17 +9,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import managers.ImageFileOperationsManager;
 import managers.PrimaryStageManager;
 import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
-import org.omg.CORBA.INTERNAL;
-import utils.Alerts;
+import utils.Dialogs;
 
-import java.awt.*;
 import java.net.URL;
-import java.util.Observable;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 public class TagScreenViewController implements Initializable {
 
@@ -71,12 +73,14 @@ public class TagScreenViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources){
         Platform.runLater(() -> tagInput.requestFocus());
-       // tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         // clears tagView to prevent duplication after reinitializing the scene and re-adds all the tags from TagManager
             tagView.getItems().clear();
             for (Tag tag : TagManager.getTagList()) {
                 tagView.getItems().add(tag);
             }
+
+
     }
 
     /**
@@ -100,7 +104,7 @@ public class TagScreenViewController implements Initializable {
 
             // duplicate is not 0, so there was an already existing tag which matched the name.
             if (duplicateExists != 0) {
-                Alerts.showTagExistsAlert();
+                Dialogs.showTagExistsAlert();
                 tagInput.clear();
             }
 
@@ -118,32 +122,52 @@ public class TagScreenViewController implements Initializable {
     /**
      * Handles when delete button is clicked. Removes selected Tag from the list on screen and removes selected Tag
      * from list in TagManager.
+     * When the selected tag associated with existing images, the program will show a warning box to ask user for permission.
      */
     @FXML
     public void deleteButtonClicked(){
-//        ObservableList<Integer> intArray = tagView.getSelectionModel().getSelectedIndices();
-//        for (int i : intArray) {
-            int i = tagView.getSelectionModel().getSelectedIndex();
-            if ( i > -1) {
-                Tag thisTag = tagView.getItems().get(i);
+        ArrayList<Integer> intArray = new ArrayList<>();
+                intArray.addAll(tagView.getSelectionModel().getSelectedIndices());
+        int deleteNum = 0;
+        for (int i : intArray) {
+
+            if ( i-deleteNum > -1) {
+                Tag thisTag = tagView.getItems().get(i-deleteNum);
                 if(thisTag.images.size() != 0 ){
-                ButtonType renameReqResponse = Alerts.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With " +thisTag.images.size()+ " Image",
+                ButtonType renameReqResponse = Dialogs.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With " +thisTag.images.size()+ " Image",
                         "Are You Sure You Want To Delete?");
                 if (renameReqResponse == ButtonType.YES){
                     for(ImageFile j : thisTag.images){
                         j.getTagList().remove(thisTag);
+
+                        ArrayList<Tag> tempList = new ArrayList<>();
+                        tempList.addAll(j.getTagList());
+
+                        StringBuilder sb = new StringBuilder();
+
+                        j.getTagList().clear(); //clear all tags, since .addAll adds everything again.
+
+                        j.getTagList().addAll(tempList);
+
+                        for (Tag tag : tempList) {
+                            sb.append("@").append(tag).append(" ");
+                        }
+                        sb.append(j.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
+                        ImageFileOperationsManager.renameImageFile(j, sb.toString());
                     }
-                    tagView.getItems().remove(i);
+                    tagView.getItems().remove(i-deleteNum);
                     TagManager.getTagList().remove(thisTag);
+                    deleteNum++;
                 }
             }
             else{
-                    tagView.getItems().remove(i);
+                    tagView.getItems().remove(i-deleteNum);
                     TagManager.getTagList().remove(thisTag);
+                    deleteNum++;
                 }
             }
-            repopulateTagView();
-//        }
+        }
+        repopulateTagView();
     }
 
     /**
@@ -151,7 +175,7 @@ public class TagScreenViewController implements Initializable {
      */
     @FXML
     public void backButtonClicked(){
-        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+        getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
     /**
@@ -171,22 +195,39 @@ public class TagScreenViewController implements Initializable {
      */
     @FXML
     public void searchInputChanged(){
+//        String input = tagSearch.getText().toLowerCase();
+//        if (input.equals("")){
+//            repopulateTagView();
+//        }
+//        else{
+//            for (int i = 0; i < tagView.getItems().size(); i++){
+//                Tag curr = tagView.getItems().get(i);
+//                if (input.length() <= curr.name.length()) {
+//                    if (!curr.name.substring(0, input.length()).equals(input)) {
+//                        tagView.getItems().remove(i);
+//                    }
+//                }
+//                else {
+//                    tagView.getItems().remove(i);
+//                }
+//            }
         String input = tagSearch.getText().toLowerCase();
-        if (input.equals("")){
+        ArrayList<Tag> searchResult = new ArrayList<>();
+        Pattern tagSearchPattern = Pattern.compile(input);
+        Matcher tagSearchMatcher;
+        tagView.getItems().clear();
+        if (input.isEmpty()){
+            searchResult.clear();
             repopulateTagView();
-        }
-        else{
-            for (int i = 0; i < tagView.getItems().size(); i++){
-                Tag curr = tagView.getItems().get(i);
-                if (input.length() <= curr.name.length()) {
-                    if (!curr.name.substring(0, input.length()).equals(input)) {
-                        tagView.getItems().remove(i);
-                    }
-                }
-                else {
-                    tagView.getItems().remove(i);
+        }else {
+            for (Tag tag: TagManager.getTagList()){
+                tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
+                if (tagSearchMatcher.find()){
+                    searchResult.add(tag);
                 }
             }
+            tagView.getItems().addAll(searchResult);
+
         }
     }
 

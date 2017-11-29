@@ -13,10 +13,14 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class used to extract data from file
+ */
 public class UserDataGetter implements java.io.Serializable {
 
     /**
      * This Function is used to extract file.
+     * when there is no target directory or file, it will create a new empty directory or file
      */
     private static void GetDataAfterOpen() throws IOException {
         if (!new File("src/data").exists()) {
@@ -55,7 +59,7 @@ public class UserDataGetter implements java.io.Serializable {
                 ArrayList<String> tempPreviousPath = (ArrayList<String>) previousPathsVisited;
                 //ArrayList<Tag> tempTagList = (ArrayList<Tag>) tagList;
                 //UserDataManager.NameToImageFileMapSetterForDataGetter(tempNameToImage);
-//                StateManager.userData.previousPathsVisitedSetterForDataGetter(tempPreviousPath);
+                //StateManager.userData.previousPathsVisitedSetterForDataGetter(tempPreviousPath);
                 //TagManager.tagListSetterForDataGetter(tempTagList);
             }
 
@@ -63,7 +67,9 @@ public class UserDataGetter implements java.io.Serializable {
     }
 
 
-
+    /**
+     * it is a helper function to load all of the data into current data container
+     */
     public static void loadDATA(){
         try{UserDataGetter.GetDataAfterOpen();}
         catch (IOException e){

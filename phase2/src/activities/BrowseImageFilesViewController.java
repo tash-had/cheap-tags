@@ -3,13 +3,18 @@ package activities;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
-import managers.PrimaryStageManager;
+import managers.StageManager;
 import managers.StateManager;
 import managers.TagManager;
 import model.ImageFile;
@@ -17,16 +22,14 @@ import model.Tag;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
-import utils.Alerts;
+import utils.Dialogs;
 import utils.ConfigureJFXControl;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,6 +37,10 @@ import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static managers.PrimaryStageManager.getPrimaryStageManager;
+
+import utils.Log;
 
 public class BrowseImageFilesViewController implements Initializable {
 
@@ -53,8 +60,8 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * A ListView of String displaying the past names that the File has had.
      */
-    @FXML
-    ListView<ArrayList<String>> revisionLog;
+//    @FXML
+//    ListView<ArrayList<String>> revisionLog;
 
     /**
      * Displays the currently selected file.
@@ -89,8 +96,8 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Reverts selected image to the selected old name.
      */
-    @FXML
-    Button revert;
+//    @FXML
+//    Button revert;
 
     /**
      * Labels allTagsListView as "Tags".
@@ -127,6 +134,13 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     ImageView shareWithInstagramBtn;
 
+    @FXML
+    TextField TagSearchBar;
+
+    @FXML
+    Button revisionLogButton;
+
+
     private ObservableList<String> imageFileNames;
 
     /**
@@ -141,7 +155,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private ObservableList<Tag> availableTagOptions;
     private ObservableList<Tag> existingTagsOnImageFile;
-    private ObservableList<ArrayList<String>> selectedImageLog;
+//    private ObservableList<ArrayList<String>> selectedImageLog;
     private Collection<String> imageNames;
 //    private static Collection<ImageFile> imagesToLoad;
     private boolean unsavedChanges = false;
@@ -153,10 +167,11 @@ public class BrowseImageFilesViewController implements Initializable {
 
     private StringBuilder imageSearchPatternEnd;
 
+
     /**
      * The File object that is the currently displayed image.
      */
-    private ImageFile selectedImageFile = null;
+    public ImageFile selectedImageFile = null;
 
 //    /**
 //     * A FilenameFilter which filters out files that are not accepted image types.
@@ -172,15 +187,15 @@ public class BrowseImageFilesViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        // Set fonts of some elements
         ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
 
+        // Enable listviews to be able to display objects with the same type as their type parameter
         ConfigureJFXControl.setListViewToDisplayCustomObjects(existingTags);
         ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
 
-        //// CANCEL BUTTON FIX WARNING FOR INSTAGRAM DIAg
-
-
+        // Populate the listview of tag options
         availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
 
         toggleButton.setSelected(false);
@@ -225,12 +240,12 @@ public class BrowseImageFilesViewController implements Initializable {
     public void addButtonClick(){
         Tag selectedTag = allTagsListView.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
-            Alerts.chooseFileAlert();
+            Dialogs.chooseFileAlert();
 
         }
         else if (allTagsListView.getItems().indexOf(selectedTag) > -1) {
             if (selectedImageFile.getTagList().contains(selectedTag)){
-                Alerts.fileContainsTagAlert();
+                Dialogs.fileContainsTagAlert();
             }
             else {
                 availableTagOptions.remove(selectedTag);
@@ -250,7 +265,7 @@ public class BrowseImageFilesViewController implements Initializable {
     public void deleteButtonClick() {
         Tag selectedTag = existingTags.getSelectionModel().getSelectedItem();
         if (selectedImageFile == null) {
-            Alerts.chooseFileAlert();
+            Dialogs.chooseFileAlert();
         } else if (existingTags.getItems().size() > 0 && selectedTag != null) {
 
             existingTagsOnImageFile.remove(selectedTag);
@@ -271,7 +286,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void renameButtonClick() {
         if (selectedImageFile == null) {
-            Alerts.chooseFileAlert();
+            Dialogs.chooseFileAlert();
         }
         else {
             selectedImageFile.updateTagHistory(selectedImageFile.getTagList()); //Add the tag list to the tag history before updating.
@@ -290,7 +305,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 imageFileNames.remove(selectedImageFile.getCurrentName());
             }
             selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
-            updateImageLog();
+//            updateImageLog();
             unsavedChanges = false;
             rename.setDisable(true);
             if (existingTagsOnImageFile.size() != 0) {
@@ -314,6 +329,7 @@ public class BrowseImageFilesViewController implements Initializable {
             imageNamesListView.setVisible(true);
             ArrayList<String> imageNamesArrayList = new ArrayList<>();
             imageNamesArrayList.addAll(imageNames);
+            // set imageFileNames for the toggle that allows images to be viewed as text (file names)
             if (imageFileNames != null){
                 imageFileNames.clear();
             }
@@ -326,10 +342,10 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
 
-    private void updateImageLog(){
-        selectedImageLog.clear();
-        selectedImageLog.addAll(selectedImageFile.getOldName());
-    }
+//    public void updateImageLog(){
+//        selectedImageLog.clear();
+//        selectedImageLog.addAll(selectedImageFile.getOldName());
+//    }
 
     /**
      * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
@@ -339,25 +355,25 @@ public class BrowseImageFilesViewController implements Initializable {
     public void moveImageButtonClick() {
         checkForUnsavedChanges();
         if (selectedImageFile == null){
-            Alerts.chooseFileAlert();
+            Dialogs.chooseFileAlert();
         }
         else {
             File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
             if (movedFile != null) {
                 File newDirectoryLocation = movedFile.getParentFile();
-                ButtonType response = Alerts.showYesNoAlert("Go To Directory", null, "Would you like to go " +
+                ButtonType response = Dialogs.showYesNoAlert("Go To Directory", null, "Would you like to go " +
                         "to the new directory?");
                 if (response == ButtonType.YES) {
                     // set screen to new directory
                     setNewTargetDirectory(newDirectoryLocation);
-                    PrimaryStageManager.setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
+                    getPrimaryStageManager().setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
                             "/activities/browse_imagefiles_view.fxml");
                     // update recently viewed on home scene
                     selectedImageFile.setFile(movedFile);
                     StateManager.userData.addPathToVisitedList(newDirectoryLocation.toString());
                 } else {
                     setNewTargetDirectory(targetDirectory);
-                    PrimaryStageManager.setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                    getPrimaryStageManager().setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
                             "/activities/browse_imagefiles_view.fxml");
                 }
             }
@@ -370,7 +386,7 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void backButtonClick() {
         checkForUnsavedChanges();
-        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+        getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
     // Miscellaneous
@@ -393,32 +409,61 @@ public class BrowseImageFilesViewController implements Initializable {
         imageSearchPatternEnd.append(")\\b");
     }
 
-    // ImageTile Pane Methods
-
+    /**
+     * Populate the ImageTilePane with all the images in this session
+     */
     private void populateImageTilePane(){
         for (ImageFile imageFile : StateManager.sessionData.getNameToImageFileMap().values()){
             addImageToTilePane(imageFile);
         }
     }
 
+    /**
+     * Add a new image to the tilepane using its corresponding ImageFile object
+     *
+     * @param imageFile the ImageFile of the image to add
+     */
     private void addImageToTilePane(ImageFile imageFile){
         Image image = null;
         try {
+            // Set the Image object to show the image associated with this ImageFile
             image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 300,
                     300, true, true);
         } catch (MalformedURLException e) {
 //            e.printStackTrace();
-            Alerts.showErrorAlert("Gallery Error", "Error", "There was an error adding " +
+            Dialogs.showErrorAlert("Gallery Error", "Error", "There was an error adding " +
             imageFile.getThisFile().getAbsolutePath() + " to the gallery. You sure it exists?");
         }
+        // Construct an ImageView for the image
         ImageView imageView = new ImageView();
         imageView.setImage(image);
         imageView.setOnMouseClicked(event -> imageClicked(imageFile));
-        imageTilePane.getChildren().add(imageView);
+
+        // Setup VBox to display both image and a label with the imagename
+        VBox tilePaneVBox = new VBox();
+
+        // Construct a BEAUTIFUL label
+        Label label = new Label(imageFile.getCurrentName());
+        label.setPadding(new Insets(20, 0, 0, 0));
+        tilePaneVBox.setAlignment(Pos.CENTER); 
+        label.setTextFill(Color.web("#000000"));
+        ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196f3"), Color.web("#000000"), label);
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 17, label);
+
+        // Add imageview and label to vbox + add vbox to tilepane
+        tilePaneVBox.getChildren().addAll(imageView, label);
+        imageTilePane.getChildren().add(tilePaneVBox);
+
     }
 
+    /**
+     * Process a click on an image on the tile pane
+     *
+     * @param imageFile the ImageFile that was clicked
+     */
     private void imageClicked(ImageFile imageFile){
         try {
+            // Before navigating to the clicked image, alert the user if they have unset tags
             checkForUnsavedChanges();
 
             // Keep a reference to the selected image and set up right pane attributes for selected image
@@ -428,17 +473,17 @@ public class BrowseImageFilesViewController implements Initializable {
             populateImageFileTagListViews();
 
         } catch (MalformedURLException e) {
-            Alerts.showErrorAlert("Image Error", "Error", "There was an error fetching " +
+            Dialogs.showErrorAlert("Image Error", "Error", "There was an error fetching " +
                     imageFile.getThisFile().getAbsolutePath() + " from the gallery. You sure it exists?");
         }
     }
 
     /**
-     * check if users save their changes or not
+     * Check if the user has unsaved changes and alert them if they do.
      */
     private void checkForUnsavedChanges(){
         if (unsavedChanges){
-            ButtonType saveChangesResponse = Alerts.showYesNoAlert("Save Your Changes", "Save Changes?",
+            ButtonType saveChangesResponse = Dialogs.showYesNoAlert("Save Your Changes", "Save Changes?",
                     "You forgot to hit Set Tags! Would you like us to set your new tags?");
             if (saveChangesResponse == ButtonType.YES){
                 renameButtonClick();
@@ -450,7 +495,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Populate a list view of tags under the image file
      */
-    private void populateImageFileTagListViews(){
+    public void populateImageFileTagListViews(){
         if (existingTagsOnImageFile != null){
             existingTagsOnImageFile.clear();
         }
@@ -459,14 +504,16 @@ public class BrowseImageFilesViewController implements Initializable {
         availableTagOptions.clear();
         availableTagOptions.addAll(TagManager.getTagList());
         availableTagOptions.removeAll(existingTagsOnImageFile);
-        if (selectedImageLog != null){
-            selectedImageLog.clear();
-        }
-        // Populate selectedImageLog with pre-existing logs
-        selectedImageLog = ConfigureJFXControl.populateListViewWithArrayList(revisionLog,
-                selectedImageFile.getOldName());
+//        if (selectedImageLog != null){
+//            selectedImageLog.clear();
+//        }
+//        // Populate selectedImageLog with pre-existing logs
+//        selectedImageLog.addAll(selectedImageFile.getOldName());
     }
 
+    /**
+     * Handle text changed on the image search bar
+     */
     public void imageSearchTextChanged(){
         String input = imageSearchBar.getText().toLowerCase().replace("@", "");
         ArrayList<ImageFile> searchResultImageFileList = new ArrayList<>();
@@ -499,59 +546,119 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    public void TagSearchTextChanged(){
+        String input = TagSearchBar.getText().toLowerCase();
+        ArrayList<Tag> searchResult = new ArrayList<>();
+        Pattern tagSearchPattern = Pattern.compile(input);
+        Matcher tagSearchMatcher;
+        availableTagOptions.clear();
+        if (input.isEmpty()){
+            searchResult.clear();
+            availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
+        }else {
+            for (Tag tag: TagManager.getTagList()){
+                tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
+                if (tagSearchMatcher.find()){
+                    searchResult.add(tag);
+                }
+            }
+            availableTagOptions.addAll(searchResult);
+
+            }
+
+    }
+
     /**
      * Reverts the current image to the selected previous name.
      */
-    @FXML
-    public void revertButtonClick() {
-        Logger.getRootLogger().info("hey");
-        int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
-//        System.out.println(indexOfRevision);
-        if (indexOfRevision != -1) {
-            ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
-            selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
-            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
-            selectedImageFile.getTagList().clear();
-            //update the selected imageFiles tagList with the tags associated with oldName.
-            selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
-//            System.out.println(selectedImageFile.getTagList().toString());
-            updateImageLog();
-            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
-            existingTagsOnImageFile.clear();
-            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
-            populateImageFileTagListViews();
-            for (Tag tag : availableTagOptions) {
-                if (selectedImageFile.getTagList().contains(tag)) {
-                    availableTagOptions.remove(tag);
-                }
-            }
-        }
-    }
+//    @FXML
+//    public void revertButtonClick() {
+//        int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
+////        System.out.println(indexOfRevision);
+//        if (indexOfRevision != -1) {
+//            ArrayList<String> specificRevision = revisionLog.getSelectionModel().getSelectedItem();
+//            selectedImageFile.updateTagHistory(selectedImageFile.getTagList());
+//            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, specificRevision.get(1));
+//
+//
+//
+//
+//            selectedImageFile.getTagList().clear();
+//                         //update the selected imageFiles tagList with the tags associated with oldName.
+//            //selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
+//
+//
+//            String[] beginningName = selectedImageFile.getCurrentName().split("\\s");
+//            for(String i: beginningName){
+//                if(i.startsWith("@")){
+//                    String withoutSymbol = i.substring(1,i.length());
+//                    Tag findTheTag = TagManager.getTagByString(withoutSymbol);
+//                    if(findTheTag==null){
+//                        Tag tempTag = new Tag(withoutSymbol);
+//                        selectedImageFile.getTagList().add(tempTag);
+//                        tempTag.images.add(selectedImageFile);
+//                        TagManager.addTag(tempTag);
+//                    }
+//                    else{findTheTag.images.add(selectedImageFile);
+//                    selectedImageFile.getTagList().add(findTheTag);
+//                    }
+//                }
+//            }
+//
+//
+////            System.out.println(selectedImageFile.getTagList().toString());
+//
+//
+//
+////            updateImageLog();
+////            nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
+////            existingTagsOnImageFile.clear();
+////            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
+////            for(Tag j : selectedImageFile.getTagList()){
+////                if(!TagManager.getTagList().contains(j)){
+////                    TagManager.addTag(j);
+////                }
+////            }
+//            populateImageFileTagListViews();
+////            for (Tag tag : availableTagOptions) {
+////                if (selectedImageFile.getTagList().contains(tag)) {
+////                    availableTagOptions.remove(tag);
+////                }
+////            }
+//
+//
+//
+//        }
+//    }
+
 
     /**
      * A function to handle the click action of the ImageView (the instagram icon) in the BrowseImageFilesView
      * This function prompts the user for their Instagram credentials and a caption, and then posts the current selected
      * ImageFile to their Instagram.
+     *
+     * Note that this function uses Instagram's private API because their public API does not allow photo upload from
+     * third parties.
      */
     public void shareWithInstagram() {
         if (selectedImageFile == null) {
-            Alerts.showErrorAlert("Must select an image", "Select an Image",
+            Dialogs.showErrorAlert("Must select an image", "Select an Image",
                     "You must select an image first!");
             return;
         }
-        // Add imageview to alertdia
-        String[] instagramCreds = Alerts.loginDialog("Login to Instagram",
+        String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
                 "Enter your Instagram credentials ...", null);
         // Disable logs
         turnOffLog4J();
         if (instagramCreds[0] != null && instagramCreds[1] != null
                 && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {
-            Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0]).password(instagramCreds[1]).build();
+            Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0])
+                    .password(instagramCreds[1]).build();
             instagram.setup();
             try {
                 instagram.login();
                 try {
-                    String caption = Alerts.showTextInputDialog("Instagram Caption", "Caption?",
+                    String caption = Dialogs.showTextInputDialog("Instagram Caption", "Caption?",
                             "Enter a caption for your photo");
                     if (caption == null) {
                         caption = "";
@@ -560,17 +667,16 @@ public class BrowseImageFilesViewController implements Initializable {
                             InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                     instagram.sendRequest(photoRequest);
                 } catch (IOException | RuntimeException e) {
-                e.printStackTrace();
-                    Alerts.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error " +
-                            "uploading your photo to Instagram. Make sure you've entered the right credentials.");
+                    Dialogs.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error "
+                            + "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
+                            "that your photo is of type JPEG.");
                 }
             } catch (IOException e) {
-//                e.printStackTrace();
-                Alerts.showErrorAlert("Invalid Credentials", "Invalid Creds",
+                Dialogs.showErrorAlert("Invalid Credentials", "Invalid Creds",
                         "Please enter a valid username and password.");
             }
         } else {
-            Alerts.showErrorAlert("Invalid Input", "No Input",
+            Dialogs.showErrorAlert("Invalid Input", "No Input",
                     "You must enter valid credentials");
         }
     }
@@ -585,6 +691,27 @@ public class BrowseImageFilesViewController implements Initializable {
             logger.setLevel(Level.OFF);
         }
         LogManager.getRootLogger().setLevel(Level.OFF);
+    }
+
+    /**
+     * A function handle the click of revision log button
+     * pops up new window with revision history
+     * stores current page to revision log view controller
+     */
+    @FXML
+    public void revisionLogButtonClick(){
+        if (selectedImageFile == null){
+            Dialogs.chooseFileAlert();
+        }
+        else{
+            RevisionLogViewController.setBrowseController(this);
+            StageManager revisionLog = new StageManager(new Stage());
+            revisionLog.setDefaultScreenHeight(400);
+            revisionLog.setDefaultScreenWidth(600);
+            revisionLog.setScreen("Revision History", "/activities/revision_log_view.fxml");
+            revisionLog.showStage();
+        }
+
     }
 
 }

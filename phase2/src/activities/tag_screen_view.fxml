@@ -8,11 +8,11 @@
 
 <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="activities.TagScreenViewController">
    <children>
-      <ListView fx:id="tagView" layoutX="-1.0" layoutY="-1.0" prefHeight="668.0" prefWidth="1077.0" />
-      <TextField fx:id="tagInput" layoutX="-3.0" layoutY="666.0" onKeyPressed="#handleEnterPressed" prefHeight="58.0" prefWidth="584.0" promptText="Example: model.Tag" />
-      <Button fx:id="add" layoutX="580.0" layoutY="667.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="54.0" prefWidth="175.0" text="Add" />
-      <Button fx:id="delete" layoutX="755.0" layoutY="666.0" mnemonicParsing="false" onAction="#deleteButtonClicked" prefHeight="55.0" prefWidth="168.0" text="Delete" />
-      <Button fx:id="back" layoutX="921.0" layoutY="666.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="55.0" prefWidth="162.0" text="Back" />
-      <TextField fx:id="tagSearch" layoutX="723.0" layoutY="-3.0" onKeyReleased="#searchInputChanged" prefHeight="37.0" prefWidth="305.0" />
+      <ListView fx:id="tagView" layoutX="56.0" layoutY="66.0" prefHeight="560.0" prefWidth="963.0" />
+      <TextField fx:id="tagInput" layoutX="63.0" layoutY="639.0" onKeyPressed="#handleEnterPressed" prefHeight="47.0" prefWidth="525.0" promptText="Example: model.Tag" />
+      <Button fx:id="add" layoutX="612.0" layoutY="639.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="46.0" prefWidth="117.0" text="Add" />
+      <Button fx:id="delete" layoutX="755.0" layoutY="640.0" mnemonicParsing="false" onAction="#deleteButtonClicked" prefHeight="44.0" prefWidth="118.0" text="Delete" />
+      <Button fx:id="back" layoutX="912.0" layoutY="641.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="44.0" prefWidth="109.0" text="Back" />
+      <TextField fx:id="tagSearch" layoutX="707.0" layoutY="15.0" onKeyReleased="#searchInputChanged" prefHeight="37.0" prefWidth="305.0" promptText="Search tag by text" />
    </children>
 </Pane>

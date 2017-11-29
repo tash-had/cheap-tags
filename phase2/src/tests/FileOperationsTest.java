@@ -1,7 +1,7 @@
 
 //package tests;
 //
-//import managers.PrimaryStageManager;
+//import managers.StageManager;
 //import org.junit.Test;
 //import utils.FileOperations;
 //

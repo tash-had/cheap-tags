@@ -25,32 +25,36 @@
                <!--<effect>-->
                   <!--<DropShadow />-->
                <!--</effect></ImageView>-->
-            <ListView fx:id="existingTags" layoutX="74.0" layoutY="395.0" prefHeight="212.0" prefWidth="163.0" />
-            <Button fx:id="changedDirectory" layoutX="95.0" layoutY="651.0" mnemonicParsing="false" onAction="#moveImageButtonClick" prefHeight="27.0" prefWidth="121.0" text="Move Image" />
-            <Button fx:id="back" layoutX="370.0" layoutY="651.0" mnemonicParsing="false" onAction="#backButtonClick" prefHeight="27.0" prefWidth="91.0" text="Back" />
-            <Label fx:id="nameOfSelectedFile" alignment="CENTER" layoutX="146.0" layoutY="8.0" prefHeight="27.0" prefWidth="250.0" textAlignment="CENTER">
+            <ListView fx:id="existingTags" layoutX="104.0" layoutY="445.0" prefHeight="229.0" prefWidth="182.0" />
+            <Button fx:id="changedDirectory" layoutX="378.0" layoutY="567.0" mnemonicParsing="false" onAction="#moveImageButtonClick" prefHeight="45.0" prefWidth="130.0" text="Move Image" />
+            <Button fx:id="back" layoutX="403.0" layoutY="648.0" mnemonicParsing="false" onAction="#backButtonClick" prefHeight="30.0" prefWidth="90.0" text="Back" />
+            <Label fx:id="nameOfSelectedFile" alignment="CENTER" layoutX="191.0" layoutY="8.0" prefHeight="27.0" prefWidth="250.0" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
-            <ListView fx:id="allTagsListView" layoutX="524.0" layoutY="60.0" onMouseClicked="#addButtonClick" prefHeight="566.0" prefWidth="215.0" />
-            <Label fx:id="Tags" alignment="CENTER" layoutX="546.0" layoutY="12.0" prefHeight="58.0" prefWidth="157.0" text="Tags" />
-            <Button fx:id="Delete" layoutX="178.0" layoutY="606.0" mnemonicParsing="false" onAction="#deleteButtonClick" prefHeight="27.0" prefWidth="59.0" text="Remove Tags" />
-            <Button fx:id="rename" layoutX="74.0" layoutY="606.0" mnemonicParsing="false" onAction="#renameButtonClick" text="Save Tags" />
-            <ListView fx:id="revisionLog" layoutX="312.0" layoutY="390.0" prefHeight="212.0" prefWidth="163.0" />
-            <Label layoutX="360.0" layoutY="365.0" prefHeight="17.0" prefWidth="112.0" text="Revision Log" />
-            <Label layoutX="115.0" layoutY="373.0" text="Current Tags" />
-            <Button fx:id="revert" layoutX="416.0" layoutY="594.0" mnemonicParsing="false" onAction="#revertButtonClick" text="Revert" />
+            <ListView fx:id="allTagsListView" layoutX="600.0" layoutY="60.0" onMouseClicked="#addButtonClick" prefHeight="585.0" prefWidth="139.0" />
+            <Label fx:id="Tags" alignment="CENTER" layoutX="588.0" layoutY="12.0" prefHeight="58.0" prefWidth="157.0" text="Tags" />
+            <Button fx:id="Delete" layoutX="215.0" layoutY="674.0" mnemonicParsing="false" onAction="#deleteButtonClick" prefHeight="27.0" prefWidth="72.0" text="Remove" />
+            <Button fx:id="rename" layoutX="102.0" layoutY="674.0" mnemonicParsing="false" onAction="#renameButtonClick" text="Save Tags" />
+            <Label layoutX="142.0" layoutY="429.0" text="Current Tags" />
             <StackPane layoutX="14.0" layoutY="41.0" prefHeight="300.0" prefWidth="500.0">
                <children>
-                  <ImageView fx:id="selectedImageView" fitHeight="306.0" fitWidth="502.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="selectedImageView" fitHeight="374.0" fitWidth="572.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </StackPane>
             <ToggleButton fx:id="toggleButton" layoutX="-35.0" layoutY="487.0" mnemonicParsing="false" onAction="#imagesViewToggle" rotate="90.0" text="View As Text" />
-            <ImageView fx:id="shareWithInstagramBtn" fitHeight="45.0" fitWidth="53.0" layoutX="245.0" layoutY="351.0" onMouseClicked="#shareWithInstagram" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="shareWithInstagramBtn" fitHeight="45.0" fitWidth="53.0" layoutX="337.0" layoutY="446.0" onMouseClicked="#shareWithInstagram" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../resources/images/instagram-logo.png" />
                </image>
             </ImageView>
+            <TextField fx:id="TagSearchBar" layoutX="601.0" layoutY="645.0" onKeyReleased="#TagSearchTextChanged" prefHeight="27.0" prefWidth="138.0" promptText="Search tag by text" />
+            <Button fx:id="revisionLogButton" layoutX="379.0" layoutY="510.0" mnemonicParsing="false" onAction="#revisionLogButtonClick" prefHeight="45.0" prefWidth="130.0" text="View Revision Log" />
+            <Label layoutX="388.0" layoutY="448.0" prefHeight="35.0" prefWidth="153.0" text="Upload to Instagram">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
          </children></AnchorPane>
   </items>
 </SplitPane>

@@ -3,11 +3,10 @@ package managers;
 import com.sun.istack.internal.Nullable;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextInputDialog;
 import model.ImageFile;
-import org.apache.log4j.Logger;
-import org.apache.log4j.varia.NullAppender;
-import utils.Alerts;
+
+import model.Tag;
+import utils.Dialogs;
 import utils.FileOperations;
 
 import java.io.File;
@@ -57,7 +56,7 @@ public class ImageFileOperationsManager {
             StateManager.sessionData.resetImageFileKey(currentImageFile.getName());
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
         }else if (response == FILENAME_TAKEN){
-            String suffixedFileName = Alerts.showFileExistsAlert(currentImageFile.getParentFile(), newName,
+            String suffixedFileName = Dialogs.showFileExistsAlert(currentImageFile.getParentFile(), newName,
                     StateManager.userData.getImageFileNames());
             // User accepted to a suffixed filename
             if (suffixedFileName != null){
@@ -65,7 +64,7 @@ public class ImageFileOperationsManager {
             }
         }else {
             // Show error alert dialog
-            Alerts.showErrorAlert("Renaming Error", "Error", "There was an error renaming your file");
+            Dialogs.showErrorAlert("Renaming Error", "Error", "There was an error renaming your file");
         }
 
         imageFile.setFile(imageFilePath.toFile());
@@ -80,7 +79,7 @@ public class ImageFileOperationsManager {
      */
     public static File moveImageFile(ImageFile imageFile) {
         File oldFile = imageFile.getThisFile();
-        File newDirectory = PrimaryStageManager.getDirectoryWithChooser();
+        File newDirectory = Dialogs.getDirectoryWithChooser();
         // If user clicks cancel on directory dialog, end function.
         if (newDirectory == null){
             return null;
@@ -92,7 +91,7 @@ public class ImageFileOperationsManager {
         if (response == SUCCESS){
             return newFile;
         }else if(response == FILENAME_TAKEN){
-            String suffixedFileName = Alerts.showFileExistsAlert(newDirectory, newFile.getName(), null);
+            String suffixedFileName = Dialogs.showFileExistsAlert(newDirectory, newFile.getName(), null);
             if (suffixedFileName != null){
                 imageFile.generalReName(suffixedFileName);
                 moveFile(imageFile.getThisFile(), newDirectory.toPath());
@@ -101,7 +100,7 @@ public class ImageFileOperationsManager {
                 newFile = null;
             }
         }else {
-            Alerts.showErrorAlert("Move Error", "Error", "There was an error moving your file");
+            Dialogs.showErrorAlert("Move Error", "Error", "There was an error moving your file");
         }
         return newFile;
     }
@@ -126,7 +125,7 @@ public class ImageFileOperationsManager {
                     if (!existingImageFilePath.equals(directory.getAbsolutePath())) {
                         // The ImageFile that exists in our records has a different path from the one being imported!
                         // Ask the user if this file is the same!
-                        ButtonType imageIsExistingImage = Alerts.showYesNoAlert("Filename Exists in Database",
+                        ButtonType imageIsExistingImage = Dialogs.showYesNoAlert("Filename Exists in Database",
                                 "Filename Taken", "It looks like " + fileName + " exists in our records " +
                                         "from another directory you imported. Is this the same image from "
                                         + existingImageFilePath + "?");
@@ -144,7 +143,7 @@ public class ImageFileOperationsManager {
                             if (renameResponse == FILENAME_TAKEN) {
                                 // Don't need to provide database as filter because we already ensured that the new name
                                 // doesn't exist in database with handleFilenameTakenByDatabase
-                                renameResponse = FileOperations.renameFile(file, Alerts.showFileExistsAlert(directory,
+                                renameResponse = FileOperations.renameFile(file, Dialogs.showFileExistsAlert(directory,
                                         chosenName, null));}
                             if (chosenName != null && renameResponse == SUCCESS) {
                                 // Rename is a success. Process the renamed file as new
@@ -166,9 +165,7 @@ public class ImageFileOperationsManager {
             }
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
-            Logger.getRootLogger().removeAllAppenders();
-            Logger.getRootLogger().addAppender(new NullAppender());
-            Alerts.showErrorAlert("Error", "Fetch Error",
+            Dialogs.showErrorAlert("Error", "Fetch Error",
                     "There was an error fetching your files. You sure that folder exists?");
 
         }
@@ -182,11 +179,11 @@ public class ImageFileOperationsManager {
      */
     private static String handleFilenameTakenByDatabase(File file, String alertBody) {
         String fileName = file.getName();
-        ButtonType renameImage = Alerts.showYesNoAlert("Filename Exists in Database",
+        ButtonType renameImage = Dialogs.showYesNoAlert("Filename Exists in Database",
                 "Filename Taken", alertBody);
 
         if (renameImage == ButtonType.YES) {
-            String result = Alerts.showTextInputDialog("Enter a new name", null,
+            String result = Dialogs.showTextInputDialog("Enter a new name", null,
                     "Enter a new name for " + fileName);
             if (result == null || result.equals("")) {
                 return null;
@@ -220,9 +217,25 @@ public class ImageFileOperationsManager {
             fileToProcess = existingImageFIle;
         }else {
             fileToProcess = new ImageFile(file);
+
+            String[] beginningName = fileToProcess.getCurrentName().split("\\s");
+            for(String i: beginningName){
+                if(i.startsWith("@")){
+                    String withoutSymbol = i.substring(1,i.length());
+                    if(TagManager.getTagByString(withoutSymbol)==null){
+                        Tag tempTag = new Tag(withoutSymbol);
+                        fileToProcess.getTagList().add(tempTag);
+                        tempTag.images.add(fileToProcess);
+                        TagManager.addTag(tempTag);
+                    }
+
+                }
+            }
+
+
+
             StateManager.userData.addImageFileToMap(fileToProcess);
         }
-//        list.add(fileToProcess);
         StateManager.sessionData.addImageFileToMap(fileToProcess);
     }
 

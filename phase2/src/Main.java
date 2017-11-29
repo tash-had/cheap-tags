@@ -1,10 +1,8 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import managers.PrimaryStageManager;
-import managers.SessionDataManager;
-import managers.StateManager;
-import managers.UserDataManager;
+import managers.*;
 
+import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 //import tests.FileOperationsTest;
 
@@ -16,10 +14,11 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws IOException {
         StateManager.startSession();
         PrimaryStageManager.setPrimaryStage(primaryStage);
-        PrimaryStageManager.setDefaultStageWidth(1080);
-        PrimaryStageManager.setDefaultStageHeight(720);
-        PrimaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
-        PrimaryStageManager.showPrimaryStage();
+        getPrimaryStageManager().setDefaultScreenWidth(1080);
+        getPrimaryStageManager().setDefaultScreenHeight(720);
+        getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+        getPrimaryStageManager().showStage();
+
     }
     public static void main(String[] args){
         launch(args);
