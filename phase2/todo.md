@@ -7,6 +7,8 @@
 * Checks to see if ImageFile exists in directory, if it does ask if it's the same, if it's not, ask user to switch name 
 * Check to ensure user doesn't have unsaved changes when they click a new image 
 * Checks associated images during tag deletion and renames those images
+* Generates tags from the actual image's name while fetching the images.
+* Renames images when the user deletes tags which associate with existing images.
 
 ### Program Features
 * Searchabar with regex search

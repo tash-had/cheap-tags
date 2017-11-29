@@ -18,11 +18,6 @@ public class Main extends Application{
         primaryStage.initStyle(StageStyle.DECORATED);
         getPrimaryStageManager().showStage();
 
-//        StageManager sm = new StageManager(new Stage());
-//        sm.setDefaultScreenWidth(1000);
-//        sm.setDefaultScreenHeight(300);
-//        sm.setScreen("Window Title", "/activities/tag_screen_view.fxml");
-//        sm.showStage();
     }
     public static void main(String[] args){
         launch(args);
