@@ -1,22 +1,22 @@
 package activities;
 
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import managers.ImageFileOperationsManager;
 import managers.TagManager;
-import model.ImageFile;
+import model.Tag;
+import utils.Log;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
-import model.Tag;
-import utils.Log;
 
 
 public class RevisionLogViewController implements Initializable {
@@ -95,15 +95,12 @@ public class RevisionLogViewController implements Initializable {
      */
     public void setRevertTo() {
         int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
-//        System.out.println(indexOfRevision);
         if (indexOfRevision != -1) {
             String specificRevision = revisionLog.getSelectionModel().getSelectedItem().getOldName();
             browseController.selectedImageFile.updateTagHistory(browseController.selectedImageFile.getTagList());
             browseController.selectedImageFile = ImageFileOperationsManager.renameImageFile(browseController.selectedImageFile, specificRevision);
 
             browseController.selectedImageFile.getTagList().clear();
-            //update the selected imageFiles tagList with the tags associated with oldName.
-            //selectedImageFile.getTagList().addAll(selectedImageFile.getTagHistory().get(indexOfRevision));
 
 
             String[] beginningName = browseController.selectedImageFile.getCurrentName().split("\\s");
@@ -123,30 +120,12 @@ public class RevisionLogViewController implements Initializable {
                 }
             }
 
-
-//            System.out.println(selectedImageFile.getTagList().toString());
-
-
-
-//             browseController.updateImageLog();
              browseController.nameOfSelectedFile.setText(browseController.selectedImageFile.getCurrentName());
-//            existingTagsOnImageFile.clear();
-//            existingTagsOnImageFile.addAll(selectedImageFile.getTagList());
-//            for(Tag j : selectedImageFile.getTagList()){
-//                if(!TagManager.getTagList().contains(j)){
-//                    TagManager.addTag(j);
-//                }
-//            }
-            browseController.populateImageFileTagListViews();
-//            for (Tag tag : availableTagOptions) {
-//                if (selectedImageFile.getTagList().contains(tag)) {
-//                    availableTagOptions.remove(tag);
-//                }
-//            }
 
+            browseController.populateImageFileTagListViews();
 
 
         }
-
     }
+
 }
