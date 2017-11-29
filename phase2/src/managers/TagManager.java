@@ -22,26 +22,19 @@ public class TagManager implements Serializable{
     }
 
     /**
-     * Removes and returns the most recent tag.
-     */
-    public static void removeTag(){
-        tagList.remove(tagList.size()-1);
-    }
-
-    /**
-     * Removes tag at index i.
-     */
-    public static void removeTag(int i){
-        tagList.remove(i);
-    }
-
-    /**
      * Returns the list of tags in the system.
      */
     public static ArrayList<Tag> getTagList(){
         return tagList;
     }
 
+    /**
+     * searches the Tag manager for a Tag with name stringOfTag, since no two tags should have the same name.
+     *
+     * @param stringOfTag The name of the tag we are searching for
+     *
+     * @return The Tag with name matching stringOfTag. Returns null if there is no tag with that name.
+     */
     public static Tag getTagByString(String stringOfTag){
         for(Tag i: TagManager.tagList){
             if(i.toString().equals(stringOfTag)){
@@ -51,11 +44,12 @@ public class TagManager implements Serializable{
         return null;
     }
 
+    /**
+     * Clears all old tags in the system and replaces it with Tags in newList.
+     *
+     * @param newList The ArrayList of tags which we want to replace existing tags in the Tag manager with.
+     */
     static void setTagList(ArrayList<Tag> newList){
         tagList = newList;
     }
-
-    /*
-    TODO: maybe delete removeTag methods?
-     */
 }

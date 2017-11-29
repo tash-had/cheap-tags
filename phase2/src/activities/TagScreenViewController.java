@@ -10,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import managers.ImageFileOperationsManager;
-import managers.PrimaryStageManager;
 import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
@@ -191,26 +190,11 @@ public class TagScreenViewController implements Initializable {
     }
 
     /**
-     *
+     * A function that handles when a key is released when a user is typing in the search bar. Narrows down the Tag
+     * results according to the user input.
      */
     @FXML
     public void searchInputChanged(){
-//        String input = tagSearch.getText().toLowerCase();
-//        if (input.equals("")){
-//            repopulateTagView();
-//        }
-//        else{
-//            for (int i = 0; i < tagView.getItems().size(); i++){
-//                Tag curr = tagView.getItems().get(i);
-//                if (input.length() <= curr.name.length()) {
-//                    if (!curr.name.substring(0, input.length()).equals(input)) {
-//                        tagView.getItems().remove(i);
-//                    }
-//                }
-//                else {
-//                    tagView.getItems().remove(i);
-//                }
-//            }
         String input = tagSearch.getText().toLowerCase();
         ArrayList<Tag> searchResult = new ArrayList<>();
         Pattern tagSearchPattern = Pattern.compile(input);
@@ -231,7 +215,10 @@ public class TagScreenViewController implements Initializable {
         }
     }
 
-    public void repopulateTagView() {
+    /**
+     * Refreshes the displayed Tags.
+     */
+    private void repopulateTagView() {
         tagView.getItems().clear();
         for (Tag tag : TagManager.getTagList()) {
             tagView.getItems().add(tag);

@@ -183,7 +183,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * The File object that is the currently displayed image.
      */
-    public ImageFile selectedImageFile = null;
+    ImageFile selectedImageFile = null;
 
 
 
@@ -397,7 +397,8 @@ public class BrowseImageFilesViewController implements Initializable {
 
     /**
      * Handles the click on move directory button
-     * @param directory
+     *
+     * @param directory the directory the user wants to move to.
      */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);
@@ -503,7 +504,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Populate a list view of tags under the image file
      */
-    public void populateImageFileTagListViews(){
+    void populateImageFileTagListViews(){
         if (existingTagsOnImageFile != null){
             existingTagsOnImageFile.clear();
         }
