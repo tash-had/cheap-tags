@@ -2,7 +2,6 @@ package managers;
 
 import javafx.stage.Stage;
 
-
 /**
  * This class consists exclusively of static methods, and delegates all communication with the
  * primary stage of the application.
@@ -54,9 +53,10 @@ public final class PrimaryStageManager extends StageManager{
     public void closeStage(){
         StateManager.endSession();
         for (StageManager stageManager : StageManager.getStageManagers()){
-            if (stageManager != null){
+            if (stageManager != null && !(stageManager instanceof PrimaryStageManager)){
                 stageManager.closeStage();
             }
         }
+        this.getStage().close();
     }
 }

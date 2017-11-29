@@ -1,7 +1,6 @@
 package managers;
 
 import com.sun.istack.internal.Nullable;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.control.ButtonType;
 import model.ImageFile;
 
@@ -72,16 +71,16 @@ public class ImageFileOperationsManager {
      * @return the ImageFile with a newer name of the users choice if they accept a rename. The old ImageFile otherwise.
      */
     private static ImageFile handleNewNameExists(ImageFile imageFile, String newName){
-            String chosenName = handleFilenameTakenByDatabase(new File(newName),
-                    "It looks like the new name you chose exists in our database from " +
-                            StateManager.userData.getNameToImageFileMap().get(newName).getThisFile().getAbsolutePath() +
-                            ". Would you like to choose a new name? (If you select no, your file will not be renamed).");
-            if (chosenName == null){
-                // User denied to a rename.
-                return imageFile;
-            }else {
-                return renameImageFile(imageFile, chosenName);
-            }
+        String chosenName = handleFilenameTakenByDatabase(new File(newName),
+                "It looks like the new name you chose exists in our database from " +
+                        StateManager.userData.getNameToImageFileMap().get(newName).getThisFile().getAbsolutePath() +
+                        ". Would you like to choose a new name? (If you select no, your file will not be renamed).");
+        if (chosenName == null){
+            // User denied to a rename.
+            return imageFile;
+        }else {
+            return renameImageFile(imageFile, chosenName);
+        }
     }
 
     /**
@@ -135,7 +134,7 @@ public class ImageFileOperationsManager {
                     // The file name already exists in our records
                     ImageFile imageFile = StateManager.userData.getImageFileWithName(fileName);
                     String existingImageFilePath = imageFile.getThisFile().getParentFile().getAbsolutePath();
-                    if (!existingImageFilePath.equals(directory.getAbsolutePath())) {
+                    if (!existingImageFilePath.equals(imageFile.getThisFile().getParentFile().getAbsolutePath())) {
                         handleImageExistsWithDifferentPath(directory, file, imageFile);
                     } else {
                         // Image is exactly the same as one in our records. Process the existing ImageFile
@@ -146,7 +145,7 @@ public class ImageFileOperationsManager {
                     processFetchedImageFile(file, null);
                 }
             }
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
 //            e.printStackTrace();
             Dialogs.showErrorAlert("Error", "Fetch Error",
                     "There was an error fetching your files. You sure that folder exists?");
@@ -237,7 +236,7 @@ public class ImageFileOperationsManager {
      * @param existingImageFIle the ImageFile for the file being imported (iff it exists in records), null otherwise
      */
     private static void processFetchedImageFile(@Nullable  File file,
-                                                   @Nullable  ImageFile existingImageFIle){
+                                                @Nullable  ImageFile existingImageFIle){
         ImageFile fileToProcess;
         if (file == null){
             fileToProcess = existingImageFIle;

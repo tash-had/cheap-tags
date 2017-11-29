@@ -2,14 +2,14 @@ package utils;
 
 import com.sun.istack.internal.Nullable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
+//import javafx.geometry.Pos;
+//import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+//import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+//import javafx.stage.Modality;
+//import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.Collection;
@@ -19,30 +19,6 @@ import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 
 public class Dialogs {
-    //citing this from JavaFx Tut5th.
-    public static void displayWarning(String message){
-        Stage window = new Stage();
-
-        //this one should be taken care of first
-        window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("WARNING!!!");
-        window.setMinWidth(300);
-
-        Label text = new Label();
-        text.setText(message);
-        Button button = new Button("I Know, Close This Window");
-        button.setOnAction(event -> window.close());
-
-        VBox layout = new VBox(15);
-        layout.getChildren().add(text);
-        layout.getChildren().add(button);
-        layout.setAlignment(Pos.CENTER);
-
-        Scene scene = new Scene(layout);
-        window.setScene(scene);
-        window.showAndWait();//display this window that needed to be
-        //close to further process other things.
-    }
 
     /**
      * Show an alert dialog with yes/no options
@@ -189,7 +165,7 @@ public class Dialogs {
     }
 
     /**
-     * Tell the user that a tag already exists with the same name.
+     * Tells the user that a tag already exists with the same name.
      */
     public static void showTagExistsAlert(){
         Alert tagExistsDialog = new Alert(Alert.AlertType.NONE, "A tag with this name already exists. " +
@@ -198,7 +174,7 @@ public class Dialogs {
     }
 
     /**
-     * Tell the user that actions cannot be performed on a file because they haven't chosen one yet.
+     * Tells the user that actions cannot be performed on a file because they haven't chosen one yet.
      */
     public static void chooseFileAlert(){
         Alert needToChooseFile = new Alert(Alert.AlertType.NONE, "No image file has been selected yet.\n" +
@@ -207,7 +183,7 @@ public class Dialogs {
     }
 
     /**
-     * Tell the user that the selected file already has that tag.
+     * Tells the user that the selected file already has that tag.
      */
     public static void fileContainsTagAlert(){
         Alert fileContainsTag = new Alert(Alert.AlertType.NONE, "The selected file already contains this tag." +
