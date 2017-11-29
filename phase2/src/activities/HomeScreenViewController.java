@@ -68,12 +68,18 @@ public class HomeScreenViewController implements Initializable {
     @FXML
     Button tumblrBtn;
 
+    @FXML
+    ImageView backgroundImage;
+
+    @FXML
+    ImageView logo;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 //       UserDataGetter.loadDATA();
 
         Image logoImage = new Image("resources/images/logo_2.jpg", true);
-        homeScreenImageView.setImage(logoImage);
+        //homeScreenImageView.setImage(logoImage);
 
         ConfigureJFXControl.populateListViewWithArrayList(previouslyViewedListView,
                 getHyperlinkArrayList(StateManager.userData.getPreviousPathsVisited()));
