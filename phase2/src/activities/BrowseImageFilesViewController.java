@@ -39,8 +39,11 @@ import java.util.regex.Pattern;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
+/**
+ * This class manages all activities when the user is on the Browse Images screen such as button clicks, populating
+ * the screen with images.
+ */
 public class BrowseImageFilesViewController implements Initializable {
-
 
     /**
      * A ListView of String representing all tags in the system (displayed on right pane).
@@ -111,12 +114,6 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label nameOfSelectedFile;
 
-//    /**
-//     * Displays the absolute path name of the currently selected file.
-//     */
-//    @FXML
-//    Label absolutePathSelectedFile;
-
     /**
      *Load a list view of names of all images
      */
@@ -141,9 +138,6 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     TextField TagSearchBar;
-
-    @FXML
-    SplitPane splitPane;
 
     /**
      * take user to the revision history window
@@ -211,7 +205,6 @@ public class BrowseImageFilesViewController implements Initializable {
 
         toggleButton.setSelected(false);
         imagesViewToggle();
-
 
         prepImageSearchRegex();
 
@@ -404,11 +397,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Handles the click on move directory button
      *
-<<<<<<< HEAD
-     * @param directory the directory to browse
-=======
      * @param directory the directory the user wants to move to.
->>>>>>> 52ecedb033fbf6f157d0e2cd6bd0ce74c1966bed
      */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);
