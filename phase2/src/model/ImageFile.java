@@ -7,7 +7,7 @@ import java.io.File;
 import java.lang.StringBuilder;
 
 /**
- * Am object to represent actual image file in operating system.
+ * ImageFile represents actual image file in operating system.
  * After the filemanager passes the file to this class, model.ImageFile will construct an ImageFile object on it.
  * Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
  * @author Renjie Li
@@ -76,32 +76,15 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
     }
 
     /**
-     * Changes inner information of an imagefile class based on given String
-     * @param newName The new name for imagefile
-     */
-    public void generalReName(String newName, ArrayList<Tag> newTagList){
-        String tempName = currentName.toString();
-        currentName = new StringBuilder();
-        currentName.append(newName);
-        currentName.append(this.imageType);
-        tagList = newTagList;
-        Long timeStamp = System.currentTimeMillis();
-        ArrayList<String> temLog = new ArrayList<>(Arrays.asList(currentName.toString(),tempName,timeStamp.toString()));
-        this.oldName.add(temLog);
-        String targetName = this.underWhichDirectory+tempName+this.imageType;
-        this.thisFile = new File(targetName);
-    }
-
-    /**
      * override the generalReNameFunction but only take one parameter.
      * Change inner information of an imagefile class based on given String
+     *
      * @param newName the newname for the imagefile
      */
     public void generalReName(String newName){
         String tempName = currentName.toString();
         currentName = new StringBuilder();
         currentName.append(newName);
-        //currentName.append(this.imageType);
         Long timeStamp = System.currentTimeMillis();
         ArrayList<String> temLog = new ArrayList<>(Arrays.asList(currentName.toString(),tempName,timeStamp.toString()));
         this.oldName.add(temLog); //Add new entry to revision history
@@ -111,6 +94,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
 
     /**
      * It updates tag history
+     *
      * @param newEntry an arraylist of tag
      */
     public void updateTagHistory(ArrayList<Tag> newEntry){
@@ -154,26 +138,13 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
     public ArrayList<ArrayList<String>> getOldName(){
         return this.oldName;
     }
-    public String getTheParentpath(){
-        return this.underWhichDirectory;
-    }
     public File getThisFile(){
         return this.thisFile;
     }
     public ArrayList<Tag> getTagList(){return this.tagList;}
-    public String getImageType(){ return this.imageType; }
-    public ArrayList<ArrayList<Tag>> getTagHistory(){
-        return this.tagHistory;
-    }
-
 
     //some setters
     public void setFile(File newFile){
         this.thisFile = newFile;
     }
-    public void setUnderWhichDirectory(String underWhichDirectory) {
-        this.underWhichDirectory = underWhichDirectory;
-    }
-
-
 }
