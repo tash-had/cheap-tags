@@ -112,23 +112,40 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Label nameOfSelectedFile;
 
+    /**
+     *Load a list view of names of all images
+     */
     @FXML
     ToggleButton toggleButton;
 
 
+    /**
+     * Display names of images as a list view
+     */
     @FXML
     ListView<String> imageNamesListView;
 
+    /**
+     * Show the image of instagram
+     */
     @FXML
     ImageView shareWithInstagramBtn;
 
+    /**
+     * Quick search for tags
+     */
     @FXML
     TextField TagSearchBar;
 
+    /**
+     * take user to the revision history window
+     */
     @FXML
     Button revisionLogButton;
 
-
+    /**
+     * Store the image files names as an observable list
+     */
     private ObservableList<String> imageFileNames;
 
     /**
@@ -136,16 +153,30 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     private static File targetDirectory;
 
-
+    /**
+     * Store available tag options in an observable list
+     */
     private ObservableList<Tag> availableTagOptions;
+
+    /**
+     * Store existing tags on image file in an observable list
+     */
     private ObservableList<Tag> existingTagsOnImageFile;
 
+    /**
+     * Store the image names
+     */
     private Collection<String> imageNames;
 
+    /**
+     * check if the change that user made on the image is saved or not
+     */
     private boolean unsavedChanges = false;
 
 
-
+    /**
+     * Use to prepare for image search by regex
+     */
     private StringBuilder imageSearchPatternEnd;
 
 
@@ -187,7 +218,10 @@ public class BrowseImageFilesViewController implements Initializable {
 
     }
 
-
+    /**
+     * Handle the click on the image view in the tile pane
+     * Display the selected image view to the screen, and load data for the image
+     */
     @FXML
     public void chooseImageClick(){
         checkForUnsavedChanges();
@@ -294,6 +328,10 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * Handles the click of the toggleButton
+     * show the list view of the names of image files
+     */
     @FXML
     public void imagesViewToggle(){
         if (toggleButton.isSelected()){
@@ -357,12 +395,18 @@ public class BrowseImageFilesViewController implements Initializable {
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
-
+    /**
+     * Handles the click on move directory button
+     * @param directory
+     */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);
         targetDirectory = directory;
     }
 
+    /**
+     * Prepares for the search by regular expression in the image search bar
+     */
     private void prepImageSearchRegex(){
         imageSearchPatternEnd = new StringBuilder(".*\\b(");
         for (String extension :ImageFileOperationsManager.ACCEPTED_EXTENSIONS){
@@ -394,7 +438,7 @@ public class BrowseImageFilesViewController implements Initializable {
             image = new Image(imageFile.getThisFile().toURI().toURL().toString(), 300,
                     300, true, true);
         } catch (MalformedURLException e) {
-//            e.printStackTrace();
+
             Dialogs.showErrorAlert("Gallery Error", "Error", "There was an error adding " +
             imageFile.getThisFile().getAbsolutePath() + " to the gallery. You sure it exists?");
         }
@@ -506,6 +550,10 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
+    /**
+     * Handles the text field as a search bar
+     * Loads the input from user and search it through the list of tags
+     */
     public void TagSearchTextChanged(){
         String input = TagSearchBar.getText().toLowerCase();
         ArrayList<Tag> searchResult = new ArrayList<>();
@@ -602,6 +650,7 @@ public class BrowseImageFilesViewController implements Initializable {
             Dialogs.chooseFileAlert();
         }
         else{
+            // store the data on the current screen for revisionLogViewController
             RevisionLogViewController.setBrowseController(this);
             StageManager revisionLog = new StageManager(new Stage());
             revisionLog.setDefaultScreenHeight(400);

@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Caroline Ming
  */
 public class Log{
-
     /**
      * the current name of the image file as a string property
      */
