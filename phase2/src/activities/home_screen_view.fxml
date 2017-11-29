@@ -58,7 +58,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Button fx:id="addTagsButton" mnemonicParsing="false" onAction="#openTagScreen" prefHeight="27.0" prefWidth="210.0" text="My Tags" />
+                  <Button fx:id="myTagsButton" mnemonicParsing="false" onAction="#openTagScreen" prefHeight="27.0" prefWidth="210.0" text="My Tags" />
                </children>
             </VBox>
          </children></AnchorPane>

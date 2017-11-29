@@ -3,7 +3,6 @@ package activities;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import managers.StateManager;
@@ -17,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ConfigureJFXControl;
 import utils.Dialogs;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -29,7 +27,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 
@@ -37,87 +34,80 @@ import static managers.PrimaryStageManager.getPrimaryStageManager;
 public class HomeScreenViewController implements Initializable {
 
     /**
-     * A reference to the
+     * A list of hyperlinks showing directories that have previously been opened.
      */
     @FXML
     ListView<Hyperlink> previouslyViewedListView;
 
-    @FXML
-    ImageView homeScreenImageView;
-
+    /**
+     * The title above the list of previously viewed directories.
+     */
     @FXML
     Label previouslyViewedLabel;
 
+    /**
+     * A button which asks the user to choose a directory, then opens images under that directory under a new screen.
+     */
     @FXML
     Button openDirectoryButton;
 
+    /**
+     * A button which takes the user to the Tag screen.
+     */
     @FXML
-    Button addTagsButton;
+    Button myTagsButton;
 
+    /**
+     * A button which asks the user to choose a directory, which images will be imported, then asks the user to enter
+     * Instagram login info, then imports all images from the chosen Instagram account to the user's computer. Then
+     * the screen will open on that directory containing the instagram photos.
+     */
     @FXML
     Button importFromInstagramBtn;
+    // Current implementation of the button is commented out due to issues getting access from Instagram's API.
+    // App needs to be submitted for Instagram's approval before proper access tokens can be granted.
 
+    /**
+     * A button which asks the user to choose a directory which the images will be imported to, then asks the user to
+     * enter the tumblr URL where they want to download images from. After images are downloaded into the directory,
+     * the screen will open on that directory containing tumblr photos.
+     */
     @FXML
     Button tumblrBtn;
 
+    /**
+     * The background image of the home screen.
+     */
     @FXML
     ImageView backgroundImage;
 
+    /**
+     * The logo "Cheap Tags"
+     */
     @FXML
     ImageView logo;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//       UserDataGetter.loadDATA();
-
-        Image logoImage = new Image("resources/images/logo_2.jpg", true);
-        //homeScreenImageView.setImage(logoImage);
-
         ConfigureJFXControl.populateListViewWithArrayList(previouslyViewedListView,
                 getHyperlinkArrayList(StateManager.userData.getPreviousPathsVisited()));
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf",
                 15, previouslyViewedLabel);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Light.ttf",
-                15, openDirectoryButton, addTagsButton, importFromInstagramBtn, tumblrBtn);
+                15, openDirectoryButton, myTagsButton, importFromInstagramBtn, tumblrBtn);
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196fe"),
-                Color.BLACK, openDirectoryButton, addTagsButton);
+                Color.BLACK, openDirectoryButton, myTagsButton);
     }
 
     /**
-     * Function to handle "Open Directory" button click on Home screen.
+     * Function to handle "Open Directory" button click on Home screen. Opens the chosen directory and moves to
+     * the image-browsing screen.
      */
     public void openDirectoryClick(){
         File selectedFile = Dialogs.getDirectoryWithChooser();
-
         if (selectedFile != null) {
-//            Collection<ImageFile> imagesToLoad = ImageFileOperationsManager.fetchImageFiles(selectedFile);
-//            BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
-            //System.out.println(ImageFileOperationsManager.fetchImageFiles(selectedFile));
-            //imagesToLoad.addAll(ImageFileOperationsManager.fetchImageFiles(selectedFile));
-
-//            if (imagesToLoad.size() != 0) {
-            //System.out.println(imagesToLoad.toString());
-//                UserDataManager.addPathToVisitedList(selectedFile.getPath());
-//                BrowseImageFilesViewController controller = fxmlLoader.getController();
-//                System.out.println(imagesToLoad);
-//                controller.setImagesToLoad(imagesToLoad);
-
-            //BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
-//            StateManager.userData.addPathToVisitedList(selectedFile.getPath());
-//            switchToToBrowseImageFilesView(selectedFile);
-
-                //BrowseImageFilesViewController.setImagesToLoad(imagesToLoad);
-
                 switchToToBrowseImageFilesView(selectedFile);
-//            }
-            //else imagesToLoad size != 0
-//            else{
-//                Dialogs.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
-//                        " in the directory you loaded. Please select another");
-//                openDirectoryClick();
-//            }
         }
-//        UserDataSaver.storeData();
     }
 
     /**
@@ -151,6 +141,11 @@ public class HomeScreenViewController implements Initializable {
         return hyperlink;
     }
 
+    /**
+     * Takes an File argument and opens that File in the image-browsing screen.
+     *
+     * @param directoryPath The directory that is to be opened.
+     */
     private void switchToToBrowseImageFilesView(File directoryPath){
         StateManager.userData.addPathToVisitedList(directoryPath.getPath());
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
@@ -164,10 +159,12 @@ public class HomeScreenViewController implements Initializable {
         }
     }
 
-
+    /**
+     *
+     */
     @FXML
-    public void importFromInstagram() throws IOException {
-//        File chosenDirectory = PrimaryStageManager.getDirectoryWithChooser();
+    public void importFromInstagram(){
+//        File chosenDirectory = Dialogs.getDirectoryWithChooser();
 //
 //        HttpGet httpGet = new HttpGet("https://api.instagram.com/v1/users/self/media/recent/?access_token=548320548.b2a4a69.db79a44000d7460db61a6186a6928da3");
 ////        TextInputDialog dialog = new TextInputDialog();
@@ -229,6 +226,11 @@ public class HomeScreenViewController implements Initializable {
 //        }
     }
 
+    /**
+     * A function that handles when the import from tumblr button is clicked. Prompts user to choose a directory and
+     * enter a tumblr URL. Imports first 20 images from the URL to the chosen directory and opens the image browsing
+     * screen on that directory.
+     */
     @FXML
     public void tumblrButtonClicked(){
         File chosenDirectory = Dialogs.getDirectoryWithChooser();
@@ -239,29 +241,28 @@ public class HomeScreenViewController implements Initializable {
             System.out.println(input);
             if (input.isPresent()) {
                 String blogName = input.get();
-                //HttpGet httpGet = new HttpGet("https://api.tumblr.com/v2/blog/elegant-autumn.tumblr.com/posts/photo?api_key=3ty3TDhh79GPAJBoVy25768p81ApgqiyYTp59ugyD19ncgQdh0");
 
                 try {
                     JSONObject json = blogToJSONObject(blogName);
                     JSONObject responsejson = json.getJSONObject("response");
-                    JSONArray posts = responsejson.getJSONArray("posts");
-                    //iterate through all posts, at each post, get photo array
-                    ArrayList<String> urlArray = new ArrayList<>();
-                    for (int i = 0; i < posts.length(); i++) {
-                        JSONObject currPost = posts.getJSONObject(i);
-                        JSONArray photoArray = currPost.getJSONArray("photos");
-                        for (int j = 0; j < photoArray.length(); j++) {
-                            JSONObject photoObj = photoArray.getJSONObject(j);
-                            JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
-                            String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
-                            urlArray.add(photoUrlString);
+                        JSONArray posts = responsejson.getJSONArray("posts");
+                        //iterate through all posts, at each post, get photo array
+                        ArrayList<String> urlArray = new ArrayList<>();
+                        for (int i = 0; i < posts.length(); i++) {
+                            JSONObject currPost = posts.getJSONObject(i);
+                            JSONArray photoArray = currPost.getJSONArray("photos");
+                            for (int j = 0; j < photoArray.length(); j++) {
+                                JSONObject photoObj = photoArray.getJSONObject(j);
+                                JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
+                                String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
+                                urlArray.add(photoUrlString);
+                            }
                         }
-                    }
-                    // System.out.println(urlArray);
-                    urlToImages(urlArray, chosenDirectory);
+                        // System.out.println(urlArray);
+                        urlToImages(urlArray, chosenDirectory);
 
-                    switchToToBrowseImageFilesView(chosenDirectory);
-                    StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
+                        switchToToBrowseImageFilesView(chosenDirectory);
+                        StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -269,6 +270,13 @@ public class HomeScreenViewController implements Initializable {
         }
     }
 
+    /**
+     * Retrieves information about the tumblr page using tumblr API. Creates a JSON object from that and returns it.
+     *
+     * @param blogName A string of the tumblr URL
+     *
+     * @return Returns the JSONObject retrieved from the tumblr API.
+     */
     private JSONObject blogToJSONObject(String blogName){
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("https://api.tumblr.com/v2/blog/" + blogName + "/posts/photo?&api_key=3ty3TDhh79GPAJBoVy25768p81ApgqiyYTp59ugyD19ncgQdh0");
@@ -302,6 +310,13 @@ public class HomeScreenViewController implements Initializable {
         return null;
     }
 
+    /**
+     * Given a list of URLs containing only an image, retrieves image and writes a new File object to the chosen
+     * directory with that image.
+     *
+     * @param urlArray The list of URLs as strings.
+     * @param chosenDirectory The directory where the user wants the images written to.
+     */
     private void urlToImages(ArrayList<String> urlArray, File chosenDirectory){
         // create BufferedImage object from url
         // Change BufferedImage to File object
@@ -339,6 +354,9 @@ public class HomeScreenViewController implements Initializable {
         }
     }
 
+    /**
+     * Changes the current screen to the Tag screen.
+     */
     public void openTagScreen(){
         getPrimaryStageManager().setScreen("My Tags", "/activities/tag_screen_view.fxml");
     }
