@@ -18,7 +18,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
+/**
+ * the {@code RevisionLogViewController} class is the controller of activities/revison_log_view.fxml
+ *
+ * @author Caroline Ming
+ */
 public class RevisionLogViewController implements Initializable {
 
     /**
@@ -91,7 +95,7 @@ public class RevisionLogViewController implements Initializable {
     }
 
     /**
-     *  Revert the current image to the selected pr
+     *  Revert the current image to the selected image file
      */
     public void setRevertTo() {
         int indexOfRevision = revisionLog.getSelectionModel().getSelectedIndex();
