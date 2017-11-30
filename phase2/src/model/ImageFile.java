@@ -1,10 +1,10 @@
 package model;
 
+import utils.Log;
+
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.io.File;
-import java.lang.StringBuilder;
 
 /**
  * ImageFile represents actual image file in operating system.
@@ -29,9 +29,9 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
     private ArrayList<Tag> tagList;
 
     /**
-     * oldName keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
+     * imageLogs keeps track of all of the revision histories in the format of arraylist [newname,previous name,timestamp]
      */
-    private ArrayList<ArrayList<String>> oldName;
+    private ArrayList<Log> imageLogs;
 
     /**
      * the original name of this image without any tag.
@@ -67,7 +67,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
         currentName = new StringBuilder();
         originalName = oneImageFile.getName();
         currentName.append(originalName);
-        oldName = new ArrayList<ArrayList<String>>();
+        imageLogs = new ArrayList<Log>();
         underWhichDirectory = oneImageFile.getParent();
         thisFile = oneImageFile;
         String c = oneImageFile.getName();
@@ -88,8 +88,8 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
         currentName = new StringBuilder();
         currentName.append(newName);
         Long timeStamp = System.currentTimeMillis();
-        ArrayList<String> temLog = new ArrayList<>(Arrays.asList(currentName.toString(), tempName, timeStamp.toString()));
-        this.oldName.add(temLog); //Add new entry to revision history
+        Log temLog = new Log(currentName.toString(), tempName, timeStamp.toString());
+        this.imageLogs.add(temLog); //Add new entry to revision history
         String targetName = this.underWhichDirectory + tempName + this.imageType;
         this.thisFile = new File(targetName);
     }
@@ -138,8 +138,8 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
         return this.originalName;
     }
 
-    public ArrayList<ArrayList<String>> getOldName() {
-        return this.oldName;
+    public ArrayList<Log> getImageLogs() {
+        return this.imageLogs;
     }
 
     public File getThisFile() {

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * the class helps all text fields to be used as search bars
  */
-public class SearchBars {
+public class SearchBars  {
 
     /**
      * this method takes an input from user and searches throw the tag manager,

@@ -1,6 +1,6 @@
 package utils;
 
-import javafx.beans.property.SimpleStringProperty;
+import java.io.Serializable;
 
 /**
  * the {@code Log} class is used to store the current name, old name and time stamp of an image file
@@ -8,21 +8,21 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Caroline Ming
  */
-public class Log {
+public class Log implements Serializable{
     /**
-     * the current name of the image file as a string property
+     * the current name of the image file
      */
-    private SimpleStringProperty currentName;
+    private String currentName;
 
     /**
-     * the old name of the image file as a string property
+     * the old name of the image file
      */
-    private SimpleStringProperty oldName;
+    private String oldName;
 
     /**
-     * the time stamp of the image file asa string property
+     * the time stamp of the image file
      */
-    private SimpleStringProperty timeStamp;
+    private String timeStamp;
 
     /**
      * construct a new log with three variables
@@ -32,9 +32,9 @@ public class Log {
      * @param time    time stamp
      */
     public Log(String current, String old, String time) {
-        this.currentName = new SimpleStringProperty(current);
-        this.oldName = new SimpleStringProperty(old);
-        this.timeStamp = new SimpleStringProperty(time);
+        this.currentName = current;
+        this.oldName = old;
+        this.timeStamp = time;
 
     }
 
@@ -44,7 +44,7 @@ public class Log {
      * @return String current name
      */
     public String getCurrentName() {
-        return currentName.get();
+        return currentName;
     }
 
     /**
@@ -53,7 +53,7 @@ public class Log {
      * @return String current name
      */
     public String getOldName() {
-        return oldName.get();
+        return oldName;
     }
 
     /**
@@ -62,37 +62,39 @@ public class Log {
      * @return String current name
      */
     public String getTimeStamp() {
-        return timeStamp.get();
+        return timeStamp;
     }
 
     /**
-     * Set the current name
+     * Set the current name as a SimpleStringProperty
      */
     public void setCurrentName(String name) {
-        currentName.set(name);
+//        SimpleStringProperty current = new SimpleStringProperty(name);
+        currentName = name;
     }
 
     /**
-     * Set the old name
+     * Set the old name as a
      */
     public void setOldName(String name) {
-        oldName.set(name);
+        oldName = name;
+
     }
 
     /**
      * Set the time stamp
      */
     public void setTimeStamp(String time) {
-        timeStamp.set(time);
+        timeStamp = time;
 
     }
 
     @Override
     public String toString() {
         StringBuilder logString =  new StringBuilder();
-        logString.append(currentName.get()+", ");
-        logString.append(oldName.get() + ", ");
-        logString.append(timeStamp.get());
+        logString.append(currentName +", ");
+        logString.append(oldName + ", ");
+        logString.append(timeStamp);
 
         return logString.toString();
 
