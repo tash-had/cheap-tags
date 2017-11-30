@@ -113,9 +113,9 @@ public class ImageFileOperationsManager {
                 // Don't move
                 newFile = null;
             }
-        } else {
-            Dialogs.showErrorAlert("Move Error", "Error", "There was an error moving your file");
-        }
+        } //else {
+//            Dialogs.showErrorAlert("Move Error", "Error", "There was an error moving your file");
+        //}
         imageFile.setFile(newFile);
         return newFile;
     }
