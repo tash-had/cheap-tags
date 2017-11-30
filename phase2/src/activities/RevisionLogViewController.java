@@ -8,15 +8,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import managers.ImageFileOperationsManager;
 import managers.TagManager;
 import model.Tag;
+import utils.ConfigureJFXControl;
 import utils.Log;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * the {@code RevisionLogViewController} class is the controller of activities/revison_log_view.fxml
@@ -72,16 +73,17 @@ public class RevisionLogViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         allLogsListView.clear();
 
-        for (ArrayList<String> al: browseController.selectedImageFile.getOldName()){
-            Log log = new Log(al.get(0),al.get(1),al.get(2));
-            allLogsListView.add(log);
-        }
-
-        currentName.setCellValueFactory(new PropertyValueFactory<>("currentName"));
-        oldName.setCellValueFactory(new PropertyValueFactory<>("oldName"));
-        timeStamp.setCellValueFactory(new PropertyValueFactory<>("timeStamp"));
-
-        revisionLog.setItems(allLogsListView);
+//        for (ArrayList<String> al: browseController.selectedImageFile.getOldName()){
+//            Log log = new Log(al.get(0),al.get(1),al.get(2));
+//            allLogsListView.add(log);
+//        }
+//
+//        currentName.setCellValueFactory(new PropertyValueFactory<>("currentName"));
+//        oldName.setCellValueFactory(new PropertyValueFactory<>("oldName"));
+//        timeStamp.setCellValueFactory(new PropertyValueFactory<>("timeStamp"));
+//
+//        revisionLog.setItems(allLogsListView);
+        allLogsListView = ConfigureJFXControl.populatedTableViewWithArrayList(revisionLog,browseController.selectedImageFile.getOldName(), currentName, oldName, timeStamp);
 
     }
     /**
@@ -133,6 +135,9 @@ public class RevisionLogViewController implements Initializable {
     }
     public void revisionLogSearchBar(){
         String input = revisionHistorySearchBar.getText().toLowerCase();
+        ObservableList<Log> searchResult = FXCollections.observableArrayList();
+        Pattern tagSearchPattern = Pattern.compile(input);
+        Matcher tagSearchMatcher;
 
     }
 

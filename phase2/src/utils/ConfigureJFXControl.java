@@ -2,9 +2,8 @@ package utils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -86,6 +85,24 @@ public abstract class ConfigureJFXControl {
             observableList.add(item);
         }
         listView.setItems(observableList);
+        return observableList;
+    }
+
+    public static ObservableList populatedTableViewWithArrayList (TableView tableView, ArrayList<ArrayList<String>> data, TableColumn column1, TableColumn column2, TableColumn column3){
+        ObservableList observableList = tableView.getItems();
+        if (observableList == null){
+            observableList = FXCollections.observableArrayList();
+        }
+        for (ArrayList al: data){
+            Log log = new Log((String)al.get(0),(String)al.get(1),(String)al.get(2));
+            observableList.add(log);
+        }
+
+        column1.setCellValueFactory(new PropertyValueFactory<Log, String>("currentName"));
+        column2.setCellValueFactory(new PropertyValueFactory<Log, String>("oldName"));
+        column3.setCellValueFactory(new PropertyValueFactory<Log, String>("timeStamp"));
+
+        tableView.setItems(observableList);
         return observableList;
     }
 }
