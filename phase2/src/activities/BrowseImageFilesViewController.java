@@ -22,7 +22,12 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.brunocvcunha.instagram4j.Instagram4j;
+import org.brunocvcunha.instagram4j.requests.InstagramEditMediaRequest;
+import org.brunocvcunha.instagram4j.requests.InstagramGetMediaInfoRequest;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
+import org.brunocvcunha.instagram4j.requests.InstagramUserFeedRequest;
+import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedItem;
+import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedResult;
 import utils.ConfigureJFXControl;
 import utils.Dialogs;
 import utils.SearchBars;
@@ -145,6 +150,9 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     Button revisionLogButton;
+
+
+    Label selectedImageLabel;
 
     /**
      * Store the image files names as an observable list
@@ -319,6 +327,7 @@ public class BrowseImageFilesViewController implements Initializable {
             for (Tag i : selectedImageFile.getTagList()) {
                 i.images.add(selectedImageFile);
             }
+            selectedImageLabel.setText(selectedImageFile.getCurrentName());
         }
     }
 
@@ -393,7 +402,6 @@ public class BrowseImageFilesViewController implements Initializable {
      *
      * @param directory the directory to browse
      *
-
      */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);
@@ -441,21 +449,20 @@ public class BrowseImageFilesViewController implements Initializable {
         // Construct an ImageView for the image
         ImageView imageView = new ImageView();
         imageView.setImage(image);
-        imageView.setOnMouseClicked(event -> imageClicked(imageFile));
 
         // Setup VBox to display both image and a label with the imagename
         VBox tilePaneVBox = new VBox();
 
         // Construct a BEAUTIFUL label
         File file = imageFile.getThisFile();
-        Label label = new Label(file.getParentFile().getName() + "/" + imageFile.getCurrentName());
-        label.setPadding(new Insets(20, 0, 0, 0));
-        label.setTextFill(Color.web("#000000"));
-        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 17, label);
+        Label imageNameLabel = new Label(file.getParentFile().getName() + "/" + imageFile.getCurrentName());
+        imageNameLabel.setPadding(new Insets(20, 0, 0, 0));
+        imageNameLabel.setTextFill(Color.web("#000000"));
+        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 17, imageNameLabel);
         tilePaneVBox.setAlignment(Pos.CENTER);
-
+        imageView.setOnMouseClicked(event -> imageClicked(imageFile, imageNameLabel));
         // Add imageview and label to vbox + add vbox to tilepane
-        tilePaneVBox.getChildren().addAll(imageView, label);
+        tilePaneVBox.getChildren().addAll(imageView, imageNameLabel);
         imageTilePane.getChildren().add(tilePaneVBox);
     }
 
@@ -464,11 +471,11 @@ public class BrowseImageFilesViewController implements Initializable {
      *
      * @param imageFile the ImageFile that was clicked
      */
-    private void imageClicked(ImageFile imageFile) {
+    private void imageClicked(ImageFile imageFile, Label imageNameLabel){
         try {
             // Before navigating to the clicked image, alert the user if they have unset tags
             checkForUnsavedChanges();
-
+            selectedImageLabel = imageNameLabel;
             // Keep a reference to the selected image and set up right pane attributes for selected image
             selectedImageFile = imageFile;
             selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
@@ -570,20 +577,22 @@ public class BrowseImageFilesViewController implements Initializable {
                     "You must select an image first!");
             return;
         }
-        String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
-                "Enter your Instagram credentials ...", null);
-        // Disable logs
-        turnOffLog4J();
-        if (instagramCreds[0] != null && instagramCreds[1] != null
-                && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {
-            Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0])
-                    .password(instagramCreds[1]).build();
-            instagram.setup();
-            sendInstagramPostRequest(instagram);
-        } else {
-            Dialogs.showErrorAlert("Invalid Input", "No Input",
-                    "You must enter valid credentials");
+
+        Instagram4j instagram = StateManager.sessionData.instagramReference;
+            if (instagram == null){
+                String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
+                        "Enter your Instagram credentials ...", null);
+                if (instagramCreds[0] != null && instagramCreds[1] != null
+                        && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {
+                    instagram = Instagram4j.builder().username(instagramCreds[0])
+                            .password(instagramCreds[1]).build();
+                    instagram.setup();
+            }else {
+                    Dialogs.showErrorAlert("Invalid Input", "No Input",
+                            "You must enter valid credentials");
+                }
         }
+        sendInstagramPostRequest(instagram);
     }
 
     /**

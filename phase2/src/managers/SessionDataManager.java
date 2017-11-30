@@ -1,6 +1,7 @@
 package managers;
 
 import model.ImageFile;
+import org.brunocvcunha.instagram4j.Instagram4j;
 
 import java.io.File;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 
 public class SessionDataManager extends UserDataManager implements Serializable {
     private String currentSessionPath;
+    public Instagram4j instagramReference;
 
     /**
      * Set this session using the given path as the identifier for the session.

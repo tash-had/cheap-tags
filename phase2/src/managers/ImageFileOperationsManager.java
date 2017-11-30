@@ -257,6 +257,11 @@ public class ImageFileOperationsManager {
                         tempTag.images.add(fileToProcess);
                         TagManager.addTag(tempTag);
                     }
+                    else{
+                        Tag tempTag = new Tag(withoutSymbol);
+                        fileToProcess.getTagList().add(tempTag);
+                        tempTag.images.add(fileToProcess);
+                    }
 
                 }
             }

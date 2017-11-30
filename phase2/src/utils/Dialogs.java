@@ -5,9 +5,17 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
+import managers.StateManager;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.brunocvcunha.instagram4j.Instagram4j;
+
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Optional;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
@@ -159,5 +167,66 @@ public class Dialogs {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select a directory");
         return directoryChooser.showDialog(getPrimaryStageManager().getStage());
+    }
+
+    /**
+     * Tells the user that a tag already exists with the same name.
+     */
+    public static void showTagExistsAlert(){
+        Alert tagExistsDialog = new Alert(Alert.AlertType.NONE, "A tag with this name already exists. " +
+                "Please select a different name.", ButtonType.CLOSE);
+        tagExistsDialog.showAndWait();
+    }
+
+    /**
+     * Tells the user that actions cannot be performed on a file because they haven't chosen one yet.
+     */
+    public static void chooseFileAlert(){
+        Alert needToChooseFile = new Alert(Alert.AlertType.NONE, "No image file has been selected yet.\n" +
+                "Please select a image file first.", ButtonType.CLOSE );
+        needToChooseFile.showAndWait();
+    }
+
+    /**
+     * Tells the user that the selected file already has that tag.
+     */
+    public static void fileContainsTagAlert(){
+        Alert fileContainsTag = new Alert(Alert.AlertType.NONE, "The selected file already contains this tag." +
+                "", ButtonType.CLOSE);
+        fileContainsTag.showAndWait();
+    }
+
+    public static boolean showInstagramLoginDialog() {
+        turnOffLog4J();
+        String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
+                "Enter your Instagram credentials ...", null);
+        if (instagramCreds[0] != null && instagramCreds[1] != null
+                && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {
+            Instagram4j instagram = Instagram4j.builder().username(instagramCreds[0])
+                    .password(instagramCreds[1]).build();
+            instagram.setup();
+            try {
+                instagram.login();
+                StateManager.sessionData.instagramReference = instagram;
+                return true;
+            } catch (IOException e) {
+//                e.printStackTrace();
+            }
+        } else {
+            Dialogs.showErrorAlert("Invalid Input", "No Input",
+                    "You must enter valid credentials");
+        }return false;
+    }
+
+    /**
+     * A method to turn off all apache log4j loggers.
+     */
+    private static void turnOffLog4J(){
+        Enumeration loggers = LogManager.getCurrentLoggers();
+        while (loggers.hasMoreElements()){
+            Logger logger = (Logger) loggers.nextElement();
+            logger.setLevel(Level.OFF);
+        }
+        LogManager.getRootLogger().setLevel(Level.OFF);
     }
 }

@@ -9,9 +9,20 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * the class helps all text fields to be used as search bars
+ */
 public class SearchBars {
 
+    /**
+     * this method takes an input from user and searches throw the tag manager,
+     * adds all result to an observable list to show on the screen
+     *
+     * @param listView the list to populate
+     * @param data the observable list of searching results
+     * @param input users input in text field
+     *
+     */
     public static void TagSearchByText(ListView listView, ObservableList data, String input ){
         ArrayList searchResult = new ArrayList<>();
 
