@@ -66,7 +66,6 @@ public class Dialogs {
         return null;
     }
 
-
     /**
      * Show an alert telling the user than an error has occured
      *

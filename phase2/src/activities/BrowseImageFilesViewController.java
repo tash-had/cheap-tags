@@ -347,7 +347,6 @@ public class BrowseImageFilesViewController implements Initializable {
         }
     }
 
-
     /**
      * Moves the image to a new directory which the user selects. After moving an image, the user can go to that new
      * directory or stay in the current directory.
