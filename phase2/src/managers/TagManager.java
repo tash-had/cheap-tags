@@ -5,7 +5,11 @@ import model.Tag;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TagManager implements Serializable{
+/**
+ * This class keeps track of all the existing tags in the system, also contains methods to perform operations on those
+ * tags.
+ */
+public class TagManager implements Serializable {
 
     /**
      * A list of all the tags in the system.
@@ -17,14 +21,14 @@ public class TagManager implements Serializable{
      *
      * @param newTag the tag to be added to the list of tags.
      */
-    public static void addTag(Tag newTag){
+    public static void addTag(Tag newTag) {
         tagList.add(newTag);
     }
 
     /**
      * Returns the list of tags in the system.
      */
-    public static ArrayList<Tag> getTagList(){
+    public static ArrayList<Tag> getTagList() {
         return tagList;
     }
 
@@ -32,12 +36,11 @@ public class TagManager implements Serializable{
      * searches the Tag manager for a Tag with name stringOfTag, since no two tags should have the same name.
      *
      * @param stringOfTag The name of the tag we are searching for
-     *
      * @return The Tag with name matching stringOfTag. Returns null if there is no tag with that name.
      */
-    public static Tag getTagByString(String stringOfTag){
-        for(Tag i: TagManager.tagList){
-            if(i.toString().equals(stringOfTag)){
+    public static Tag getTagByString(String stringOfTag) {
+        for (Tag i : TagManager.tagList) {
+            if (i.toString().equals(stringOfTag)) {
                 return i;
             }
         }
@@ -49,7 +52,7 @@ public class TagManager implements Serializable{
      *
      * @param newList The ArrayList of tags which we want to replace existing tags in the Tag manager with.
      */
-    static void setTagList(ArrayList<Tag> newList){
+    static void setTagList(ArrayList<Tag> newList) {
         tagList = newList;
     }
 }

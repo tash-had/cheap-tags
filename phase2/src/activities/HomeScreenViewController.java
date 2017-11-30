@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ConfigureJFXControl;
 import utils.Dialogs;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -30,8 +31,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import static managers.PrimaryStageManager.getPrimaryStageManager;
 
+import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 
 public class HomeScreenViewController implements Initializable {
@@ -94,7 +95,7 @@ public class HomeScreenViewController implements Initializable {
     Button masterLogButton;
 
     @Override
-    public void initialize (URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) {
         Image logoImage = new Image("resources/images/logo_2.jpg", true);
         ConfigureJFXControl.populateListViewWithArrayList(previouslyViewedListView,
                 getHyperlinkArrayList(StateManager.userData.getPreviousPathsVisited()));
@@ -153,13 +154,13 @@ public class HomeScreenViewController implements Initializable {
      *
      * @param directoryPath The directory that is to be opened.
      */
-    private void switchToToBrowseImageFilesView(File directoryPath){
+    private void switchToToBrowseImageFilesView(File directoryPath) {
         StateManager.userData.addPathToVisitedList(directoryPath.getPath());
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
-        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0){
+        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0) {
             getPrimaryStageManager().setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
                     "/activities/browse_imagefiles_view.fxml");
-        }else {
+        } else {
             Dialogs.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
                     " in the directory you loaded. Please select another");
             openDirectoryClick();
@@ -170,7 +171,7 @@ public class HomeScreenViewController implements Initializable {
      *
      */
     @FXML
-    public void importFromInstagram(){
+    public void importFromInstagram() {
 //        File chosenDirectory = Dialogs.getDirectoryWithChooser();
 //
 //        HttpGet httpGet = new HttpGet("https://api.instagram.com/v1/users/self/media/recent/?access_token=548320548.b2a4a69.db79a44000d7460db61a6186a6928da3");
@@ -239,7 +240,7 @@ public class HomeScreenViewController implements Initializable {
      * screen on that directory.
      */
     @FXML
-    public void tumblrButtonClicked(){
+    public void tumblrButtonClicked() {
         File chosenDirectory = Dialogs.getDirectoryWithChooser();
         if (chosenDirectory != null) {
             TextInputDialog dialog = new TextInputDialog();
@@ -252,24 +253,24 @@ public class HomeScreenViewController implements Initializable {
                 try {
                     JSONObject json = blogToJSONObject(blogName);
                     JSONObject responsejson = json.getJSONObject("response");
-                        JSONArray posts = responsejson.getJSONArray("posts");
-                        //iterate through all posts, at each post, get photo array
-                        ArrayList<String> urlArray = new ArrayList<>();
-                        for (int i = 0; i < posts.length(); i++) {
-                            JSONObject currPost = posts.getJSONObject(i);
-                            JSONArray photoArray = currPost.getJSONArray("photos");
-                            for (int j = 0; j < photoArray.length(); j++) {
-                                JSONObject photoObj = photoArray.getJSONObject(j);
-                                JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
-                                String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
-                                urlArray.add(photoUrlString);
-                            }
+                    JSONArray posts = responsejson.getJSONArray("posts");
+                    //iterate through all posts, at each post, get photo array
+                    ArrayList<String> urlArray = new ArrayList<>();
+                    for (int i = 0; i < posts.length(); i++) {
+                        JSONObject currPost = posts.getJSONObject(i);
+                        JSONArray photoArray = currPost.getJSONArray("photos");
+                        for (int j = 0; j < photoArray.length(); j++) {
+                            JSONObject photoObj = photoArray.getJSONObject(j);
+                            JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
+                            String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
+                            urlArray.add(photoUrlString);
                         }
-                        // System.out.println(urlArray);
-                        urlToImages(urlArray, chosenDirectory);
+                    }
+                    // System.out.println(urlArray);
+                    urlToImages(urlArray, chosenDirectory);
 
-                        switchToToBrowseImageFilesView(chosenDirectory);
-                        StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
+                    switchToToBrowseImageFilesView(chosenDirectory);
+                    StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -281,10 +282,9 @@ public class HomeScreenViewController implements Initializable {
      * Retrieves information about the tumblr page using tumblr API. Creates a JSON object from that and returns it.
      *
      * @param blogName A string of the tumblr URL
-     *
      * @return Returns the JSONObject retrieved from the tumblr API.
      */
-    private JSONObject blogToJSONObject(String blogName){
+    private JSONObject blogToJSONObject(String blogName) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet("https://api.tumblr.com/v2/blog/" + blogName + "/posts/photo?&api_key=3ty3TDhh79GPAJBoVy25768p81ApgqiyYTp59ugyD19ncgQdh0");
         CloseableHttpResponse response = null;
@@ -321,10 +321,10 @@ public class HomeScreenViewController implements Initializable {
      * Given a list of URLs containing only an image, retrieves image and writes a new File object to the chosen
      * directory with that image.
      *
-     * @param urlArray The list of URLs as strings.
+     * @param urlArray        The list of URLs as strings.
      * @param chosenDirectory The directory where the user wants the images written to.
      */
-    private void urlToImages(ArrayList<String> urlArray, File chosenDirectory){
+    private void urlToImages(ArrayList<String> urlArray, File chosenDirectory) {
         // create BufferedImage object from url
         // Change BufferedImage to File object
         // add to File to directory chosen
@@ -364,14 +364,14 @@ public class HomeScreenViewController implements Initializable {
     /**
      * Changes the current screen to the Tag screen.
      */
-    public void openTagScreen(){
+    public void openTagScreen() {
         getPrimaryStageManager().setScreen("My Tags", "/activities/tag_screen_view.fxml");
     }
 
     /**
      * Change the current screen to the tag screen
      */
-    public void openMasterLog(){
+    public void openMasterLog() {
         StageManager masterLog = new StageManager(new Stage());
         masterLog.setDefaultScreenHeight(400);
         masterLog.setDefaultScreenWidth(600);

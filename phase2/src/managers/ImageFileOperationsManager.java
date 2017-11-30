@@ -29,31 +29,31 @@ public class ImageFileOperationsManager {
      * Rename a given ImageFile but only take two parameters.
      *
      * @param imageFile the image to rename
-     * @param newName the new name
+     * @param newName   the new name
      * @return a ImageFile object with the new name if successfully renamed, the old File object otherwise
      */
-    public static ImageFile renameImageFile(ImageFile imageFile, String newName){
+    public static ImageFile renameImageFile(ImageFile imageFile, String newName) {
         File currentImageFile = imageFile.getThisFile();
         Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
 
-        if (StateManager.userData.getNameToImageFileMap().containsKey(newName)){
+        if (StateManager.userData.getNameToImageFileMap().containsKey(newName)) {
             return handleNewNameExists(imageFile, newName);
         }
 
-        FileOperationsResponse response =  renameFile(currentImageFile, newName);
-        if (response == SUCCESS){
+        FileOperationsResponse response = renameFile(currentImageFile, newName);
+        if (response == SUCCESS) {
             imageFile.generalReName(newName);
             StateManager.userData.resetImageFileKey(currentImageFile.getName());
             StateManager.sessionData.resetImageFileKey(currentImageFile.getName());
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
-        }else if (response == FILENAME_TAKEN){
+        } else if (response == FILENAME_TAKEN) {
             String suffixedFileName = Dialogs.showFileExistsAlert(currentImageFile.getParentFile(), newName,
                     StateManager.userData.getImageFileNames());
             // User accepted to a suffixed filename
-            if (suffixedFileName != null){
+            if (suffixedFileName != null) {
                 return renameImageFile(imageFile, suffixedFileName);
             }
-        }else {
+        } else {
             // Show error alert dialog
             Dialogs.showErrorAlert("Renaming Error", "Error",
                     "There was an error renaming your file");
@@ -67,18 +67,18 @@ public class ImageFileOperationsManager {
      * Helper function to handle the case where the new name for an ImageFile already exists in the database
      *
      * @param imageFile the ImageFile being renamed
-     * @param newName the new name the user is attempting to give the ImageFile
+     * @param newName   the new name the user is attempting to give the ImageFile
      * @return the ImageFile with a newer name of the users choice if they accept a rename. The old ImageFile otherwise.
      */
-    private static ImageFile handleNewNameExists(ImageFile imageFile, String newName){
+    private static ImageFile handleNewNameExists(ImageFile imageFile, String newName) {
         String chosenName = handleFilenameTakenByDatabase(new File(newName),
                 "It looks like the new name you chose exists in our database from " +
                         StateManager.userData.getNameToImageFileMap().get(newName).getThisFile().getAbsolutePath() +
                         ". Would you like to choose a new name? (If you select no, your file will not be renamed).");
-        if (chosenName == null){
+        if (chosenName == null) {
             // User denied to a rename.
             return imageFile;
-        }else {
+        } else {
             return renameImageFile(imageFile, chosenName);
         }
     }
@@ -93,25 +93,25 @@ public class ImageFileOperationsManager {
         File oldFile = imageFile.getThisFile();
         File newDirectory = Dialogs.getDirectoryWithChooser();
         // If user clicks cancel on directory dialog, end function.
-        if (newDirectory == null){
+        if (newDirectory == null) {
             return null;
         }
         // A file object of the imageFile in the new directory
         File newFile = new File(newDirectory, oldFile.getName());
         FileOperationsResponse response = moveFile(oldFile, newDirectory.toPath());
 
-        if (response == SUCCESS){
+        if (response == SUCCESS) {
             return newFile;
-        }else if(response == FILENAME_TAKEN){
+        } else if (response == FILENAME_TAKEN) {
             String suffixedFileName = Dialogs.showFileExistsAlert(newDirectory, newFile.getName(), null);
-            if (suffixedFileName != null){
+            if (suffixedFileName != null) {
                 imageFile.generalReName(suffixedFileName);
                 moveFile(imageFile.getThisFile(), newDirectory.toPath());
-            }else{
+            } else {
                 // Don't move
                 newFile = null;
             }
-        }else {
+        } else {
             Dialogs.showErrorAlert("Move Error", "Error", "There was an error moving your file");
         }
         return newFile;
@@ -157,16 +157,16 @@ public class ImageFileOperationsManager {
      * A helper function to handle the case where an image being fetched has the same name but different location as
      * an image that already exists in the database.
      *
-     * @param directory the firectory being queried
+     * @param directory      the firectory being queried
      * @param duplicateImage the duplicate named image
-     * @param exisitngImage the existing ImageFile
+     * @param exisitngImage  the existing ImageFile
      */
     private static void handleImageExistsWithDifferentPath(File directory, File duplicateImage,
-                                                           ImageFile exisitngImage){
+                                                           ImageFile exisitngImage) {
         // The ImageFile that exists in our records has a different path from the one being imported!
         // Ask the user if this file is the same!
         ButtonType imageIsExistingImage = Dialogs.showYesNoAlert("Filename Exists in Database",
-                "Filename Taken", "It looks like " + duplicateImage.getName() + " exists in our records "+
+                "Filename Taken", "It looks like " + duplicateImage.getName() + " exists in our records " +
                         "from another directory you imported. Is this the same image from "
                         + exisitngImage.getThisFile().getPath() + "?");
         if (imageIsExistingImage == ButtonType.NO) {
@@ -184,16 +184,19 @@ public class ImageFileOperationsManager {
                 // Don't need to provide database as filter because we already ensured that the new name
                 // doesn't exist in database with handleFilenameTakenByDatabase
                 renameResponse = FileOperations.renameFile(duplicateImage, Dialogs.showFileExistsAlert(directory,
-                        chosenName, null));}
+                        chosenName, null));
+            }
             if (chosenName != null && renameResponse == SUCCESS) {
                 // Rename is a success. Process the renamed file as new
                 File fileWithChosenName = new File(duplicateImage.getParentFile().getAbsolutePath(), chosenName);
-                processFetchedImageFile(fileWithChosenName, null);}
+                processFetchedImageFile(fileWithChosenName, null);
+            }
         } else {
             // User says image is same as existing image one in records.
             // Update location of existing ImageFile and process it
             exisitngImage.setFile(duplicateImage);
-            processFetchedImageFile(null, exisitngImage);}
+            processFetchedImageFile(null, exisitngImage);
+        }
     }
 
     /**
@@ -212,13 +215,13 @@ public class ImageFileOperationsManager {
                     "Enter a new name for " + fileName);
             if (result == null || result.equals("")) {
                 return null;
-            }else {
+            } else {
                 result = result + FileOperations.getFileExtension(file, false);
             }
             // Ensure that the new name they gave us doesn't also exist in our database
-            if (StateManager.userData.existsInMap(result)){
+            if (StateManager.userData.existsInMap(result)) {
                 return handleFilenameTakenByDatabase(new File(result), alertBody);
-            }else {
+            } else {
                 return result;
             }
         } else {
@@ -232,23 +235,23 @@ public class ImageFileOperationsManager {
      * is not in our records. Pass in existingImageFile (from records) if the file being imported exists and we have
      * an ImageFile for the file.
      *
-     * @param file the file being imported (if this files ImageFile isn't stored already), null otherwise
+     * @param file              the file being imported (if this files ImageFile isn't stored already), null otherwise
      * @param existingImageFIle the ImageFile for the file being imported (iff it exists in records), null otherwise
      */
-    private static void processFetchedImageFile(@Nullable  File file,
-                                                @Nullable  ImageFile existingImageFIle){
+    private static void processFetchedImageFile(@Nullable File file,
+                                                @Nullable ImageFile existingImageFIle) {
         ImageFile fileToProcess;
-        if (file == null){
+        if (file == null) {
             fileToProcess = existingImageFIle;
-        }else {
+        } else {
             fileToProcess = new ImageFile(file);
 
             // Check to see if there are tags in the new file, that don't already exist in our database
             String[] beginningName = fileToProcess.getCurrentName().split("\\s");
-            for(String i: beginningName){
-                if(i.startsWith("@")){
-                    String withoutSymbol = i.substring(1,i.length());
-                    if(TagManager.getTagByString(withoutSymbol)==null){
+            for (String i : beginningName) {
+                if (i.startsWith("@")) {
+                    String withoutSymbol = i.substring(1, i.length());
+                    if (TagManager.getTagByString(withoutSymbol) == null) {
                         Tag tempTag = new Tag(withoutSymbol);
                         fileToProcess.getTagList().add(tempTag);
                         tempTag.images.add(fileToProcess);
