@@ -1,6 +1,4 @@
-package managers;
-
-import model.Tag;
+package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +7,7 @@ import java.util.ArrayList;
  * This class keeps track of all the existing tags in the system, also contains methods to perform operations on those
  * tags.
  */
-public class TagManager implements Serializable {
+public class UserTagData implements Serializable {
 
     /**
      * A list of all the tags in the system.
@@ -39,7 +37,7 @@ public class TagManager implements Serializable {
      * @return The Tag with name matching stringOfTag. Returns null if there is no tag with that name.
      */
     public static Tag getTagByString(String stringOfTag) {
-        for (Tag i : TagManager.tagList) {
+        for (Tag i : UserTagData.tagList) {
             if (i.toString().equals(stringOfTag)) {
                 return i;
             }
@@ -52,7 +50,7 @@ public class TagManager implements Serializable {
      *
      * @param newList The ArrayList of tags which we want to replace existing tags in the Tag manager with.
      */
-    static void setTagList(ArrayList<Tag> newList) {
+    public static void setTagList(ArrayList<Tag> newList) {
         tagList = newList;
     }
 }

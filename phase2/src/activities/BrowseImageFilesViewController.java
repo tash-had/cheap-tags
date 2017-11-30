@@ -16,9 +16,9 @@ import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
 import managers.StageManager;
 import managers.StateManager;
-import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
+import model.UserTagData;
 import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
 import utils.ConfigureJFXControl;
@@ -198,7 +198,7 @@ public class BrowseImageFilesViewController implements Initializable {
         ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
 
         // Populate the listview of tag options
-        availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
+        availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, UserTagData.getTagList());
 
         toggleButton.setSelected(false);
         imagesViewToggle();
@@ -505,7 +505,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         // Reset the available tag options, and remove all the tags that already belong to the selected ImageFile
         availableTagOptions.clear();
-        availableTagOptions.addAll(TagManager.getTagList());
+        availableTagOptions.addAll(UserTagData.getTagList());
         availableTagOptions.removeAll(existingTagsOnImageFile);
 
     }

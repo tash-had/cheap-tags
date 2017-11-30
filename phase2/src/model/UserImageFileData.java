@@ -1,15 +1,14 @@
-package managers;
-
-import model.ImageFile;
-import model.Tag;
+package model;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-
-public class UserDataManager implements Serializable {
+/**
+ * This class stores all ImageFile data from every session.
+ */
+public class UserImageFileData implements Serializable {
 
     /**
      * An ArrayList of all the previous directories the user has visited.
@@ -19,7 +18,7 @@ public class UserDataManager implements Serializable {
     /**
      * An ArrayList of all the tags
      */
-    ArrayList<Tag> allTags;
+    public ArrayList<Tag> allTags;
 
     /**
      * The name to image file map
@@ -41,7 +40,7 @@ public class UserDataManager implements Serializable {
      *
      * @param imageFile the ImageFile to add
      */
-    void addImageFileToMap(ImageFile imageFile) {
+    public void addImageFileToMap(ImageFile imageFile) {
         getNameToImageFileMap().put(imageFile.getCurrentName(), imageFile);
     }
 
@@ -50,7 +49,7 @@ public class UserDataManager implements Serializable {
      *
      * @param oldName the old name of the image
      */
-    void resetImageFileKey(String oldName) {
+    public void resetImageFileKey(String oldName) {
         if (getNameToImageFileMap().containsKey(oldName)) {
             ImageFile renamedImageFile = getNameToImageFileMap().get(oldName);
             getNameToImageFileMap().remove(oldName);
@@ -72,7 +71,7 @@ public class UserDataManager implements Serializable {
      *
      * @return a HashMap of image names to their corresponding ImageFile
      */
-    HashMap<String, ImageFile> getNameToImageFileMap() {
+    public HashMap<String, ImageFile> getNameToImageFileMap() {
         return nameToImageFileMap;
     }
 
@@ -82,7 +81,7 @@ public class UserDataManager implements Serializable {
      * @param imageName the image name to look for
      * @return if it exists in the map
      */
-    boolean existsInMap(String imageName) {
+    public boolean existsInMap(String imageName) {
         return getNameToImageFileMap().containsKey(imageName);
     }
 

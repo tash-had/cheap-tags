@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import managers.ImageFileOperationsManager;
-import managers.TagManager;
+import model.UserTagData;
 import model.Tag;
 import utils.ConfigureJFXControl;
 import utils.Log;
@@ -95,12 +95,12 @@ public class RevisionLogViewController implements Initializable {
             for (String i : beginningName) {
                 if (i.startsWith("@")) {
                     String withoutSymbol = i.substring(1, i.length());
-                    Tag findTheTag = TagManager.getTagByString(withoutSymbol);
+                    Tag findTheTag = UserTagData.getTagByString(withoutSymbol);
                     if (findTheTag == null) {
                         Tag tempTag = new Tag(withoutSymbol);
                         browseController.selectedImageFile.getTagList().add(tempTag);
                         tempTag.images.add(browseController.selectedImageFile);
-                        TagManager.addTag(tempTag);
+                        UserTagData.addTag(tempTag);
                     } else {
                         findTheTag.images.add(browseController.selectedImageFile);
                         browseController.selectedImageFile.getTagList().add(findTheTag);

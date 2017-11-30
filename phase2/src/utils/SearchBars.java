@@ -2,7 +2,7 @@ package utils;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
-import managers.TagManager;
+import model.UserTagData;
 import model.Tag;
 
 import java.util.ArrayList;
@@ -32,9 +32,9 @@ public class SearchBars  {
         data.clear();
         if (input.isEmpty()) {
             searchResult.clear();
-            data = ConfigureJFXControl.populateListViewWithArrayList(listView, TagManager.getTagList());
+            data = ConfigureJFXControl.populateListViewWithArrayList(listView, UserTagData.getTagList());
         } else {
-            for (Tag tag : TagManager.getTagList()) {
+            for (Tag tag : UserTagData.getTagList()) {
                 tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
                 if (tagSearchMatcher.find()) {
                     searchResult.add(tag);

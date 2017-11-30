@@ -5,6 +5,7 @@ import javafx.scene.control.ButtonType;
 import model.ImageFile;
 
 import model.Tag;
+import model.UserTagData;
 import utils.Dialogs;
 import utils.FileOperations;
 
@@ -122,7 +123,7 @@ public class ImageFileOperationsManager {
      *
      * @param directory the directory to fetch from
      */
-    static void fetchImageFiles(File directory) {
+    public static void fetchImageFiles(File directory) {
         ArrayDeque<String> acceptedExtensions = new ArrayDeque<>();
         acceptedExtensions.addAll(Arrays.asList(ACCEPTED_EXTENSIONS));
         try {
@@ -251,11 +252,11 @@ public class ImageFileOperationsManager {
             for (String i : beginningName) {
                 if (i.startsWith("@")) {
                     String withoutSymbol = i.substring(1, i.length());
-                    if (TagManager.getTagByString(withoutSymbol) == null) {
+                    if (UserTagData.getTagByString(withoutSymbol) == null) {
                         Tag tempTag = new Tag(withoutSymbol);
                         fileToProcess.getTagList().add(tempTag);
                         tempTag.images.add(fileToProcess);
-                        TagManager.addTag(tempTag);
+                        UserTagData.addTag(tempTag);
                     }
                     else{
                         Tag tempTag = new Tag(withoutSymbol);

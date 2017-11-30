@@ -63,18 +63,6 @@ public class StageManager {
     }
 
     /**
-     * Set the scene for the entire primary stage using a given Scene object.
-     *
-     * @param windowTitle the title of the new window
-     * @param scene       the scene to set
-     */
-    @SuppressWarnings("unused")
-    public void setScreen(String windowTitle, Scene scene) {
-        getStage().setTitle(windowTitle);
-        getStage().setScene(scene);
-    }
-
-    /**
      * Set the scene for the entire primary stage using a given FXML file.
      *
      * @param windowTitle the title of the new window
@@ -116,7 +104,6 @@ public class StageManager {
      *
      * @param width the width to set as default.
      */
-    @SuppressWarnings("ALL")
     public void setDefaultScreenWidth(double width) {
         defaultScreenWidth = width;
     }
@@ -136,7 +123,6 @@ public class StageManager {
      *
      * @param height the height to set as default
      */
-    @SuppressWarnings("ALL")
     public void setDefaultScreenHeight(double height) {
         defaultScreenHeight = height;
     }

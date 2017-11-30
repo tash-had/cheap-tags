@@ -1,13 +1,16 @@
-package managers;
+package model;
 
-import model.ImageFile;
+import managers.ImageFileOperationsManager;
 import org.brunocvcunha.instagram4j.Instagram4j;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 
-public class SessionDataManager extends UserDataManager implements Serializable {
+/**
+ * This class holds all user data for the duration of the ongoing session.
+ */
+public class UserSessionData extends UserImageFileData implements Serializable {
     private String currentSessionPath;
     public Instagram4j instagramReference;
 
@@ -27,8 +30,8 @@ public class SessionDataManager extends UserDataManager implements Serializable 
     }
 
     /**
-     * Functions in exactly the same way as {@link UserDataManager#getNameToImageFileMap() the parent's version} but has
-     * a <pre>public</pre> access modifier.
+     * Functions in exactly the same way as {@link UserImageFileData#getNameToImageFileMap() the parent's version}
+     * but has a <pre>public</pre> access modifier.
      */
     @Override
     public HashMap<String, ImageFile> getNameToImageFileMap() {

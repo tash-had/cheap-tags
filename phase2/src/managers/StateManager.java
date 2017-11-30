@@ -2,6 +2,9 @@ package managers;
 
 import exceptions.DirectoryCreationException;
 import exceptions.FileNotCreatedException;
+import model.UserImageFileData;
+import model.UserSessionData;
+import model.UserTagData;
 
 import java.io.*;
 
@@ -15,26 +18,26 @@ public class StateManager {
     /**
      * Container for all user data in records
      */
-    public static UserDataManager userData;
+    public static UserImageFileData userData;
 
     /**
      * Container for all session data
      */
-    public static SessionDataManager sessionData;
+    public static UserSessionData sessionData;
 
     /**
      * Start a new session
      */
     public static void startSession() {
         reloadState();
-        sessionData = new SessionDataManager();
+        sessionData = new UserSessionData();
     }
 
     /**
      * End a session
      */
     static void endSession() {
-        userData.allTags = TagManager.getTagList();
+        userData.allTags = UserTagData.getTagList();
         saveState(userData);
     }
 
@@ -44,15 +47,15 @@ public class StateManager {
     private static void reloadState() {
         File dataFile = new File("data/data.ctags");
         if (!dataFile.exists()) {
-            userData = new UserDataManager();
+            userData = new UserImageFileData();
         } else {
             FileInputStream fileInputStream;
             ObjectInputStream objectInputStream;
             try {
                 fileInputStream = new FileInputStream(dataFile);
                 objectInputStream = new ObjectInputStream(fileInputStream);
-                userData = (UserDataManager) objectInputStream.readObject();
-                TagManager.setTagList(userData.allTags);
+                userData = (UserImageFileData) objectInputStream.readObject();
+                UserTagData.setTagList(userData.allTags);
                 objectInputStream.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -65,9 +68,9 @@ public class StateManager {
     /**
      * Attempt to store all new data from this session, including ImageFiles and Tags.
      *
-     * @param userDataManager the main data manager for this session.
+     * @param userImageFileData the main data manager for this session.
      */
-    private static void saveState(UserDataManager userDataManager) {
+    private static void saveState(UserImageFileData userImageFileData) {
         FileOutputStream fileOutputStream;
         ObjectOutputStream objectOutputStream;
         File dataFile = new File("data/data.ctags");
@@ -77,12 +80,13 @@ public class StateManager {
             }
             fileOutputStream = new FileOutputStream(dataFile);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(userDataManager);
+            objectOutputStream.writeObject(userImageFileData);
             objectOutputStream.close();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
     }
+
 
     private static void createDataFile(File dataFile) {
         if (!dataFile.exists()) {

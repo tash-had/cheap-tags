@@ -110,6 +110,7 @@ public abstract class ConfigureJFXControl {
         }
         observableList.addAll(data);
 
+
         column1.setCellValueFactory(new PropertyValueFactory<Log, String>("currentName"));
         column2.setCellValueFactory(new PropertyValueFactory<Log, String>("oldName"));
         column3.setCellValueFactory(new PropertyValueFactory<Log, String>("timeStamp"));
