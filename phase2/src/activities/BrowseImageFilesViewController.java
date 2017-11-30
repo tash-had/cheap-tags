@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
 import managers.StageManager;
@@ -660,7 +661,19 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void viewParentButtonClicked(){
-        Dialogs.getDirectoryWithChooser();
+        if (selectedImageFile == null){
+            Dialogs.showErrorAlert("Error", "Nothing selected",
+                    "No image file has been selected yet. Please select a image file first.");
+
+        }
+        else{
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("View Parent Directory");
+            File file = selectedImageFile.getThisFile().getParentFile();
+            directoryChooser.setInitialDirectory(file);
+            directoryChooser.showDialog(getPrimaryStageManager().getStage());
+        }
+
 
     }
 
