@@ -19,9 +19,6 @@ import managers.StateManager;
 import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
 import utils.ConfigureJFXControl;
@@ -34,7 +31,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -133,7 +129,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * Show the image of instagram
      */
     @FXML
-    ImageView shareWithInstagramBtn;
+    Button shareWithInstagramBtn;
 
     /**
      * Quick search for tags
@@ -148,7 +144,7 @@ public class BrowseImageFilesViewController implements Initializable {
     Button revisionLogButton;
 
 
-    Label selectedImageLabel;
+    private Label selectedImageLabel;
 
     /**
      * Store the image files names as an observable list
@@ -195,7 +191,6 @@ public class BrowseImageFilesViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         // Set fonts of some elements
-        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
 
         // Enable listviews to be able to display objects with the same type as their type parameter
@@ -397,13 +392,8 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Handles the click on move directory button
      *
-<<<<<<< HEAD
-     * @param directory the directory the user wants to move to.
-=======
      * @param directory the directory to browse
      *
-
->>>>>>> dc77851dfe93317df8fce5df18809671c1b67f93
      */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);
@@ -460,14 +450,12 @@ public class BrowseImageFilesViewController implements Initializable {
         Label imageNameLabel = new Label(file.getParentFile().getName() + "/" + imageFile.getCurrentName());
         imageNameLabel.setPadding(new Insets(20, 0, 0, 0));
         imageNameLabel.setTextFill(Color.web("#000000"));
-        ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196f3"), Color.web("#000000"), imageNameLabel);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 17, imageNameLabel);
         tilePaneVBox.setAlignment(Pos.CENTER);
         imageView.setOnMouseClicked(event -> imageClicked(imageFile, imageNameLabel));
         // Add imageview and label to vbox + add vbox to tilepane
         tilePaneVBox.getChildren().addAll(imageView, imageNameLabel);
         imageTilePane.getChildren().add(tilePaneVBox);
-
     }
 
     /**
@@ -613,6 +601,11 @@ public class BrowseImageFilesViewController implements Initializable {
                 if (caption == null) {
                     caption = "";
                 }
+                StringBuilder sb = new StringBuilder();
+                for(Tag i : selectedImageFile.getTagList()){
+                    sb.append("@" + i.toString() + " ");
+                }
+                caption = caption + " " + sb.toString();
                 InstagramUploadPhotoRequest photoRequest = new
                         InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                 instagram.sendRequest(photoRequest);
@@ -625,18 +618,6 @@ public class BrowseImageFilesViewController implements Initializable {
             Dialogs.showErrorAlert("Invalid Credentials", "Invalid Creds",
                     "Please enter a valid username and password.");
         }
-    }
-
-    /**
-     * A method to turn off all apache log4j loggers.
-     */
-    private void turnOffLog4J() {
-        Enumeration loggers = LogManager.getCurrentLoggers();
-        while (loggers.hasMoreElements()) {
-            Logger logger = (Logger) loggers.nextElement();
-            logger.setLevel(Level.OFF);
-        }
-        LogManager.getRootLogger().setLevel(Level.OFF);
     }
 
     /**
