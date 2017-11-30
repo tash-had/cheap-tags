@@ -111,7 +111,7 @@ public class HomeScreenViewController implements Initializable {
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Light.ttf",
                 15, openDirectoryButton, myTagsButton, importFromInstagramBtn, tumblrBtn);
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196fe"),
-                Color.BLACK, openDirectoryButton, myTagsButton);
+                Color.BLACK, openDirectoryButton, myTagsButton, importFromInstagramBtn, tumblrBtn, masterLogButton);
     }
 
     /**
@@ -174,32 +174,9 @@ public class HomeScreenViewController implements Initializable {
         }
     }
 
-    public ArrayList<String> getInstragramDirectUrls(ArrayList<String> photoCodes) {
-        ArrayList<String> directUrls = new ArrayList<>();
-        for (String photoCode : photoCodes) {
-            HttpGet httpGet = new HttpGet("https://api.instagram.com/oembed/?url=http://instagram.com/p/" +
-                    photoCode);
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-            CloseableHttpResponse response = null;
-            try {
-                StringBuilder sb = new StringBuilder();
-                response = httpclient.execute(httpGet);
-                HttpEntity entity = response.getEntity();
-                BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-                JSONObject json = new JSONObject(sb.toString());
-                String directURL = json.getString("thumbnail_url");
-                directUrls.add(directURL);
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return directUrls;
-    }
-
+    /**
+     * Imports the first 20 images to the chosen directory from the instagram that the user entered.
+     */
     public void importFromInstagram(){
         File chosenDirectory = Dialogs.getDirectoryWithChooser();
         if (chosenDirectory != null){
@@ -207,18 +184,56 @@ public class HomeScreenViewController implements Initializable {
                 Dialogs.showInstagramLoginDialog();
             }
             ArrayList<String> codeList = getInstagramPhotoCodes();
-            ArrayList<String> directUrls = getInstragramDirectUrls(codeList);
+            ArrayList<String> directUrls = getInstagramDirectUrls(codeList);
+            System.out.println(directUrls);
             writeUrlToFile(directUrls, chosenDirectory);
             switchToToBrowseImageFilesView(chosenDirectory);
         }
     }
 
-    public ArrayList<String> getInstagramPhotoCodes(){
+    /**
+     * Returns a list of url strings where each individual image is sourced.
+     *
+     * @param photoCodes the instagram photo's id
+     *
+     * @return ArrayList of String containing urls to each individual image
+     */
+    private ArrayList<String> getInstagramDirectUrls(ArrayList<String> photoCodes) {
+        ArrayList<String> directUrls = new ArrayList<>();
+        for (String photoCode : photoCodes) {
+            System.out.println(photoCode);
+            try {
+                CloseableHttpResponse response = getHttpResponse("https://api.instagram.com/oembed/?url=http://instagram.com/p/" +
+                        photoCode);
+                if (response!= null && response.getStatusLine().getStatusCode() == 200) {
+                    JSONObject json = getJSONObject(response);
+                    System.out.println(json);
+                    String directURL = null;
+                    if (json != null) {
+                        directURL = json.getString("thumbnail_url");
+                    }
+                    CloseableHttpResponse directImageResponse = getHttpResponse(directURL);
+                    if (directImageResponse != null && directImageResponse.getStatusLine().getStatusCode() == 200) { // check the direct link to the image works
+                        directUrls.add(directURL);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return directUrls;
+    }
+
+    /**
+     * Gets an array of instagram photo ids using the Instagram4j API.
+     *
+     * @return an ArrayList of string representing the each photo's id.
+     */
+     private ArrayList<String> getInstagramPhotoCodes(){
         ArrayList<String> instagramPhotoIds = new ArrayList<>();
         Instagram4j instagramRef = StateManager.sessionData.instagramReference;
-        InstagramFeedResult feed = null;
         try {
-            feed = instagramRef.sendRequest(new InstagramUserFeedRequest(instagramRef.getUserId()));
+            InstagramFeedResult feed = instagramRef.sendRequest(new InstagramUserFeedRequest(instagramRef.getUserId()));
             if (feed != null && feed.getItems() != null){
                 for (InstagramFeedItem item : feed.getItems()){
                     instagramPhotoIds.add(item.getCode());
@@ -232,8 +247,8 @@ public class HomeScreenViewController implements Initializable {
 
     /**
      * A function that handles when the import from tumblr button is clicked. Prompts user to choose a directory and
-     * enter a tumblr URL. Imports first 20 images from the URL to the chosen directory and opens the image browsing
-     * screen on that directory.
+     * enter a tumblr URL. Using the tumblr API, imports first 20 images from the blog to the chosen directory and
+     * opens the image browsing screen on that directory.
      */
     @FXML
     public void tumblrButtonClicked() {
@@ -246,25 +261,11 @@ public class HomeScreenViewController implements Initializable {
                 if (response != null && response.getStatusLine().getStatusCode() == 200){ // response is not null and equal to 200 i.e. success code
                     JSONObject json = getJSONObject(response);
                     if (json != null) {
-                        try {
-                            JSONObject responseJson = json.getJSONObject("response");
-                            JSONArray posts = responseJson.getJSONArray("posts");
-                            ArrayList<String> urlArray = new ArrayList<>();
-                            for (int i = 0; i < posts.length(); i++) {
-                                JSONObject currPost = posts.getJSONObject(i);
-                                JSONArray photoArray = currPost.getJSONArray("photos");
-                                for (int j = 0; j < photoArray.length(); j++) {
-                                    JSONObject photoObj = photoArray.getJSONObject(j);
-                                    JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
-                                    String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
-                                    urlArray.add(photoUrlString);
-                                }
-                            }
+                        ArrayList<String> urlArray = getTumblrPhotoUrls(json);
+                        if (urlArray != null && !urlArray.isEmpty()) {
                             writeUrlToFile(urlArray, chosenDirectory);
                             switchToToBrowseImageFilesView(chosenDirectory);
                             StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
                     }
                 }
@@ -274,6 +275,34 @@ public class HomeScreenViewController implements Initializable {
                 }
             }
         }
+    }
+
+    /**
+     * Returns the url where the specific tumblr photo is located.
+     *
+     * @param json The JSON object to search for the url in
+     * @return String of the photo's url location, otherwise null if it is not found
+     */
+    private ArrayList<String> getTumblrPhotoUrls(JSONObject json){
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            JSONObject responseJson = json.getJSONObject("response");
+            JSONArray posts = responseJson.getJSONArray("posts");
+            for (int i = 0; i < posts.length(); i++) {
+                JSONObject currPost = posts.getJSONObject(i);
+                JSONArray photoArray = currPost.getJSONArray("photos");
+                for (int j = 0; j < photoArray.length(); j++) {
+                    JSONObject photoObj = photoArray.getJSONObject(j);
+                    JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
+                    String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
+                    result.add(photoUrlString);
+                }
+            }
+            return result;
+        } catch (JSONException j){
+            j.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -309,13 +338,8 @@ public class HomeScreenViewController implements Initializable {
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
             }
-            try {
                 return new JSONObject(sb.toString());
-            }
-            catch (JSONException je){
-                je.printStackTrace();
-            }
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return null;

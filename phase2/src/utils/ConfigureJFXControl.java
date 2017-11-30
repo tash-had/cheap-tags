@@ -103,15 +103,12 @@ public abstract class ConfigureJFXControl {
      * @param column3  shows the third index of the array list under data
      * @return a reference to the table view as an ObservableList
      */
-    public static ObservableList populatedTableViewWithArrayList (TableView tableView, ArrayList<ArrayList<String>> data, TableColumn column1, TableColumn column2, TableColumn column3){
+    public static ObservableList populatedTableViewWithArrayList (TableView tableView, ArrayList<Log> data, TableColumn column1, TableColumn column2, TableColumn column3){
         ObservableList observableList = tableView.getItems();
         if (observableList == null){
             observableList = FXCollections.observableArrayList();
         }
-        for (ArrayList al: data){
-            Log log = new Log((String)al.get(0),(String)al.get(1),(String)al.get(2));
-            observableList.add(log);
-        }
+        observableList.addAll(data);
 
 
         column1.setCellValueFactory(new PropertyValueFactory<Log, String>("currentName"));

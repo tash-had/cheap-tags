@@ -20,7 +20,7 @@ import static utils.FileOperations.FileOperationsResponse.FILENAME_TAKEN;
 import static utils.FileOperations.FileOperationsResponse.SUCCESS;
 
 /**
- * This class
+ * This class manages how file operations for ImageFiles are handled
  */
 public class ImageFileOperationsManager {
 
@@ -258,6 +258,12 @@ public class ImageFileOperationsManager {
                         tempTag.images.add(fileToProcess);
                         UserTagData.addTag(tempTag);
                     }
+                    else{
+                        Tag tempTag = new Tag(withoutSymbol);
+                        fileToProcess.getTagList().add(tempTag);
+                        tempTag.images.add(fileToProcess);
+                    }
+
                 }
             }
             StateManager.userData.addImageFileToMap(fileToProcess);

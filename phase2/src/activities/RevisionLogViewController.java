@@ -63,7 +63,7 @@ public class RevisionLogViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         allLogsListView.clear();
         allLogsListView = ConfigureJFXControl.populatedTableViewWithArrayList(revisionLog,
-                browseController.selectedImageFile.getOldName(), currentName, oldName, timeStamp);
+                browseController.selectedImageFile.getImageLogs(), currentName, oldName, timeStamp);
 
     }
 
