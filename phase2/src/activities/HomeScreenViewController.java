@@ -145,7 +145,7 @@ public class HomeScreenViewController implements Initializable {
      * @param path the path to hyperlink
      * @return the hyperlinked path
      */
-    private Hyperlink getHyperlinkWithPathName(String path) {
+     private Hyperlink getHyperlinkWithPathName(String path) {
         Hyperlink hyperlink = new Hyperlink(path);
         hyperlink.setOnAction(event -> switchToToBrowseImageFilesView(new File(path)));
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.BLUE, Color.BLACK, hyperlink);
@@ -161,7 +161,7 @@ public class HomeScreenViewController implements Initializable {
      *
      * @param directoryPath The directory that is to be opened.
      */
-    private void switchToToBrowseImageFilesView(File directoryPath) {
+     private void switchToToBrowseImageFilesView(File directoryPath) {
         StateManager.userData.addPathToVisitedList(directoryPath.getPath());
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
         if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0) {

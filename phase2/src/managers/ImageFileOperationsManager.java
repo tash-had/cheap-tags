@@ -59,7 +59,6 @@ public class ImageFileOperationsManager {
             Dialogs.showErrorAlert("Renaming Error", "Error",
                     "There was an error renaming your file");
         }
-
         imageFile.setFile(imageFilePath.toFile());
         return imageFile;
     }
@@ -158,18 +157,18 @@ public class ImageFileOperationsManager {
      * A helper function to handle the case where an image being fetched has the same name but different location as
      * an image that already exists in the database.
      *
-     * @param directory      the firectory being queried
+     * @param directory      the directory being queried
      * @param duplicateImage the duplicate named image
-     * @param exisitngImage  the existing ImageFile
+     * @param existingImage  the existing ImageFile
      */
     private static void handleImageExistsWithDifferentPath(File directory, File duplicateImage,
-                                                           ImageFile exisitngImage) {
+                                                           ImageFile existingImage) {
         // The ImageFile that exists in our records has a different path from the one being imported!
         // Ask the user if this file is the same!
         ButtonType imageIsExistingImage = Dialogs.showYesNoAlert("Filename Exists in Database",
                 "Filename Taken", "It looks like " + duplicateImage.getName() + " exists in our records " +
                         "from another directory you imported. Is this the same image from "
-                        + exisitngImage.getThisFile().getPath() + "?");
+                        + existingImage.getThisFile().getPath() + "?");
         if (imageIsExistingImage == ButtonType.NO) {
             // Image is not the image that exists in directory! Ask user if they want to rename the image
             // and make sure the entered name doesn't also exist in our database.
@@ -195,8 +194,8 @@ public class ImageFileOperationsManager {
         } else {
             // User says image is same as existing image one in records.
             // Update location of existing ImageFile and process it
-            exisitngImage.setFile(duplicateImage);
-            processFetchedImageFile(null, exisitngImage);
+            existingImage.setFile(duplicateImage);
+            processFetchedImageFile(null, existingImage);
         }
     }
 
