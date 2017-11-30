@@ -87,5 +87,16 @@ public class Log {
 
     }
 
+    @Override
+    public String toString() {
+        StringBuilder logString =  new StringBuilder();
+        logString.append(currentName.get()+", ");
+        logString.append(oldName.get() + ", ");
+        logString.append(timeStamp.get());
+
+        return logString.toString();
+
+    }
+
 }
 

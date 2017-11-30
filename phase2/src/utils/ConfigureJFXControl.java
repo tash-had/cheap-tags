@@ -2,9 +2,8 @@ package utils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -88,6 +87,38 @@ public abstract class ConfigureJFXControl {
             observableList.add(item);
         }
         listView.setItems(observableList);
+        return observableList;
+    }
+
+    /**
+     * Populate a given table view with a given array list
+     * by converting array list in the array list to log object, and storing in an observable list
+     * the table contains three column
+     * using setCellValueFactory to set those three column
+     * return an observable list
+     * @param tableView the table to populate
+     * @param data the array list to work with
+     * @param column1  shows the first index of the array list under data
+     * @param column2  shows the second index of the array list under data
+     * @param column3  shows the third index of the array list under data
+     * @return a reference to the table view as an ObservableList
+     */
+
+    public static ObservableList populatedTableViewWithArrayList (TableView tableView, ArrayList<ArrayList<String>> data, TableColumn column1, TableColumn column2, TableColumn column3){
+        ObservableList observableList = tableView.getItems();
+        if (observableList == null){
+            observableList = FXCollections.observableArrayList();
+        }
+        for (ArrayList al: data){
+            Log log = new Log((String)al.get(0),(String)al.get(1),(String)al.get(2));
+            observableList.add(log);
+        }
+
+        column1.setCellValueFactory(new PropertyValueFactory<Log, String>("currentName"));
+        column2.setCellValueFactory(new PropertyValueFactory<Log, String>("oldName"));
+        column3.setCellValueFactory(new PropertyValueFactory<Log, String>("timeStamp"));
+
+        tableView.setItems(observableList);
         return observableList;
     }
 }
