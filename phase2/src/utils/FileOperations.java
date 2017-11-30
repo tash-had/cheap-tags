@@ -20,19 +20,19 @@ public class FileOperations{
     /**
      * Enum class to hold response types
      */
-    public enum  FileOperationsResponse{
+    public enum FileOperationsResponse {
         SUCCESS, FAILURE, FILENAME_TAKEN
     }
 
     /**
      * Rename a given file.
      *
-     * @param file the file to rename
+     * @param file    the file to rename
      * @param newName the new name for the given file, including extension
      * @return 0 on failure, 1 on success and -1 on failure due to existing file
      */
     public static FileOperationsResponse renameFile(File file, String newName) {
-        if (newName == null){
+        if (newName == null) {
             return FAILURE;
         }
         File newFile = new File(file.getParentFile().getAbsolutePath(), newName);
@@ -41,7 +41,7 @@ public class FileOperations{
                 Path currentFilePath = file.toPath();
                 Files.move(currentFilePath, currentFilePath.resolveSibling(newName));
                 return SUCCESS;
-            }else {
+            } else {
                 return FILENAME_TAKEN;
             }
         } catch (IOException e) {
@@ -55,23 +55,23 @@ public class FileOperations{
      * share the same name
      *
      * @param existingFileName the name to suffix
-     * @param parentDirectory the parent directory
+     * @param parentDirectory  the parent directory
      * @return a File object of the
      */
-    static String getSuffixedFileName(File parentDirectory, String existingFileName){
+    static String getSuffixedFileName(File parentDirectory, String existingFileName) {
         String fileExtension = getFileExtension(new File(parentDirectory, existingFileName), true);
         String nameWithoutExt = existingFileName.substring(0, existingFileName.length() - fileExtension.length());
 
         int suffix = 1;
-        String baseFilePath = parentDirectory.getAbsolutePath() +"/"+nameWithoutExt;
-        String newName = nameWithoutExt + "("+Integer.toString(suffix)+")"+fileExtension;
+        String baseFilePath = parentDirectory.getAbsolutePath() + "/" + nameWithoutExt;
+        String newName = nameWithoutExt + "(" + Integer.toString(suffix) + ")" + fileExtension;
         File newFile = new File(baseFilePath + newName);
 
         // Loop to ensure suffixed file name does not exist.
-        while(newFile.exists()){
-            newName = nameWithoutExt +"("+Integer.toString(suffix)+")"+fileExtension;
+        while (newFile.exists()) {
+            newName = nameWithoutExt + "(" + Integer.toString(suffix) + ")" + fileExtension;
             newFile = new File(baseFilePath + newName);
-            suffix ++;
+            suffix++;
         }
         return newName;
 
@@ -80,17 +80,17 @@ public class FileOperations{
     /**
      * Get the extension of a normal file.
      *
-     * @param file the file to check
+     * @param file             the file to check
      * @param checkForValidity check whether the given file is infact a valid file with a valid extension. If false is
      *                         passed in, the function will not perform validity checks and simply return the characters
      *                         after the last "." in the file name.
      * @return the extension (includes the dot)
      */
-    public static String getFileExtension(File file, boolean checkForValidity){
+    public static String getFileExtension(File file, boolean checkForValidity) {
         String fileExtension = null;
         String fileName = file.getName();
         if ((checkForValidity && file.exists() && !file.isDirectory() && !file.isHidden() && fileName.contains(".")) ||
-                !checkForValidity){
+                !checkForValidity) {
             fileExtension = fileName.substring(fileName.lastIndexOf("."));
         }
         return fileExtension;
@@ -99,14 +99,14 @@ public class FileOperations{
     /**
      * Move a file to a new location
      *
-     * @param file the file to move
+     * @param file                 the file to move
      * @param destinationDirectory where to move the file
      * @return 0 on failure, 1 on success and -1 on failure due to existing file
      */
-    public static FileOperationsResponse moveFile(File file, Path destinationDirectory){
+    public static FileOperationsResponse moveFile(File file, Path destinationDirectory) {
         File newFile = new File(destinationDirectory.toFile(), file.getName());
 
-        if (!newFile.exists()){
+        if (!newFile.exists()) {
             Path sourcePath = file.toPath();
             try {
                 Files.move(sourcePath, destinationDirectory.resolve(sourcePath.getFileName()), REPLACE_EXISTING);
@@ -114,7 +114,7 @@ public class FileOperations{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             return FILENAME_TAKEN;
         }
         return FAILURE;
@@ -123,26 +123,26 @@ public class FileOperations{
     /**
      * Fetch files from a given directory
      *
-     * @param directory the directory to fetch from
+     * @param directory          the directory to fetch from
      * @param acceptedExtensions a collection of extensions to filter the files with
      * @return an arraylist of the fetched files (as File objects)
      */
     public static ArrayDeque<File> fetchFromDirectory(File directory, @Nullable Collection acceptedExtensions)
             throws IllegalArgumentException {
-        if (!directory.isDirectory()){
+        if (!directory.isDirectory()) {
             throw new IllegalArgumentException("File passed in is not a directory.");
         }
         File[] filesInDirectory = directory.listFiles();
         ArrayDeque<File> validFiles = new ArrayDeque<>();
 
-        if (filesInDirectory != null){
-            for (File file : filesInDirectory){
-                if (file.isDirectory()){
+        if (filesInDirectory != null) {
+            for (File file : filesInDirectory) {
+                if (file.isDirectory()) {
                     validFiles.addAll(fetchFromDirectory(file, acceptedExtensions));
-                }else {
+                } else {
                     String fileExtension = FileOperations.getFileExtension(file, true);
                     if ((fileExtension != null) &&
-                            (acceptedExtensions == null || acceptedExtensions.contains(fileExtension))){
+                            (acceptedExtensions == null || acceptedExtensions.contains(fileExtension))) {
                         validFiles.add(file);
                     }
                 }

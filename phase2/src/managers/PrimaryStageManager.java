@@ -5,10 +5,10 @@ import javafx.stage.Stage;
 /**
  * This class consists exclusively of static methods, and delegates all communication with the
  * primary stage of the application.
- *
+ * <p>
  * This class is final as it does not make sense to extend the primary stage manager.
  */
-public final class PrimaryStageManager extends StageManager{
+public final class PrimaryStageManager extends StageManager {
 
     private static PrimaryStageManager thisPrimaryStageManager;
 
@@ -27,7 +27,7 @@ public final class PrimaryStageManager extends StageManager{
      *
      * @return the PrimaryStageManager for this progream
      */
-    public static PrimaryStageManager getPrimaryStageManager(){
+    public static PrimaryStageManager getPrimaryStageManager() {
         return thisPrimaryStageManager;
     }
 
@@ -37,8 +37,8 @@ public final class PrimaryStageManager extends StageManager{
      *
      * @param stage the stage to manage.
      */
-    public static void setPrimaryStage(Stage stage){
-        if (thisPrimaryStageManager == null){
+    public static void setPrimaryStage(Stage stage) {
+        if (thisPrimaryStageManager == null) {
             thisPrimaryStageManager = new PrimaryStageManager(stage);
 
             // When the primaryStage is requested to close, do so via closeStage().
@@ -50,10 +50,10 @@ public final class PrimaryStageManager extends StageManager{
      * The PrimaryStageManager closes all other windows when it is closed.
      */
     @Override
-    public void closeStage(){
+    public void closeStage() {
         StateManager.endSession();
-        for (StageManager stageManager : StageManager.getStageManagers()){
-            if (stageManager != null && !(stageManager instanceof PrimaryStageManager)){
+        for (StageManager stageManager : StageManager.getStageManagers()) {
+            if (stageManager != null && !(stageManager instanceof PrimaryStageManager)) {
                 stageManager.closeStage();
             }
         }

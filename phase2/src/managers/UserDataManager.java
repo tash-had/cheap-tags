@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+
 public class UserDataManager implements Serializable {
 
+    /**
+     * An ArrayList of all the previous directories the user has visited.
+     */
     private ArrayList<String> previousPathsVisited = new ArrayList<>();
 
     /**
-     * An arraylist of all the tags
+     * An ArrayList of all the tags
      */
     ArrayList<Tag> allTags;
 
@@ -28,7 +32,7 @@ public class UserDataManager implements Serializable {
      * @param imageName the image name
      * @return the imagefile with the imageName
      */
-    public ImageFile getImageFileWithName(String imageName){
+    public ImageFile getImageFileWithName(String imageName) {
         return getNameToImageFileMap().get(imageName);
     }
 
@@ -37,7 +41,7 @@ public class UserDataManager implements Serializable {
      *
      * @param imageFile the ImageFile to add
      */
-    void addImageFileToMap(ImageFile imageFile){
+    void addImageFileToMap(ImageFile imageFile) {
         getNameToImageFileMap().put(imageFile.getCurrentName(), imageFile);
     }
 
@@ -46,8 +50,8 @@ public class UserDataManager implements Serializable {
      *
      * @param oldName the old name of the image
      */
-    void resetImageFileKey(String oldName){
-        if (getNameToImageFileMap().containsKey(oldName)){
+    void resetImageFileKey(String oldName) {
+        if (getNameToImageFileMap().containsKey(oldName)) {
             ImageFile renamedImageFile = getNameToImageFileMap().get(oldName);
             getNameToImageFileMap().remove(oldName);
             addImageFileToMap(renamedImageFile);
@@ -59,7 +63,7 @@ public class UserDataManager implements Serializable {
      *
      * @return a collection of all names.
      */
-    public Collection<String> getImageFileNames(){
+    public Collection<String> getImageFileNames() {
         return new ArrayList<>(nameToImageFileMap.keySet());
     }
 
@@ -78,7 +82,7 @@ public class UserDataManager implements Serializable {
      * @param imageName the image name to look for
      * @return if it exists in the map
      */
-    boolean existsInMap(String imageName){
+    boolean existsInMap(String imageName) {
         return getNameToImageFileMap().containsKey(imageName);
     }
 
@@ -87,10 +91,11 @@ public class UserDataManager implements Serializable {
      *
      * @param path the path to add
      */
-    public void addPathToVisitedList(String path){
-        if (previousPathsVisited.contains(path)){
+    public void addPathToVisitedList(String path) {
+        if (previousPathsVisited.contains(path)) {
             previousPathsVisited.remove(path);
-        }previousPathsVisited.add(path);
+        }
+        previousPathsVisited.add(path);
     }
 
     /**

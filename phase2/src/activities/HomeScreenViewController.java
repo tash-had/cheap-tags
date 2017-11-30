@@ -2,8 +2,10 @@ package activities;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -14,9 +16,6 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUserFeedRequest;
 import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedItem;
@@ -26,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import utils.ConfigureJFXControl;
 import utils.Dialogs;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -35,13 +35,14 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Optional;
+
 import java.util.ResourceBundle;
+
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
-
-
+/**
+ * This class manages activities on the home screen.
+ */
 public class HomeScreenViewController implements Initializable {
 
     /**
@@ -102,8 +103,7 @@ public class HomeScreenViewController implements Initializable {
     Button masterLogButton;
 
     @Override
-    public void initialize (URL location, ResourceBundle resources) {
-        Image logoImage = new Image("resources/images/logo_2.jpg", true);
+    public void initialize(URL location, ResourceBundle resources) {
         ConfigureJFXControl.populateListViewWithArrayList(previouslyViewedListView,
                 getHyperlinkArrayList(StateManager.userData.getPreviousPathsVisited()));
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf",
@@ -129,7 +129,7 @@ public class HomeScreenViewController implements Initializable {
      * Given an array of paths, get an arrayList of hyperlinked paths
      *
      * @param pathArray an array of paths
-     * @return an arraylist of hyperlinked paths
+     * @return an ArrayList of hyperlinked paths
      */
     private ArrayList<Hyperlink> getHyperlinkArrayList(String[] pathArray) {
         ArrayList<Hyperlink> hyperlinkArrayList = new ArrayList<>();
@@ -161,13 +161,13 @@ public class HomeScreenViewController implements Initializable {
      *
      * @param directoryPath The directory that is to be opened.
      */
-    private void switchToToBrowseImageFilesView(File directoryPath){
+    private void switchToToBrowseImageFilesView(File directoryPath) {
         StateManager.userData.addPathToVisitedList(directoryPath.getPath());
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
-        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0){
+        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0) {
             getPrimaryStageManager().setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
                     "/activities/browse_imagefiles_view.fxml");
-        }else {
+        } else {
             Dialogs.showErrorAlert("No Files to Load", "Uh oh!", "We didn't find any image files" +
                     " in the directory you loaded. Please select another");
             openDirectoryClick();
@@ -208,7 +208,7 @@ public class HomeScreenViewController implements Initializable {
             }
             ArrayList<String> codeList = getInstagramPhotoCodes();
             ArrayList<String> directUrls = getInstragramDirectUrls(codeList);
-            urlToImages(directUrls, chosenDirectory);
+            writeUrlToFile(directUrls, chosenDirectory);
             switchToToBrowseImageFilesView(chosenDirectory);
         }
     }
@@ -236,139 +236,140 @@ public class HomeScreenViewController implements Initializable {
      * screen on that directory.
      */
     @FXML
-    public void tumblrButtonClicked(){
+    public void tumblrButtonClicked() {
         File chosenDirectory = Dialogs.getDirectoryWithChooser();
         if (chosenDirectory != null) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setContentText("Enter a tumblr blog:");
-            Optional<String> input = dialog.showAndWait();
-            System.out.println(input);
-            if (input.isPresent()) {
-                String blogName = input.get();
-
-                try {
-                    JSONObject json = blogToJSONObject(blogName);
-                    JSONObject responsejson = json.getJSONObject("response");
-                        JSONArray posts = responsejson.getJSONArray("posts");
-                        //iterate through all posts, at each post, get photo array
-                        ArrayList<String> urlArray = new ArrayList<>();
-                        for (int i = 0; i < posts.length(); i++) {
-                            JSONObject currPost = posts.getJSONObject(i);
-                            JSONArray photoArray = currPost.getJSONArray("photos");
-                            for (int j = 0; j < photoArray.length(); j++) {
-                                JSONObject photoObj = photoArray.getJSONObject(j);
-                                JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
-                                String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
-                                urlArray.add(photoUrlString);
+            String blogName = Dialogs.showTextInputDialog("Import From Tumblr blog", null,
+                    "Please enter a Tumblr URL");
+            if (blogName != null) {
+                CloseableHttpResponse response  = getHttpResponse("https://api.tumblr.com/v2/blog/" + blogName + "/posts/photo?&api_key=3ty3TDhh79GPAJBoVy25768p81ApgqiyYTp59ugyD19ncgQdh0");
+                if (response != null && response.getStatusLine().getStatusCode() == 200){ // response is not null and equal to 200 i.e. success code
+                    JSONObject json = getJSONObject(response);
+                    if (json != null) {
+                        try {
+                            JSONObject responseJson = json.getJSONObject("response");
+                            JSONArray posts = responseJson.getJSONArray("posts");
+                            ArrayList<String> urlArray = new ArrayList<>();
+                            for (int i = 0; i < posts.length(); i++) {
+                                JSONObject currPost = posts.getJSONObject(i);
+                                JSONArray photoArray = currPost.getJSONArray("photos");
+                                for (int j = 0; j < photoArray.length(); j++) {
+                                    JSONObject photoObj = photoArray.getJSONObject(j);
+                                    JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
+                                    String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
+                                    urlArray.add(photoUrlString);
+                                }
                             }
+                            writeUrlToFile(urlArray, chosenDirectory);
+                            switchToToBrowseImageFilesView(chosenDirectory);
+                            StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        // System.out.println(urlArray);
-                        urlToImages(urlArray, chosenDirectory);
-
-                        switchToToBrowseImageFilesView(chosenDirectory);
-                        StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    }
+                }
+                else{
+                    Dialogs.showErrorAlert("Error", "Not a valid tumblr URL", "The URL entered" +
+                            " was not a valid tumblr blog. Please try again.");
                 }
             }
         }
     }
 
     /**
-     * Retrieves information about the tumblr page using tumblr API. Creates a JSON object from that and returns it.
+     * Returns the HttpResponse object created from requesting GET from a uri.
      *
-     * @param blogName A string of the tumblr URL
+     * @param uriString string of the URI to be accessed
      *
-     * @return Returns the JSONObject retrieved from the tumblr API.
+     * @return returns the response object from that page
      */
-    private JSONObject blogToJSONObject(String blogName){
+    private CloseableHttpResponse getHttpResponse(String uriString){
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("https://api.tumblr.com/v2/blog/" + blogName + "/posts/photo?&api_key=3ty3TDhh79GPAJBoVy25768p81ApgqiyYTp59ugyD19ncgQdh0");
-        CloseableHttpResponse response = null;
+        HttpGet httpGet = new HttpGet(uriString);
         try {
-            response = httpClient.execute(httpGet);
+            return httpClient.execute(httpGet);
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
-        HttpEntity entity = response.getEntity();
-        BufferedReader br = null;
+    }
+
+    /**
+     * Given a valid HTTP response, creates a JSON object from given entity.
+     *
+     * @param response the Http response to retrieve entity from
+     *
+     * @return return the JSONObject created from http entity, or null if JSONObject not created
+     */
+    private JSONObject getJSONObject(CloseableHttpResponse response){
+            HttpEntity entity = response.getEntity();
         try {
-            br = new BufferedReader(new InputStreamReader(entity.getContent()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        StringBuilder sb = new StringBuilder();
-        String line;
-        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+            StringBuilder sb = new StringBuilder();
+            String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
             }
+            try {
+                return new JSONObject(sb.toString());
+            }
+            catch (JSONException je){
+                je.printStackTrace();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            return new JSONObject(sb.toString());
-        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     /**
-     * Given a list of URLs containing only an image, retrieves image and writes a new File object to the chosen
-     * directory with that image.
+     * Given a list of URLs containing only an image, retrieves image and writes a new File object on the
+     * user's computer to the chosen directory with that image.
      *
-     * @param urlArray The list of URLs as strings.
+     * @param urlArray        The list of URLs as strings.
+     *
      * @param chosenDirectory The directory where the user wants the images written to.
      */
-    private void urlToImages(ArrayList<String> urlArray, File chosenDirectory){
-        // create BufferedImage object from url
-        // Change BufferedImage to File object
-        // add to File to directory chosen
-        int i = 1;
+    private void writeUrlToFile(ArrayList<String> urlArray, File chosenDirectory) {
         for (String urlString : urlArray) {
-            URL url = null;
             try {
-                url = new URL(urlString);
+                URL url = new URL(urlString);
+                try {
+                    BufferedImage image = ImageIO.read(url);
+                    File outputfile = new File(chosenDirectory.getAbsolutePath() + File.separator + getUniqueNameFromUrl(urlString));
+                    ImageIO.write(image, "png", outputfile);
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-            BufferedImage image = null;
-            try {
-                image = ImageIO.read(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            File outputfile = new File(chosenDirectory.getAbsolutePath() + File.separator + String.valueOf(i) + ".jpg");
-            try {
-                ImageIO.write(image, "jpg", outputfile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            outputfile.getParentFile().mkdirs();
-            try {
-                outputfile.createNewFile(); // if image doesn't already exist in directory, create it.
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            i++;
         }
+    }
+
+    /**
+     * Return a String of the unique name of an image located at the end of URL (after the last '/' character).
+     *
+     * @param urlString the url containing link to image and unique name.
+     *
+     * @return a String of the unique name.
+     */
+    private String getUniqueNameFromUrl(String urlString){
+        int startIndex = urlString.lastIndexOf("/");
+        return urlString.substring(startIndex, urlString.length());
     }
 
     /**
      * Changes the current screen to the Tag screen.
      */
-    public void openTagScreen(){
+    public void openTagScreen() {
         getPrimaryStageManager().setScreen("My Tags", "/activities/tag_screen_view.fxml");
     }
 
     /**
      * Change the current screen to the tag screen
      */
-    public void openMasterLog(){
+    public void openMasterLog() {
         StageManager masterLog = new StageManager(new Stage());
         masterLog.setDefaultScreenHeight(400);
         masterLog.setDefaultScreenWidth(600);

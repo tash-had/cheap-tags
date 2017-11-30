@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Caroline Ming
  */
-public class Log{
+public class Log {
     /**
      * the current name of the image file as a string property
      */
@@ -26,11 +26,12 @@ public class Log{
 
     /**
      * construct a new log with three variables
+     *
      * @param current current name
-     * @param old old name
-     * @param time time stamp
+     * @param old     old name
+     * @param time    time stamp
      */
-    public Log(String current, String old, String time){
+    public Log(String current, String old, String time) {
         this.currentName = new SimpleStringProperty(current);
         this.oldName = new SimpleStringProperty(old);
         this.timeStamp = new SimpleStringProperty(time);
@@ -39,46 +40,61 @@ public class Log{
 
     /**
      * Get the current name as a string
+     *
      * @return String current name
      */
-    public String getCurrentName(){
+    public String getCurrentName() {
         return currentName.get();
     }
 
     /**
      * Get the old name as a string
+     *
      * @return String current name
      */
-    public String getOldName(){
+    public String getOldName() {
         return oldName.get();
     }
+
     /**
      * Get the time stamp as a string
+     *
      * @return String current name
      */
-    public String getTimeStamp(){
+    public String getTimeStamp() {
         return timeStamp.get();
     }
 
     /**
      * Set the current name
      */
-    public void setCurrentName(String name){
+    public void setCurrentName(String name) {
         currentName.set(name);
     }
 
     /**
      * Set the old name
      */
-    public void setOldName(String name){
+    public void setOldName(String name) {
         oldName.set(name);
     }
 
     /**
      * Set the time stamp
      */
-    public void setTimeStamp(String time){
+    public void setTimeStamp(String time) {
         timeStamp.set(time);
+
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder logString =  new StringBuilder();
+        logString.append(currentName.get()+", ");
+        logString.append(oldName.get() + ", ");
+        logString.append(timeStamp.get());
+
+        return logString.toString();
 
     }
 
