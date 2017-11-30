@@ -661,7 +661,6 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     public void viewParentButtonClicked(){
         Dialogs.getDirectoryWithChooser();
-
     }
 
 }
