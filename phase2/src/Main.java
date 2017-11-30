@@ -13,8 +13,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         StateManager.startSession();
         PrimaryStageManager.setPrimaryStage(primaryStage);
-        getPrimaryStageManager().setDefaultScreenWidth(1280);
-        getPrimaryStageManager().setDefaultScreenHeight(800);
+        getPrimaryStageManager().setDefaultScreenWidth(1080);
+        getPrimaryStageManager().setDefaultScreenHeight(720);
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
         primaryStage.initStyle(StageStyle.DECORATED);
         getPrimaryStageManager().showStage();
