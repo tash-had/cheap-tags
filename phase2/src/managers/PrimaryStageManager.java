@@ -58,4 +58,5 @@ public final class PrimaryStageManager extends StageManager {
         }
         this.getStage().close();
     }
+
 }

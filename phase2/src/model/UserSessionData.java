@@ -23,20 +23,20 @@ public class UserSessionData extends UserImageFileData implements Serializable {
     public void startNewSession(File directory) {
         String sessionPath = directory.getAbsolutePath();
 
-        if (this.currentSessionPath == null || !this.currentSessionPath.equals(sessionPath)) {
-            this.pathToImageFileMap.clear();
+        if (this.currentSessionPath == null) {
+            this.nameToImageFileMap.clear();
             this.currentSessionPath = sessionPath;
             ImageFileOperationsManager.fetchImageFiles(directory);
         }
     }
 
     /**
-     * Functions in exactly the same way as {@link UserImageFileData#getPathToImageFileMap() the parent's version}
+     * Functions in exactly the same way as {@link UserImageFileData#getNameToImageFileMap() the parent's version}
      * but has a <pre>public</pre> access modifier.
      */
     @Override
-    public HashMap<String, ImageFile> getPathToImageFileMap() {
-        return pathToImageFileMap;
+    public HashMap<String, ImageFile> getNameToImageFileMap() {
+        return nameToImageFileMap;
     }
 
 }

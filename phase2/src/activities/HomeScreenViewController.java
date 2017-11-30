@@ -160,7 +160,7 @@ public class HomeScreenViewController implements Initializable {
      */
     private void switchToToBrowseImageFilesView(File directoryPath) {
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
-        if (StateManager.sessionData.getPathToImageFileMap().values().size() > 0) {
+        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0) {
             getPrimaryStageManager().setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
                     "/activities/browse_imagefiles_view.fxml");
         } else {
