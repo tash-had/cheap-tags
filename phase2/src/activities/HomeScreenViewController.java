@@ -185,7 +185,6 @@ public class HomeScreenViewController implements Initializable {
             }
             ArrayList<String> codeList = getInstagramPhotoCodes();
             ArrayList<String> directUrls = getInstagramDirectUrls(codeList);
-            System.out.println(directUrls);
             writeUrlToFile(directUrls, chosenDirectory);
             switchToToBrowseImageFilesView(chosenDirectory);
 
@@ -202,13 +201,10 @@ public class HomeScreenViewController implements Initializable {
     private ArrayList<String> getInstagramDirectUrls(ArrayList<String> photoCodes) {
         ArrayList<String> directUrls = new ArrayList<>();
         for (String photoCode : photoCodes) {
-            System.out.println(photoCode);
             try {
                 CloseableHttpResponse response = getHttpResponse("https://api.instagram.com/oembed/?url=http://instagram.com/p/" +
                         photoCode);
-                if (response!= null && response.getStatusLine().getStatusCode() == 200) {
                     JSONObject json = getJSONObject(response);
-                    System.out.println(json);
                     String directURL = null;
                     if (json != null) {
                         directURL = json.getString("thumbnail_url");
@@ -217,7 +213,6 @@ public class HomeScreenViewController implements Initializable {
                     if (directImageResponse != null && directImageResponse.getStatusLine().getStatusCode() == 200) { // check the direct link to the image works
                         directUrls.add(directURL);
                     }
-                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
