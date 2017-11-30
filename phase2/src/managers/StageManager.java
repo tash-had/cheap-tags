@@ -33,7 +33,7 @@ public class StageManager {
      */
     private static ArrayList<StageManager> stageManagers;
 
-    public StageManager(Stage stage){
+    public StageManager(Stage stage) {
         this.stage = stage;
         stageManagers = new ArrayList<>();
         stageManagers.add(this);
@@ -44,21 +44,21 @@ public class StageManager {
      *
      * @return the primary stage being managed
      */
-    public Stage getStage(){
+    public Stage getStage() {
         return stage;
     }
 
     /**
      * Show the primary stage window
      */
-    public void showStage(){
+    public void showStage() {
         getStage().show();
     }
 
     /**
      * Close the primary stage window
      */
-    public void closeStage(){
+    public void closeStage() {
         getStage().close();
     }
 
@@ -66,10 +66,10 @@ public class StageManager {
      * Set the scene for the entire primary stage using a given Scene object.
      *
      * @param windowTitle the title of the new window
-     * @param scene the scene to set
+     * @param scene       the scene to set
      */
     @SuppressWarnings("unused")
-    public void setScreen(String windowTitle, Scene scene){
+    public void setScreen(String windowTitle, Scene scene) {
         getStage().setTitle(windowTitle);
         getStage().setScene(scene);
     }
@@ -78,9 +78,9 @@ public class StageManager {
      * Set the scene for the entire primary stage using a given FXML file.
      *
      * @param windowTitle the title of the new window
-     * @param fxmlPath the path of this FXML file relative to this class.
+     * @param fxmlPath    the path of this FXML file relative to this class.
      */
-    public void setScreen(String windowTitle, String fxmlPath){
+    public void setScreen(String windowTitle, String fxmlPath) {
         getStage().setTitle(windowTitle);
         getStage().setScene(new Scene(getParentWithFXMLPath(fxmlPath),
                 getDefaultScreenWidth(), getDefaultScreenHeight()));
@@ -92,7 +92,7 @@ public class StageManager {
      * @param fxmlPath the path of the FXML file to load the Parent with. (relative to this class)
      * @return a Parent instance, loaded with the given FXML file
      */
-    private Parent getParentWithFXMLPath(String fxmlPath){
+    private Parent getParentWithFXMLPath(String fxmlPath) {
         try {
             return FXMLLoader.load(StageManager.class.getResource(fxmlPath));
         } catch (IOException e) {
@@ -115,7 +115,7 @@ public class StageManager {
      * width.
      *
      * @param width the width to set as default.
-     * */
+     */
     @SuppressWarnings("ALL")
     public void setDefaultScreenWidth(double width) {
         defaultScreenWidth = width;
@@ -141,7 +141,7 @@ public class StageManager {
         defaultScreenHeight = height;
     }
 
-    static ArrayList<StageManager> getStageManagers(){
+    static ArrayList<StageManager> getStageManagers() {
         return stageManagers;
     }
 }

@@ -14,7 +14,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-
 public class MasterLogViewController implements Initializable {
 
     /**
@@ -49,8 +48,7 @@ public class MasterLogViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-
-
+        allRevisionHistory.clear();
         for (String name: StateManager.userData.nameToImageFileMap.keySet()) {
             allRevisionHistory = ConfigureJFXControl.populatedTableViewWithArrayList(masterLog,
                     StateManager.userData.nameToImageFileMap.get(name).getOldName(),

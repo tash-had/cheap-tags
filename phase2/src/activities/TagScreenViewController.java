@@ -70,14 +70,14 @@ public class TagScreenViewController implements Initializable {
 
 
     @Override
-    public void initialize(URL location, ResourceBundle resources){
+    public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> tagInput.requestFocus());
         tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         // clears tagView to prevent duplication after reinitializing the scene and re-adds all the tags from TagManager
-            tagView.getItems().clear();
-            for (Tag tag : TagManager.getTagList()) {
-                tagView.getItems().add(tag);
-            }
+        tagView.getItems().clear();
+        for (Tag tag : TagManager.getTagList()) {
+            tagView.getItems().add(tag);
+        }
 
 
     }
@@ -88,7 +88,7 @@ public class TagScreenViewController implements Initializable {
      * with same name.
      */
     @FXML
-    public void addButtonClicked(){
+    public void addButtonClicked() {
         // tagInput checks if text box is empty since we cant have a tag with empty string as name.
         if (tagInput.getText() != null && !tagInput.getText().equals("")) {
 
@@ -103,7 +103,7 @@ public class TagScreenViewController implements Initializable {
 
             // duplicate is not 0, so there was an already existing tag which matched the name.
             if (duplicateExists != 0) {
-                Dialogs.showTagExistsAlert();
+                Dialogs.showErrorAlert("Error", "Duplicate Tags", "A tag with this name already exists.Please select a different name.");
                 tagInput.clear();
             }
 
@@ -124,43 +124,42 @@ public class TagScreenViewController implements Initializable {
      * When the selected tag associated with existing images, the program will show a warning box to ask user for permission.
      */
     @FXML
-    public void deleteButtonClicked(){
+    public void deleteButtonClicked() {
         ArrayList<Integer> intArray = new ArrayList<>();
-                intArray.addAll(tagView.getSelectionModel().getSelectedIndices());
+        intArray.addAll(tagView.getSelectionModel().getSelectedIndices());
         int deleteNum = 0;
         for (int i : intArray) {
 
-            if ( i-deleteNum > -1) {
-                Tag thisTag = tagView.getItems().get(i-deleteNum);
-                if(thisTag.images.size() != 0 ){
-                ButtonType renameReqResponse = Dialogs.showYesNoAlert("Could Not Delete The Tag","This Tag Associates With " +thisTag.images.size()+ " Image",
-                        "Are You Sure You Want To Delete?");
-                if (renameReqResponse == ButtonType.YES){
-                    for(ImageFile j : thisTag.images){
-                        j.getTagList().remove(thisTag);
+            if (i - deleteNum > -1) {
+                Tag thisTag = tagView.getItems().get(i - deleteNum);
+                if (thisTag.images.size() != 0) {
+                    ButtonType renameReqResponse = Dialogs.showYesNoAlert("Could Not Delete The Tag", "This Tag Associates With " + thisTag.images.size() + " Image",
+                            "Are You Sure You Want To Delete?");
+                    if (renameReqResponse == ButtonType.YES) {
+                        for (ImageFile j : thisTag.images) {
+                            j.getTagList().remove(thisTag);
 
-                        ArrayList<Tag> tempList = new ArrayList<>();
-                        tempList.addAll(j.getTagList());
+                            ArrayList<Tag> tempList = new ArrayList<>();
+                            tempList.addAll(j.getTagList());
 
-                        StringBuilder sb = new StringBuilder();
+                            StringBuilder sb = new StringBuilder();
 
-                        j.getTagList().clear(); //clear all tags, since .addAll adds everything again.
+                            j.getTagList().clear(); //clear all tags, since .addAll adds everything again.
 
-                        j.getTagList().addAll(tempList);
+                            j.getTagList().addAll(tempList);
 
-                        for (Tag tag : tempList) {
-                            sb.append("@").append(tag).append(" ");
+                            for (Tag tag : tempList) {
+                                sb.append("@").append(tag).append(" ");
+                            }
+                            sb.append(j.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
+                            ImageFileOperationsManager.renameImageFile(j, sb.toString());
                         }
-                        sb.append(j.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
-                        ImageFileOperationsManager.renameImageFile(j, sb.toString());
+                        tagView.getItems().remove(i - deleteNum);
+                        TagManager.getTagList().remove(thisTag);
+                        deleteNum++;
                     }
-                    tagView.getItems().remove(i-deleteNum);
-                    TagManager.getTagList().remove(thisTag);
-                    deleteNum++;
-                }
-            }
-            else{
-                    tagView.getItems().remove(i-deleteNum);
+                } else {
+                    tagView.getItems().remove(i - deleteNum);
                     TagManager.getTagList().remove(thisTag);
                     deleteNum++;
                 }
@@ -173,7 +172,7 @@ public class TagScreenViewController implements Initializable {
      * Changes scene to home screen.
      */
     @FXML
-    public void backButtonClicked(){
+    public void backButtonClicked() {
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
@@ -183,8 +182,8 @@ public class TagScreenViewController implements Initializable {
      * @param ke key that the user has pressed.
      */
     @FXML
-    public void handleEnterPressed(KeyEvent ke){
-        if (ke.getCode() == KeyCode.ENTER){
+    public void handleEnterPressed(KeyEvent ke) {
+        if (ke.getCode() == KeyCode.ENTER) {
             addButtonClicked();
         }
     }
@@ -194,19 +193,19 @@ public class TagScreenViewController implements Initializable {
      * results according to the user input.
      */
     @FXML
-    public void searchInputChanged(){
+    public void searchInputChanged() {
         String input = tagSearch.getText().toLowerCase();
         ArrayList<Tag> searchResult = new ArrayList<>();
         Pattern tagSearchPattern = Pattern.compile(input);
         Matcher tagSearchMatcher;
         tagView.getItems().clear();
-        if (input.isEmpty()){
+        if (input.isEmpty()) {
             searchResult.clear();
             repopulateTagView();
-        }else {
-            for (Tag tag: TagManager.getTagList()){
+        } else {
+            for (Tag tag : TagManager.getTagList()) {
                 tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
-                if (tagSearchMatcher.find()){
+                if (tagSearchMatcher.find()) {
                     searchResult.add(tag);
                 }
             }

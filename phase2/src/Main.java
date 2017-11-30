@@ -7,7 +7,8 @@ import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 import java.io.IOException;
 
-public class Main extends Application{
+public class Main extends Application {
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         StateManager.startSession();
@@ -17,11 +18,9 @@ public class Main extends Application{
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
         primaryStage.initStyle(StageStyle.DECORATED);
         getPrimaryStageManager().showStage();
-
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         launch(args);
     }
-
-
 }

@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 
-public class SessionDataManager extends UserDataManager implements Serializable{
+public class SessionDataManager extends UserDataManager implements Serializable {
     private String currentSessionPath;
 
     /**
@@ -14,10 +14,10 @@ public class SessionDataManager extends UserDataManager implements Serializable{
      *
      * @param directory the directory this session will browse.
      */
-    public void startNewSession(File directory){
+    public void startNewSession(File directory) {
         String sessionPath = directory.getAbsolutePath();
 
-        if (this.currentSessionPath == null || !this.currentSessionPath.equals(sessionPath)){
+        if (this.currentSessionPath == null || !this.currentSessionPath.equals(sessionPath)) {
             this.nameToImageFileMap.clear();
             this.currentSessionPath = sessionPath;
             ImageFileOperationsManager.fetchImageFiles(directory);
@@ -32,6 +32,5 @@ public class SessionDataManager extends UserDataManager implements Serializable{
     public HashMap<String, ImageFile> getNameToImageFileMap() {
         return nameToImageFileMap;
     }
-
 
 }
