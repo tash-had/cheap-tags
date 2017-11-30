@@ -2,8 +2,10 @@ package activities;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -29,12 +31,13 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
-
+/**
+ * This class manages activities on the home screen.
+ */
 public class HomeScreenViewController implements Initializable {
 
     /**
@@ -96,7 +99,6 @@ public class HomeScreenViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image logoImage = new Image("resources/images/logo_2.jpg", true);
         ConfigureJFXControl.populateListViewWithArrayList(previouslyViewedListView,
                 getHyperlinkArrayList(StateManager.userData.getPreviousPathsVisited()));
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf",
@@ -243,122 +245,124 @@ public class HomeScreenViewController implements Initializable {
     public void tumblrButtonClicked() {
         File chosenDirectory = Dialogs.getDirectoryWithChooser();
         if (chosenDirectory != null) {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setContentText("Enter a tumblr blog:");
-            Optional<String> input = dialog.showAndWait();
-            System.out.println(input);
-            if (input.isPresent()) {
-                String blogName = input.get();
-
-                try {
-                    JSONObject json = blogToJSONObject(blogName);
-                    JSONObject responsejson = json.getJSONObject("response");
-                    JSONArray posts = responsejson.getJSONArray("posts");
-                    //iterate through all posts, at each post, get photo array
-                    ArrayList<String> urlArray = new ArrayList<>();
-                    for (int i = 0; i < posts.length(); i++) {
-                        JSONObject currPost = posts.getJSONObject(i);
-                        JSONArray photoArray = currPost.getJSONArray("photos");
-                        for (int j = 0; j < photoArray.length(); j++) {
-                            JSONObject photoObj = photoArray.getJSONObject(j);
-                            JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
-                            String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
-                            urlArray.add(photoUrlString);
+            String blogName = Dialogs.showTextInputDialog("Import From Tumblr blog", null,
+                    "Please enter a Tumblr URL");
+            if (blogName != null) {
+                CloseableHttpResponse response  = getHttpResponse("https://api.tumblr.com/v2/blog/" + blogName + "/posts/photo?&api_key=3ty3TDhh79GPAJBoVy25768p81ApgqiyYTp59ugyD19ncgQdh0");
+                if (response != null && response.getStatusLine().getStatusCode() == 200){ // response is not null and equal to 200 i.e. success code
+                    JSONObject json = getJSONObject(response);
+                    if (json != null) {
+                        try {
+                            JSONObject responseJson = json.getJSONObject("response");
+                            JSONArray posts = responseJson.getJSONArray("posts");
+                            ArrayList<String> urlArray = new ArrayList<>();
+                            for (int i = 0; i < posts.length(); i++) {
+                                JSONObject currPost = posts.getJSONObject(i);
+                                JSONArray photoArray = currPost.getJSONArray("photos");
+                                for (int j = 0; j < photoArray.length(); j++) {
+                                    JSONObject photoObj = photoArray.getJSONObject(j);
+                                    JSONArray photoSpecs = photoObj.getJSONArray("alt_sizes");
+                                    String photoUrlString = photoSpecs.getJSONObject(0).getString("url");
+                                    urlArray.add(photoUrlString);
+                                }
+                            }
+                            writeUrlToFile(urlArray, chosenDirectory);
+                            switchToToBrowseImageFilesView(chosenDirectory);
+                            StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-                    // System.out.println(urlArray);
-                    urlToImages(urlArray, chosenDirectory);
-
-                    switchToToBrowseImageFilesView(chosenDirectory);
-                    StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }
+                else{
+                    Dialogs.showErrorAlert("Error", "Not a valid tumblr URL", "The URL entered" +
+                            " was not a valid tumblr blog. Please try again.");
                 }
             }
         }
     }
 
     /**
-     * Retrieves information about the tumblr page using tumblr API. Creates a JSON object from that and returns it.
+     * Returns the HttpResponse object created from requesting GET from a uri.
      *
-     * @param blogName A string of the tumblr URL
-     * @return Returns the JSONObject retrieved from the tumblr API.
+     * @param uriString string of the URI to be accessed
+     *
+     * @return returns the response object from that page
      */
-    private JSONObject blogToJSONObject(String blogName) {
+    private CloseableHttpResponse getHttpResponse(String uriString){
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("https://api.tumblr.com/v2/blog/" + blogName + "/posts/photo?&api_key=3ty3TDhh79GPAJBoVy25768p81ApgqiyYTp59ugyD19ncgQdh0");
-        CloseableHttpResponse response = null;
+        HttpGet httpGet = new HttpGet(uriString);
         try {
-            response = httpClient.execute(httpGet);
+            return httpClient.execute(httpGet);
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
-        HttpEntity entity = response.getEntity();
-        BufferedReader br = null;
+    }
+
+    /**
+     * Given a valid HTTP response, creates a JSON object from given entity.
+     *
+     * @param response the Http response to retrieve entity from
+     *
+     * @return return the JSONObject created from http entity, or null if JSONObject not created
+     */
+    private JSONObject getJSONObject(CloseableHttpResponse response){
+            HttpEntity entity = response.getEntity();
         try {
-            br = new BufferedReader(new InputStreamReader(entity.getContent()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        StringBuilder sb = new StringBuilder();
-        String line;
-        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+            StringBuilder sb = new StringBuilder();
+            String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
             }
+            try {
+                return new JSONObject(sb.toString());
+            }
+            catch (JSONException je){
+                je.printStackTrace();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            return new JSONObject(sb.toString());
-        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     /**
-     * Given a list of URLs containing only an image, retrieves image and writes a new File object to the chosen
-     * directory with that image.
+     * Given a list of URLs containing only an image, retrieves image and writes a new File object on the
+     * user's computer to the chosen directory with that image.
      *
      * @param urlArray        The list of URLs as strings.
+     *
      * @param chosenDirectory The directory where the user wants the images written to.
      */
-    private void urlToImages(ArrayList<String> urlArray, File chosenDirectory) {
-        // create BufferedImage object from url
-        // Change BufferedImage to File object
-        // add to File to directory chosen
-        int i = 1;
+    private void writeUrlToFile(ArrayList<String> urlArray, File chosenDirectory) {
         for (String urlString : urlArray) {
-            URL url = null;
             try {
-                url = new URL(urlString);
+                URL url = new URL(urlString);
+                try {
+                    BufferedImage image = ImageIO.read(url);
+                    File outputfile = new File(chosenDirectory.getAbsolutePath() + File.separator + getUniqueNameFromUrl(urlString));
+                    ImageIO.write(image, "png", outputfile);
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-            BufferedImage image = null;
-            try {
-                image = ImageIO.read(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            File outputfile = new File(chosenDirectory.getAbsolutePath() + File.separator + String.valueOf(i) + ".jpg");
-            try {
-                ImageIO.write(image, "png", outputfile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            outputfile.getParentFile().mkdirs();
-            try {
-                outputfile.createNewFile(); // if image doesn't already exist in directory, create it.
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            i++;
         }
+    }
+
+    /**
+     * Return a String of the unique name of an image located at the end of URL (after the last '/' character).
+     *
+     * @param urlString the url containing link to image and unique name.
+     *
+     * @return a String of the unique name.
+     */
+    private String getUniqueNameFromUrl(String urlString){
+        int startIndex = urlString.lastIndexOf("/");
+        return urlString.substring(startIndex, urlString.length());
     }
 
     /**
