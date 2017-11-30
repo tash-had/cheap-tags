@@ -286,7 +286,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * Modifies the tagsList of selected image, and stores the data
      */
     @FXML
-    public void renameButtonClick() {
+    public void setTagsBtnClick() {
         if (selectedImageFile == null) {
             Dialogs.showErrorAlert("Error", "Nothing selected ", "No image file has been selected yet. Please select a image file first.");
         } else {
@@ -355,7 +355,8 @@ public class BrowseImageFilesViewController implements Initializable {
     public void moveImageButtonClick() {
         checkForUnsavedChanges();
         if (selectedImageFile == null) {
-            Dialogs.showErrorAlert("Error", "Nothing selected", "No image file has been selected yet. Please select a image file first.");
+            Dialogs.showErrorAlert("Error", "Nothing selected",
+                    "No image file has been selected yet. Please select a image file first.");
         } else {
             File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
             if (movedFile != null) {
@@ -365,16 +366,11 @@ public class BrowseImageFilesViewController implements Initializable {
                 if (response == ButtonType.YES) {
                     // set screen to new directory
                     setNewTargetDirectory(newDirectoryLocation);
-                    getPrimaryStageManager().setScreen("Browse Images - [~" + newDirectoryLocation.getPath() + "]",
-                            "/activities/browse_imagefiles_view.fxml");
-                    // update recently viewed on home scene
-                    selectedImageFile.setFile(movedFile);
-                    StateManager.userData.addPathToVisitedList(newDirectoryLocation.toString());
                 } else {
                     setNewTargetDirectory(targetDirectory);
-                    getPrimaryStageManager().setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
-                            "/activities/browse_imagefiles_view.fxml");
                 }
+                getPrimaryStageManager().setScreen("Browse Images - [~" + targetDirectory.getPath() + "]",
+                        "/activities/browse_imagefiles_view.fxml");
             }
         }
     }
@@ -395,6 +391,7 @@ public class BrowseImageFilesViewController implements Initializable {
      *
      */
     static void setNewTargetDirectory(File directory) {
+        StateManager.userData.addPathToVisitedList(directory.getPath());
         StateManager.sessionData.startNewSession(directory);
         targetDirectory = directory;
     }
@@ -416,7 +413,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * Populate the ImageTilePane with all the images in this session
      */
     private void populateImageTilePane() {
-        for (ImageFile imageFile : StateManager.sessionData.getNameToImageFileMap().values()) {
+        for (ImageFile imageFile : StateManager.sessionData.getPathToImageFileMap().values()) {
             addImageToTilePane(imageFile);
         }
     }
@@ -487,7 +484,7 @@ public class BrowseImageFilesViewController implements Initializable {
             ButtonType saveChangesResponse = Dialogs.showYesNoAlert("Save Your Changes", "Save Changes?",
                     "You forgot to hit Set Tags! Would you like us to set your new tags?");
             if (saveChangesResponse == ButtonType.YES) {
-                renameButtonClick();
+                setTagsBtnClick();
             }
             unsavedChanges = false;
         }
@@ -571,7 +568,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         Instagram4j instagram = StateManager.sessionData.instagramReference;
             if (instagram == null){
-                String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
+                String[] instagramCreds = Dialogs.loginDialog("Instagram Login",
                         "Enter your Instagram credentials ...", null);
                 if (instagramCreds[0] != null && instagramCreds[1] != null
                         && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {

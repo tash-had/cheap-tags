@@ -20,7 +20,10 @@ import static utils.FileOperations.FileOperationsResponse.FILENAME_TAKEN;
 import static utils.FileOperations.FileOperationsResponse.SUCCESS;
 
 /**
- * This class manages how file operations for ImageFiles are handled
+ * This class handles how file operations are <b>handled</b> within the program.
+ * <p>
+ * Note: This class differs from utils/FileOperations in that the latter deals with the OS-related operations,
+ * while this class handles the consequences of those operations (ie.
  */
 public class ImageFileOperationsManager {
 
@@ -37,15 +40,15 @@ public class ImageFileOperationsManager {
         File currentImageFile = imageFile.getThisFile();
         Path imageFilePath = Paths.get(currentImageFile.getParentFile().getAbsolutePath());
 
-        if (StateManager.userData.getNameToImageFileMap().containsKey(newName)) {
+        if (StateManager.userData.existsInMap(newName)) {
             return handleNewNameExists(imageFile, newName);
         }
 
         FileOperationsResponse response = renameFile(currentImageFile, newName);
         if (response == SUCCESS) {
             imageFile.generalReName(newName);
-            StateManager.userData.resetImageFileKey(currentImageFile.getName());
-            StateManager.sessionData.resetImageFileKey(currentImageFile.getName());
+            StateManager.userData.resetImageFileKey(currentImageFile.getAbsolutePath());
+            StateManager.sessionData.resetImageFileKey(currentImageFile.getAbsolutePath());
             imageFilePath = Paths.get(imageFilePath.toAbsolutePath().toString(), newName);
         } else if (response == FILENAME_TAKEN) {
             String suffixedFileName = Dialogs.showFileExistsAlert(currentImageFile.getParentFile(), newName,
@@ -74,7 +77,7 @@ public class ImageFileOperationsManager {
     private static ImageFile handleNewNameExists(ImageFile imageFile, String newName) {
         String chosenName = handleFilenameTakenByDatabase(new File(newName),
                 "It looks like the new name you chose exists in our database from " +
-                        StateManager.userData.getNameToImageFileMap().get(newName).getThisFile().getAbsolutePath() +
+                        StateManager.userData.getImageFileWithName(newName).getThisFile().getAbsolutePath() +
                         ". Would you like to choose a new name? (If you select no, your file will not be renamed).");
         if (chosenName == null) {
             // User denied to a rename.
@@ -101,10 +104,9 @@ public class ImageFileOperationsManager {
         File newFile = new File(newDirectory, oldFile.getName());
         FileOperationsResponse response = moveFile(oldFile, newDirectory.toPath());
 
-        if (response == SUCCESS) {
-            return newFile;
-        } else if (response == FILENAME_TAKEN) {
+        if (response == FILENAME_TAKEN) {
             String suffixedFileName = Dialogs.showFileExistsAlert(newDirectory, newFile.getName(), null);
+
             if (suffixedFileName != null) {
                 imageFile.generalReName(suffixedFileName);
                 moveFile(imageFile.getThisFile(), newDirectory.toPath());
@@ -115,6 +117,7 @@ public class ImageFileOperationsManager {
         } else {
             Dialogs.showErrorAlert("Move Error", "Error", "There was an error moving your file");
         }
+        imageFile.setFile(newFile);
         return newFile;
     }
 
@@ -171,8 +174,7 @@ public class ImageFileOperationsManager {
                         "from another directory you imported. Is this the same image from "
                         + exisitngImage.getThisFile().getPath() + "?");
         if (imageIsExistingImage == ButtonType.NO) {
-            // Image is not the image that exists in directory! Ask user if they want to rename the image
-            // and make sure the entered name doesn't also exist in our database.
+            // Image is not the image that exists in directory - ask user if they want to rename the image
             String alertBody = "Would you like to rename this file? (If you chose no, the file will " +
                     "not be imported)";
             String chosenName = handleFilenameTakenByDatabase(duplicateImage, alertBody);
@@ -257,8 +259,7 @@ public class ImageFileOperationsManager {
                         fileToProcess.getTagList().add(tempTag);
                         tempTag.images.add(fileToProcess);
                         UserTagData.addTag(tempTag);
-                    }
-                    else{
+                    } else {
                         Tag tempTag = new Tag(withoutSymbol);
                         fileToProcess.getTagList().add(tempTag);
                         tempTag.images.add(fileToProcess);

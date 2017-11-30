@@ -1,6 +1,5 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import managers.*;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
@@ -13,11 +12,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         StateManager.startSession();
         PrimaryStageManager.setPrimaryStage(primaryStage);
-        getPrimaryStageManager().setDefaultScreenWidth(1080);
-        getPrimaryStageManager().setDefaultScreenHeight(720);
-        getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
-        primaryStage.initStyle(StageStyle.DECORATED);
-        getPrimaryStageManager().showStage();
+        PrimaryStageManager primaryStageManager = getPrimaryStageManager();
+        primaryStageManager.setDefaultScreenWidth(1080);
+        primaryStageManager.setDefaultScreenHeight(720);
+        primaryStageManager.setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
+        primaryStageManager.showStage();
     }
 
     public static void main(String[] args) {

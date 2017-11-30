@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * This class keeps track of all the existing tags in the system, also contains methods to perform operations on those
- * tags.
+ * This class keeps track of all the existing tags in the system.
  */
 public class UserTagData implements Serializable {
 

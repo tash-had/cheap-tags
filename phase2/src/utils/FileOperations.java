@@ -29,7 +29,7 @@ public class FileOperations{
      *
      * @param file    the file to rename
      * @param newName the new name for the given file, including extension
-     * @return 0 on failure, 1 on success and -1 on failure due to existing file
+     * @return whether the operation was a succes, failiure or if the filename was taken.
      */
     public static FileOperationsResponse renameFile(File file, String newName) {
         if (newName == null) {
@@ -54,9 +54,9 @@ public class FileOperations{
      * Get a new file with a suffix at the end of its name based on how many other files in the parent directory,
      * share the same name
      *
-     * @param existingFileName the name to suffix
-     * @param parentDirectory  the parent directory
-     * @return a File object of the
+     * @param parentDirectory the parent directory
+     * @param existingFileName  the name to suffix
+     * @return a string of the new name with a numerical suffix.
      */
     static String getSuffixedFileName(File parentDirectory, String existingFileName) {
         String fileExtension = getFileExtension(new File(parentDirectory, existingFileName), true);
@@ -101,7 +101,7 @@ public class FileOperations{
      *
      * @param file                 the file to move
      * @param destinationDirectory where to move the file
-     * @return 0 on failure, 1 on success and -1 on failure due to existing file
+     * @return whether the operation was a succes, failiure or if the filename was taken.
      */
     public static FileOperationsResponse moveFile(File file, Path destinationDirectory) {
         File newFile = new File(destinationDirectory.toFile(), file.getName());

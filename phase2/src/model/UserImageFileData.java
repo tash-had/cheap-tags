@@ -23,7 +23,8 @@ public class UserImageFileData implements Serializable {
     /**
      * The name to image file map
      */
-    public HashMap<String, ImageFile> nameToImageFileMap = new HashMap<>();
+    public HashMap<String, ImageFile> pathToImageFileMap = new HashMap<>();
+
 
     /**
      * Get the ImageFile associated with the given name
@@ -32,7 +33,12 @@ public class UserImageFileData implements Serializable {
      * @return the imagefile with the imageName
      */
     public ImageFile getImageFileWithName(String imageName) {
-        return getNameToImageFileMap().get(imageName);
+        for (ImageFile imageFile : pathToImageFileMap.values()){
+            if (imageFile.getCurrentName().equals(imageName)){
+                return imageFile;
+            }
+        }
+        return null;
     }
 
     /**
@@ -41,18 +47,18 @@ public class UserImageFileData implements Serializable {
      * @param imageFile the ImageFile to add
      */
     public void addImageFileToMap(ImageFile imageFile) {
-        getNameToImageFileMap().put(imageFile.getCurrentName(), imageFile);
+        getPathToImageFileMap().put(imageFile.getThisFile().getAbsolutePath(), imageFile);
     }
 
     /**
      * Reset the key of the ImageFile in the main HashMap of all ImageFiles
      *
-     * @param oldName the old name of the image
+     * @param oldPath the (absolute) old path of this image
      */
-    public void resetImageFileKey(String oldName) {
-        if (getNameToImageFileMap().containsKey(oldName)) {
-            ImageFile renamedImageFile = getNameToImageFileMap().get(oldName);
-            getNameToImageFileMap().remove(oldName);
+    public void resetImageFileKey(String oldPath) {
+        if (getPathToImageFileMap().containsKey(oldPath)) {
+            ImageFile renamedImageFile = getPathToImageFileMap().get(oldPath);
+            getPathToImageFileMap().remove(oldPath);
             addImageFileToMap(renamedImageFile);
         }
     }
@@ -63,7 +69,11 @@ public class UserImageFileData implements Serializable {
      * @return a collection of all names.
      */
     public Collection<String> getImageFileNames() {
-        return new ArrayList<>(nameToImageFileMap.keySet());
+        ArrayList<String> names = new ArrayList<>();
+        for (ImageFile imageFile : pathToImageFileMap.values()){
+            names.add(imageFile.getCurrentName());
+        }
+        return names;
     }
 
     /**
@@ -71,8 +81,8 @@ public class UserImageFileData implements Serializable {
      *
      * @return a HashMap of image names to their corresponding ImageFile
      */
-    public HashMap<String, ImageFile> getNameToImageFileMap() {
-        return nameToImageFileMap;
+    public HashMap<String, ImageFile> getPathToImageFileMap() {
+        return pathToImageFileMap;
     }
 
     /**
@@ -82,7 +92,12 @@ public class UserImageFileData implements Serializable {
      * @return if it exists in the map
      */
     public boolean existsInMap(String imageName) {
-        return getNameToImageFileMap().containsKey(imageName);
+        for (ImageFile imageFile : pathToImageFileMap.values()){
+            if (imageFile.getCurrentName().equals(imageName)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

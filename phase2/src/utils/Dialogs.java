@@ -21,7 +21,7 @@ import java.util.Optional;
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 /**
- * A class containing all the popup windows in the system. Contains alerts and directory-choosing popups.
+ * A class containing methods behind all the popup dialogs in the program. Contains alerts and directory-choosing popups.
  */
 public class Dialogs {
 
@@ -168,33 +168,6 @@ public class Dialogs {
         return directoryChooser.showDialog(getPrimaryStageManager().getStage());
     }
 
-    /**
-     * Tells the user that a tag already exists with the same name.
-     */
-    public static void showTagExistsAlert() {
-        Alert tagExistsDialog = new Alert(Alert.AlertType.NONE, "A tag with this name already exists. " +
-                "Please select a different name.", ButtonType.CLOSE);
-        tagExistsDialog.showAndWait();
-    }
-
-    /**
-     * Tells the user that actions cannot be performed on a file because they haven't chosen one yet.
-     */
-    public static void chooseFileAlert() {
-        Alert needToChooseFile = new Alert(Alert.AlertType.NONE, "No image file has been selected yet.\n" +
-                "Please select a image file first.", ButtonType.CLOSE);
-        needToChooseFile.showAndWait();
-    }
-
-    /**
-     * Tells the user that the selected file already has that tag.
-     */
-    public static void fileContainsTagAlert() {
-        Alert fileContainsTag = new Alert(Alert.AlertType.NONE, "The selected file already contains this tag." +
-                "", ButtonType.CLOSE);
-        fileContainsTag.showAndWait();
-    }
-
     public static boolean showInstagramLoginDialog() {
         turnOffLog4J();
         String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
@@ -210,6 +183,7 @@ public class Dialogs {
                 return true;
             } catch (IOException e) {
 //                e.printStackTrace();
+                return false;
             }
         } else {
             Dialogs.showErrorAlert("Invalid Input", "No Input",
