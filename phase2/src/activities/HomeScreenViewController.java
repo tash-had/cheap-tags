@@ -188,6 +188,7 @@ public class HomeScreenViewController implements Initializable {
             System.out.println(directUrls);
             writeUrlToFile(directUrls, chosenDirectory);
             switchToToBrowseImageFilesView(chosenDirectory);
+
         }
     }
 
@@ -265,7 +266,6 @@ public class HomeScreenViewController implements Initializable {
                         if (urlArray != null && !urlArray.isEmpty()) {
                             writeUrlToFile(urlArray, chosenDirectory);
                             switchToToBrowseImageFilesView(chosenDirectory);
-                            StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
                         }
                     }
                 }
