@@ -4,8 +4,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -14,12 +12,11 @@ import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
 import utils.Dialogs;
+import utils.SearchBars;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
@@ -195,22 +192,7 @@ public class TagScreenViewController implements Initializable {
     @FXML
     public void searchInputChanged() {
         String input = tagSearch.getText().toLowerCase();
-        ArrayList<Tag> searchResult = new ArrayList<>();
-        Pattern tagSearchPattern = Pattern.compile(input);
-        Matcher tagSearchMatcher;
-        tagView.getItems().clear();
-        if (input.isEmpty()) {
-            searchResult.clear();
-            repopulateTagView();
-        } else {
-            for (Tag tag : TagManager.getTagList()) {
-                tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
-                if (tagSearchMatcher.find()) {
-                    searchResult.add(tag);
-                }
-            }
-            tagView.getItems().addAll(searchResult);
-        }
+        SearchBars.TagSearchByText(tagView, tagView.getItems(),input);
     }
 
     /**
