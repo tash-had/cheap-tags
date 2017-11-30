@@ -132,7 +132,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * Show the image of instagram
      */
     @FXML
-    ImageView shareWithInstagramBtn;
+    Button shareWithInstagramBtn;
 
     /**
      * Quick search for tags
@@ -191,7 +191,6 @@ public class BrowseImageFilesViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         // Set fonts of some elements
-        ConfigureJFXControl.setFontOfLabeled("resources/fonts/Roboto-Regular.ttf", 20, Tags);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
 
         // Enable listviews to be able to display objects with the same type as their type parameter
@@ -452,14 +451,12 @@ public class BrowseImageFilesViewController implements Initializable {
         Label label = new Label(file.getParentFile().getName() + "/" + imageFile.getCurrentName());
         label.setPadding(new Insets(20, 0, 0, 0));
         label.setTextFill(Color.web("#000000"));
-        ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196f3"), Color.web("#000000"), label);
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 17, label);
         tilePaneVBox.setAlignment(Pos.CENTER);
 
         // Add imageview and label to vbox + add vbox to tilepane
         tilePaneVBox.getChildren().addAll(imageView, label);
         imageTilePane.getChildren().add(tilePaneVBox);
-
     }
 
     /**

@@ -103,7 +103,7 @@ public class HomeScreenViewController implements Initializable {
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Light.ttf",
                 15, openDirectoryButton, myTagsButton, importFromInstagramBtn, tumblrBtn);
         ConfigureJFXControl.toggleHoverTextColorOfLabeled(Color.web("#2196fe"),
-                Color.BLACK, openDirectoryButton, myTagsButton);
+                Color.BLACK, openDirectoryButton, myTagsButton, importFromInstagramBtn, tumblrBtn, masterLogButton);
     }
 
     /**
