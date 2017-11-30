@@ -14,6 +14,13 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.brunocvcunha.instagram4j.Instagram4j;
+import org.brunocvcunha.instagram4j.requests.InstagramUserFeedRequest;
+import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedItem;
+import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +35,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import static managers.PrimaryStageManager.getPrimaryStageManager;
@@ -166,71 +174,60 @@ public class HomeScreenViewController implements Initializable {
         }
     }
 
-    /**
-     *
-     */
-    @FXML
+    public ArrayList<String> getInstragramDirectUrls(ArrayList<String> photoCodes) {
+        ArrayList<String> directUrls = new ArrayList<>();
+        for (String photoCode : photoCodes) {
+            HttpGet httpGet = new HttpGet("https://api.instagram.com/oembed/?url=http://instagram.com/p/" +
+                    photoCode);
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            CloseableHttpResponse response = null;
+            try {
+                StringBuilder sb = new StringBuilder();
+                response = httpclient.execute(httpGet);
+                HttpEntity entity = response.getEntity();
+                BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                JSONObject json = new JSONObject(sb.toString());
+                String directURL = json.getString("thumbnail_url");
+                directUrls.add(directURL);
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return directUrls;
+    }
+
     public void importFromInstagram(){
-//        File chosenDirectory = Dialogs.getDirectoryWithChooser();
-//
-//        HttpGet httpGet = new HttpGet("https://api.instagram.com/v1/users/self/media/recent/?access_token=548320548.b2a4a69.db79a44000d7460db61a6186a6928da3");
-////        TextInputDialog dialog = new TextInputDialog();
-////        dialog.setContentText("Enter your Instagram id:");
-////        Optional<String> input = dialog.showAndWait();
-////        if (input != null) {
-//
-//        CloseableHttpClient httpclient = HttpClients.createDefault();
-//
-//        try {
-//            ArrayList<File> instagramImages = new ArrayList<>();
-//            CloseableHttpResponse response = httpclient.execute(httpGet);
-//            HttpEntity entity = response.getEntity();
-//            BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-//            StringBuilder sb = new StringBuilder();
-//            String line;
-//            while ((line = br.readLine())!= null){
-//                sb.append(line).append("\n");
-//            }
-//            JSONObject json = new JSONObject(sb.toString());
-//            JSONArray arr = json.getJSONArray("data");
-//            ArrayList<String> urlArray = new ArrayList<>();
-//
-//            // add all urls to our arraylist
-//            for (int i = 0; i < arr.length(); i++){
-//                JSONObject subJSON = arr.getJSONObject(i);
-//                JSONObject imagesJSON = subJSON.getJSONObject("images");
-//                JSONObject standardRes = imagesJSON.getJSONObject("standard_resolution");
-//                String url = standardRes.getString("url");
-//                urlArray.add(url);
-//            }
-//            for (String s : urlArray){
-//                System.out.println(s);
-//            }
-//            // create BufferedImage object from url
-//            // Change BufferedImage to File object
-//            // add to File to directory chosen
-//            int i = 1;
-//            for (String urlString : urlArray){
-//                URL url = new URL(urlString);
-//                BufferedImage image = ImageIO.read(url);
-//                System.out.println(image);
-//                System.out.println(chosenDirectory.getAbsolutePath());
-//
-//                File outputfile = new File(chosenDirectory.getAbsolutePath() +File.separator + String.valueOf(i) + ".jpg");
-//                ImageIO.write(image, "png", outputfile);
-//
-//                outputfile.getParentFile().mkdirs();
-//                outputfile.createNewFile(); // if image doesn't already exist in directory, create it.
-//
-//                i++;
-//            }
-//            switchToToBrowseImageFilesView(chosenDirectory);
-//            StateManager.userData.addPathToVisitedList(chosenDirectory.getPath());
-//        } catch (IOException e) {
-//            System.out.println("IOException");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        File chosenDirectory = Dialogs.getDirectoryWithChooser();
+        if (chosenDirectory != null){
+            if (StateManager.sessionData.instagramReference == null){
+                Dialogs.showInstagramLoginDialog();
+            }
+            ArrayList<String> codeList = getInstagramPhotoCodes();
+            ArrayList<String> directUrls = getInstragramDirectUrls(codeList);
+            urlToImages(directUrls, chosenDirectory);
+            switchToToBrowseImageFilesView(chosenDirectory);
+        }
+    }
+
+    public ArrayList<String> getInstagramPhotoCodes(){
+        ArrayList<String> instagramPhotoIds = new ArrayList<>();
+        Instagram4j instagramRef = StateManager.sessionData.instagramReference;
+        InstagramFeedResult feed = null;
+        try {
+            feed = instagramRef.sendRequest(new InstagramUserFeedRequest(instagramRef.getUserId()));
+            if (feed != null && feed.getItems() != null){
+                for (InstagramFeedItem item : feed.getItems()){
+                    instagramPhotoIds.add(item.getCode());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return instagramPhotoIds;
     }
 
     /**
@@ -345,7 +342,7 @@ public class HomeScreenViewController implements Initializable {
 
             File outputfile = new File(chosenDirectory.getAbsolutePath() + File.separator + String.valueOf(i) + ".jpg");
             try {
-                ImageIO.write(image, "png", outputfile);
+                ImageIO.write(image, "jpg", outputfile);
             } catch (IOException e) {
                 e.printStackTrace();
             }

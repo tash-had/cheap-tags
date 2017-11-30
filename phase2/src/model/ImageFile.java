@@ -59,6 +59,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile>{
 
     /**
      * Constructs a new model.ImageFile object.
+     *
      * @param oneImageFile is the actual imagefile(eg.image.jpeg)
      */
     public ImageFile(File oneImageFile){

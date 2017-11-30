@@ -15,7 +15,7 @@ import static utils.FileOperations.FileOperationsResponse.*;
 /**
  * This class contains exclusively of static methods that operate on files or attributes of files.
  */
-public class FileOperations {
+public class FileOperations{
 
     /**
      * Enum class to hold response types
