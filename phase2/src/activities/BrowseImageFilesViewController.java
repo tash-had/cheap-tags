@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
 import managers.StageManager;
@@ -85,7 +86,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * Takes user back to home screen.
      */
     @FXML
-    Button back;
+    Button home;
 
 
     /**
@@ -144,6 +145,18 @@ public class BrowseImageFilesViewController implements Initializable {
     @FXML
     Button revisionLogButton;
 
+    /**
+     * Takes the user to the tag screen.
+     */
+    @FXML
+    Button myTagsButton;
+
+    /**
+     *
+     */
+    @FXML
+    Button viewParentButton;
+
 
     private Label selectedImageLabel;
 
@@ -190,9 +203,6 @@ public class BrowseImageFilesViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        // Set fonts of some elements
-        ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 20, Tags);
 
         // Enable listviews to be able to display objects with the same type as their type parameter
         ConfigureJFXControl.setListViewToDisplayCustomObjects(existingTags);
@@ -382,7 +392,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * Takes user to the home screen when back button is clicked.
      */
     @FXML
-    public void backButtonClick() {
+    public void homeButtonClick() {
         checkForUnsavedChanges();
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
@@ -642,6 +652,36 @@ public class BrowseImageFilesViewController implements Initializable {
             revisionLog.setScreen("Revision History", "/activities/revision_log_view.fxml");
             revisionLog.showStage();
         }
+
+    }
+
+    /**
+     * Takes the user to the tag screen.
+     */
+    @FXML
+    public void myTagsButtonClicked(){
+        checkForUnsavedChanges();
+        getPrimaryStageManager().setScreen("My Tags", "/activities/tag_screen_view.fxml");
+    }
+
+    /**
+     * Takes the user to the parent directory screen
+     */
+    @FXML
+    public void viewParentButtonClicked(){
+        if (selectedImageFile == null){
+            Dialogs.showErrorAlert("Error", "Nothing selected",
+                    "No image file has been selected yet. Please select a image file first.");
+
+        }
+        else{
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("View Parent Directory");
+            File file = selectedImageFile.getThisFile().getParentFile();
+            directoryChooser.setInitialDirectory(file);
+            directoryChooser.showDialog(getPrimaryStageManager().getStage());
+        }
+
 
     }
 

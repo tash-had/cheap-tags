@@ -64,7 +64,6 @@ public class ImageFileOperationsManager {
             Dialogs.showErrorAlert("Renaming Error", "Error",
                     "There was an error renaming your file");
         }
-
         imageFile.setFile(imageFilePath.toFile());
         return imageFile;
     }
@@ -211,35 +210,35 @@ public class ImageFileOperationsManager {
 //        }
 //    }
 
-    /**
-     * Prompt the user to rename the file being imported since it has the same name as something the database.
-     *
-     * @param file the file they are trying to import
-     * @return the new name they chose for the file, null if they said no to a new name.
-     */
-    private static String handleFilenameTakenByDatabase(File file, String alertBody) {
-        String fileName = file.getName();
-        ButtonType renameImage = Dialogs.showYesNoAlert("Filename Exists in Database",
-                "Filename Taken", alertBody);
-
-        if (renameImage == ButtonType.YES) {
-            String result = Dialogs.showTextInputDialog("Enter a new name", null,
-                    "Enter a new name for " + fileName);
-            if (result == null || result.equals("")) {
-                return null;
-            } else {
-                result = result + FileOperations.getFileExtension(file, false);
-            }
-            // Ensure that the new name they gave us doesn't also exist in our database
-            if (StateManager.userData.existsInMap(result)) {
-                return handleFilenameTakenByDatabase(new File(result), alertBody);
-            } else {
-                return result;
-            }
-        } else {
-            return null;
-        }
-    }
+//    /**
+//     * Prompt the user to rename the file being imported since it has the same name as something the database.
+//     *
+//     * @param file the file they are trying to import
+//     * @return the new name they chose for the file, null if they said no to a new name.
+//     */
+//    private static String handleFilenameTakenByDatabase(File file, String alertBody) {
+//        String fileName = file.getName();
+//        ButtonType renameImage = Dialogs.showYesNoAlert("Filename Exists in Database",
+//                "Filename Taken", alertBody);
+//
+//        if (renameImage == ButtonType.YES) {
+//            String result = Dialogs.showTextInputDialog("Enter a new name", null,
+//                    "Enter a new name for " + fileName);
+//            if (result == null || result.equals("")) {
+//                return null;
+//            } else {
+//                result = result + FileOperations.getFileExtension(file, false);
+//            }
+//            // Ensure that the new name they gave us doesn't also exist in our database
+//            if (StateManager.userData.existsInMap(result)) {
+//                return handleFilenameTakenByDatabase(new File(result), alertBody);
+//            } else {
+//                return result;
+//            }
+//        } else {
+//            return null;
+//        }
+//    }
 
     /**
      * Process a fetched image file by adding it to the session and load list.

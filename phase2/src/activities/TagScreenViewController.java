@@ -8,12 +8,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import managers.ImageFileOperationsManager;
+import managers.StateManager;
+import model.UserImageFileData;
 import model.UserTagData;
 import model.ImageFile;
 import model.Tag;
 import utils.Dialogs;
 import utils.SearchBars;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -39,7 +42,13 @@ public class TagScreenViewController implements Initializable {
      * Takes user back to home screen.
      */
     @FXML
-    Button back;
+    Button home;
+
+    /**
+     * Takes the user to their last viewed directory.
+     */
+    @FXML
+    Button lastDirectoryButton;
 
     /**
      * A TextField where users can enter their desired tag names.
@@ -169,7 +178,7 @@ public class TagScreenViewController implements Initializable {
      * Changes scene to home screen.
      */
     @FXML
-    public void backButtonClicked() {
+    public void homeButtonClicked() {
         getPrimaryStageManager().setScreen("Cheap Tags", "/activities/home_screen_view.fxml");
     }
 
@@ -202,6 +211,25 @@ public class TagScreenViewController implements Initializable {
         tagView.getItems().clear();
         for (Tag tag : UserTagData.getTagList()) {
             tagView.getItems().add(tag);
+        }
+    }
+
+    /**
+     * Handles when the last directory button is clicked. Takes user to most recently viewed directory.
+     */
+    @FXML
+    public void lastDirectoryButtonClicked(){
+        String[] pathsVisited = StateManager.userData.getPreviousPathsVisited();
+        if (pathsVisited != null && pathsVisited.length >0 ) {
+            String lastDirectory = pathsVisited[pathsVisited.length - 1];
+            File directoryPath = new File(lastDirectory);
+            BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
+            getPrimaryStageManager().setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
+                    "/activities/browse_imagefiles_view.fxml");
+        }
+        else {
+            Dialogs.showErrorAlert("Error", "No Available Directory", "There are no previously" +
+                    " viewed directories! Please open a directory in the home screen.");
         }
     }
 }
