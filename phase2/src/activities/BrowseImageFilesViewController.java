@@ -657,7 +657,7 @@ public class BrowseImageFilesViewController implements Initializable {
     }
 
     /**
-     *
+     * Takes the user to the parent directory screen
      */
     @FXML
     public void viewParentButtonClicked(){
