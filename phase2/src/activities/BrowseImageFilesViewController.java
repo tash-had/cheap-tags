@@ -600,6 +600,11 @@ public class BrowseImageFilesViewController implements Initializable {
                 if (caption == null) {
                     caption = "";
                 }
+                StringBuilder sb = new StringBuilder();
+                for(Tag i : selectedImageFile.getTagList()){
+                    sb.append("@" + i.toString() + " ");
+                }
+                caption = caption + " " + sb.toString();
                 InstagramUploadPhotoRequest photoRequest = new
                         InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                 instagram.sendRequest(photoRequest);
