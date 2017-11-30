@@ -11,7 +11,7 @@ import managers.ImageFileOperationsManager;
 import model.UserTagData;
 import model.Tag;
 import utils.ConfigureJFXControl;
-import utils.Log;
+import model.Log;
 
 import java.net.URL;
 import java.util.ResourceBundle;

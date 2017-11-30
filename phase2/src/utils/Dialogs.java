@@ -21,7 +21,7 @@ import java.util.Optional;
 import static managers.PrimaryStageManager.getPrimaryStageManager;
 
 /**
- * A class containing all the popup windows in the system. Contains alerts and directory-choosing popups.
+ * A class containing methods behind all the popup dialogs in the program. Contains alerts and directory-choosing popups.
  */
 public class Dialogs {
 
@@ -183,6 +183,7 @@ public class Dialogs {
                 return true;
             } catch (IOException e) {
 //                e.printStackTrace();
+                return false;
             }
         } else {
             Dialogs.showErrorAlert("Invalid Input", "No Input",

@@ -5,8 +5,8 @@ import javafx.stage.Stage;
 /**
  * This class consists exclusively of static methods, and delegates all communication with the
  * primary stage of the application.
- * <p>
- * This class is final as it does not make sense to extend the primary stage manager.
+ *
+ * This class is final as it does not make sense to extend the PrimaryStageManager.
  */
 public final class PrimaryStageManager extends StageManager {
 
@@ -14,7 +14,6 @@ public final class PrimaryStageManager extends StageManager {
 
     /**
      * Private constructor because there is only one PrimaryStage, so there cannot be multiple instances
-     * of a PrimaryStage.
      *
      * @param stage the primary stage
      */

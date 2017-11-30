@@ -96,24 +96,28 @@ public abstract class ConfigureJFXControl {
      * the table contains three column
      * using setCellValueFactory to set those three column
      * return an observable list
+     *
      * @param tableView the table to populate
-     * @param data the array list to work with
-     * @param column1  shows the first index of the array list under data
-     * @param column2  shows the second index of the array list under data
-     * @param column3  shows the third index of the array list under data
+     * @param data      the array list to work with
+     * @param column1   shows the first index of the array list under data
+     * @param column2   shows the second index of the array list under data
+     * @param column3   shows the third index of the array list under data
      * @return a reference to the table view as an ObservableList
      */
-    public static ObservableList populatedTableViewWithArrayList (TableView tableView, ArrayList<Log> data, TableColumn column1, TableColumn column2, TableColumn column3){
+    public static ObservableList populatedTableViewWithArrayList(TableView tableView, ArrayList data,
+                                                                 TableColumn column1,
+                                                                 TableColumn column2,
+                                                                 TableColumn column3) {
         ObservableList observableList = tableView.getItems();
-        if (observableList == null){
+        if (observableList == null) {
             observableList = FXCollections.observableArrayList();
         }
         observableList.addAll(data);
 
 
-        column1.setCellValueFactory(new PropertyValueFactory<Log, String>("currentName"));
-        column2.setCellValueFactory(new PropertyValueFactory<Log, String>("oldName"));
-        column3.setCellValueFactory(new PropertyValueFactory<Log, String>("timeStamp"));
+        column1.setCellValueFactory(new PropertyValueFactory<>("currentName"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("oldName"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("timeStamp"));
 
         tableView.setItems(observableList);
         return observableList;

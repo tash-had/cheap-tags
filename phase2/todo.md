@@ -90,7 +90,7 @@ will discuss these features during the presentaiton
 * Make UML Diagram PDF
 * Add a help.txt with concise IntelliJ AND Terminal instructions
 * Run program in lab computers!
-
+* Send in remark req for phase1
 
 
 #### Presentation

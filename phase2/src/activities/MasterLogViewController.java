@@ -8,7 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import managers.StateManager;
 import utils.ConfigureJFXControl;
-import utils.Log;
+import model.Log;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -49,9 +49,9 @@ public class MasterLogViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources){
         allRevisionHistory.clear();
-        for (String name: StateManager.userData.nameToImageFileMap.keySet()) {
+        for (String name: StateManager.userData.getImageFileNames()) {
             allRevisionHistory = ConfigureJFXControl.populatedTableViewWithArrayList(masterLog,
-                    StateManager.userData.nameToImageFileMap.get(name).getImageLogs(),
+                    StateManager.userData.getImageFileWithName(name).getImageLogs(),
                     currentName, oldName, timeStamp);
         }
     }

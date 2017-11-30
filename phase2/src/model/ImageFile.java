@@ -1,7 +1,5 @@
 package model;
 
-import utils.Log;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -67,7 +65,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
         currentName = new StringBuilder();
         originalName = oneImageFile.getName();
         currentName.append(originalName);
-        imageLogs = new ArrayList<Log>();
+        imageLogs = new ArrayList<>();
         underWhichDirectory = oneImageFile.getParent();
         thisFile = oneImageFile;
         String c = oneImageFile.getName();
@@ -111,7 +109,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
             return false;
         } else {
             ImageFile temp = (ImageFile) obj;
-            if (this.currentName.equals(temp.currentName)) {
+            if (this.getThisFile().getAbsolutePath().equals(temp.getThisFile().getAbsolutePath())) {
                 return true;
             }
             return false;
