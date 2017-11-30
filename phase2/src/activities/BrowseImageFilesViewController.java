@@ -18,16 +18,8 @@ import managers.StateManager;
 import managers.TagManager;
 import model.ImageFile;
 import model.Tag;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.brunocvcunha.instagram4j.Instagram4j;
-import org.brunocvcunha.instagram4j.requests.InstagramEditMediaRequest;
-import org.brunocvcunha.instagram4j.requests.InstagramGetMediaInfoRequest;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
-import org.brunocvcunha.instagram4j.requests.InstagramUserFeedRequest;
-import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedItem;
-import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedResult;
 import utils.ConfigureJFXControl;
 import utils.Dialogs;
 import utils.SearchBars;
@@ -38,7 +30,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -152,7 +143,7 @@ public class BrowseImageFilesViewController implements Initializable {
     Button revisionLogButton;
 
 
-    Label selectedImageLabel;
+    private Label selectedImageLabel;
 
     /**
      * Store the image files names as an observable list
@@ -621,18 +612,6 @@ public class BrowseImageFilesViewController implements Initializable {
             Dialogs.showErrorAlert("Invalid Credentials", "Invalid Creds",
                     "Please enter a valid username and password.");
         }
-    }
-
-    /**
-     * A method to turn off all apache log4j loggers.
-     */
-    private void turnOffLog4J() {
-        Enumeration loggers = LogManager.getCurrentLoggers();
-        while (loggers.hasMoreElements()) {
-            Logger logger = (Logger) loggers.nextElement();
-            logger.setLevel(Level.OFF);
-        }
-        LogManager.getRootLogger().setLevel(Level.OFF);
     }
 
     /**
