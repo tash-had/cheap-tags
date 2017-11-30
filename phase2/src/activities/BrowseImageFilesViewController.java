@@ -15,19 +15,14 @@ import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
 import managers.StageManager;
 import managers.StateManager;
-import managers.TagManager;
+import model.UserTagData;
 import model.ImageFile;
 import model.Tag;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.brunocvcunha.instagram4j.Instagram4j;
-import org.brunocvcunha.instagram4j.requests.InstagramEditMediaRequest;
-import org.brunocvcunha.instagram4j.requests.InstagramGetMediaInfoRequest;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
-import org.brunocvcunha.instagram4j.requests.InstagramUserFeedRequest;
-import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedItem;
-import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedResult;
 import utils.ConfigureJFXControl;
 import utils.Dialogs;
 import utils.SearchBars;
@@ -207,7 +202,7 @@ public class BrowseImageFilesViewController implements Initializable {
         ConfigureJFXControl.setListViewToDisplayCustomObjects(allTagsListView);
 
         // Populate the listview of tag options
-        availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
+        availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, UserTagData.getTagList());
 
         toggleButton.setSelected(false);
         imagesViewToggle();
@@ -401,13 +396,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Handles the click on move directory button
      *
-<<<<<<< HEAD
      * @param directory the directory the user wants to move to.
-=======
-     * @param directory the directory to browse
-     *
-
->>>>>>> dc77851dfe93317df8fce5df18809671c1b67f93
      */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);
@@ -479,7 +468,7 @@ public class BrowseImageFilesViewController implements Initializable {
      *
      * @param imageFile the ImageFile that was clicked
      */
-    private void imageClicked(ImageFile imageFile, Label imageNameLabel){
+    private void imageClicked(ImageFile imageFile, Label imageNameLabel) {
         try {
             // Before navigating to the clicked image, alert the user if they have unset tags
             checkForUnsavedChanges();
@@ -522,7 +511,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         // Reset the available tag options, and remove all the tags that already belong to the selected ImageFile
         availableTagOptions.clear();
-        availableTagOptions.addAll(TagManager.getTagList());
+        availableTagOptions.addAll(UserTagData.getTagList());
         availableTagOptions.removeAll(existingTagsOnImageFile);
 
     }
@@ -568,7 +557,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     public void TagSearchTextChanged() {
         String input = TagSearchBar.getText().toLowerCase();
-        SearchBars.TagSearchByText(allTagsListView, availableTagOptions,input);
+        SearchBars.TagSearchByText(allTagsListView, availableTagOptions, input);
     }
 
     /**
@@ -587,18 +576,18 @@ public class BrowseImageFilesViewController implements Initializable {
         }
 
         Instagram4j instagram = StateManager.sessionData.instagramReference;
-            if (instagram == null){
-                String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
-                        "Enter your Instagram credentials ...", null);
-                if (instagramCreds[0] != null && instagramCreds[1] != null
-                        && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {
-                    instagram = Instagram4j.builder().username(instagramCreds[0])
-                            .password(instagramCreds[1]).build();
-                    instagram.setup();
-            }else {
-                    Dialogs.showErrorAlert("Invalid Input", "No Input",
-                            "You must enter valid credentials");
-                }
+        if (instagram == null) {
+            String[] instagramCreds = Dialogs.loginDialog("Login to Instagram",
+                    "Enter your Instagram credentials ...", null);
+            if (instagramCreds[0] != null && instagramCreds[1] != null
+                    && instagramCreds[0].length() > 0 && instagramCreds[1].length() > 0) {
+                instagram = Instagram4j.builder().username(instagramCreds[0])
+                        .password(instagramCreds[1]).build();
+                instagram.setup();
+            } else {
+                Dialogs.showErrorAlert("Invalid Input", "No Input",
+                        "You must enter valid credentials");
+            }
         }
         sendInstagramPostRequest(instagram);
     }

@@ -3,7 +3,7 @@ package utils;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
- * the {@code Log} class is used to store the current name, old name and time stamp of an image file
+ * The {@code Log} class is used to store the current name, old name and time stamp of an image file
  * used in activities/RevisionLogViewController to generate the table view of revision history
  *
  * @author Caroline Ming
@@ -15,17 +15,17 @@ public class Log {
     private SimpleStringProperty currentName;
 
     /**
-     * the old name of the image file as a string property
+     * The old name of the image file as a string property
      */
     private SimpleStringProperty oldName;
 
     /**
-     * the time stamp of the image file asa string property
+     * The time stamp of the image file as a string property
      */
     private SimpleStringProperty timeStamp;
 
     /**
-     * construct a new log with three variables
+     * Construct a new log with three variables
      *
      * @param current current name
      * @param old     old name
@@ -35,7 +35,6 @@ public class Log {
         this.currentName = new SimpleStringProperty(current);
         this.oldName = new SimpleStringProperty(old);
         this.timeStamp = new SimpleStringProperty(time);
-
     }
 
     /**

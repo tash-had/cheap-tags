@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import managers.ImageFileOperationsManager;
-import managers.TagManager;
+import model.UserTagData;
 import model.ImageFile;
 import model.Tag;
 import utils.Dialogs;
@@ -70,9 +70,9 @@ public class TagScreenViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> tagInput.requestFocus());
         tagView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        // clears tagView to prevent duplication after reinitializing the scene and re-adds all the tags from TagManager
+        // clears tagView to prevent duplication after reinitializing the scene and re-adds all the tags from UserTagData
         tagView.getItems().clear();
-        for (Tag tag : TagManager.getTagList()) {
+        for (Tag tag : UserTagData.getTagList()) {
             tagView.getItems().add(tag);
         }
 
@@ -92,7 +92,7 @@ public class TagScreenViewController implements Initializable {
             // check if the input matches an already existing tag. If it exists, show an alert. Else, proceed
             // and add the tag.
             int duplicateExists = 0;
-            for (Tag eachTag : TagManager.getTagList()) {
+            for (Tag eachTag : UserTagData.getTagList()) {
                 if (eachTag.name.equals(tagInput.getText())) {
                     duplicateExists += 1;
                 }
@@ -107,7 +107,7 @@ public class TagScreenViewController implements Initializable {
             // else there are no duplicates, proceed with adding tag to the tag list.
             else {
                 Tag newTag = new Tag(tagInput.getText());
-                TagManager.addTag(newTag);
+                UserTagData.addTag(newTag);
                 tagView.getItems().add(newTag);
                 tagInput.clear();
                 tagInput.requestFocus();
@@ -117,7 +117,7 @@ public class TagScreenViewController implements Initializable {
 
     /**
      * Handles when delete button is clicked. Removes selected Tag from the list on screen and removes selected Tag
-     * from list in TagManager.
+     * from list in UserTagData.
      * When the selected tag associated with existing images, the program will show a warning box to ask user for permission.
      */
     @FXML
@@ -152,12 +152,12 @@ public class TagScreenViewController implements Initializable {
                             ImageFileOperationsManager.renameImageFile(j, sb.toString());
                         }
                         tagView.getItems().remove(i - deleteNum);
-                        TagManager.getTagList().remove(thisTag);
+                        UserTagData.getTagList().remove(thisTag);
                         deleteNum++;
                     }
                 } else {
                     tagView.getItems().remove(i - deleteNum);
-                    TagManager.getTagList().remove(thisTag);
+                    UserTagData.getTagList().remove(thisTag);
                     deleteNum++;
                 }
             }
@@ -200,7 +200,7 @@ public class TagScreenViewController implements Initializable {
      */
     private void repopulateTagView() {
         tagView.getItems().clear();
-        for (Tag tag : TagManager.getTagList()) {
+        for (Tag tag : UserTagData.getTagList()) {
             tagView.getItems().add(tag);
         }
     }
