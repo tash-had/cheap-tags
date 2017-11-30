@@ -25,6 +25,7 @@ import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
 import utils.ConfigureJFXControl;
 import utils.Dialogs;
+import utils.SearchBars;
 
 import java.io.File;
 import java.io.IOException;
@@ -555,23 +556,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     public void TagSearchTextChanged() {
         String input = TagSearchBar.getText().toLowerCase();
-        ArrayList<Tag> searchResult = new ArrayList<>();
-        Pattern tagSearchPattern = Pattern.compile(input);
-        Matcher tagSearchMatcher;
-        availableTagOptions.clear();
-        if (input.isEmpty()) {
-            searchResult.clear();
-            availableTagOptions = ConfigureJFXControl.populateListViewWithArrayList(allTagsListView, TagManager.getTagList());
-        } else {
-            for (Tag tag : TagManager.getTagList()) {
-                tagSearchMatcher = tagSearchPattern.matcher(tag.toString().toLowerCase());
-                if (tagSearchMatcher.find()) {
-                    searchResult.add(tag);
-                }
-            }
-            availableTagOptions.addAll(searchResult);
-
-        }
+        SearchBars.TagSearchByText(allTagsListView, availableTagOptions,input);
     }
 
     /**
