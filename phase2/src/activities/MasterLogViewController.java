@@ -51,7 +51,7 @@ public class MasterLogViewController implements Initializable {
         allRevisionHistory.clear();
         for (String name: StateManager.userData.nameToImageFileMap.keySet()) {
             allRevisionHistory = ConfigureJFXControl.populatedTableViewWithArrayList(masterLog,
-                    StateManager.userData.nameToImageFileMap.get(name).getOldName(),
+                    StateManager.userData.nameToImageFileMap.get(name).getImageLogs(),
                     currentName, oldName, timeStamp);
         }
     }
