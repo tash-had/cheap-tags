@@ -391,12 +391,9 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Handles the click on move directory button
      *
-<<<<<<< HEAD
      * @param directory the directory to browse
      *
-=======
-     * @param directory the directory the user wants to move to.
->>>>>>> b1a2511d59e84a0a283a766c7cc3c8996693491d
+
      */
     static void setNewTargetDirectory(File directory) {
         StateManager.sessionData.startNewSession(directory);

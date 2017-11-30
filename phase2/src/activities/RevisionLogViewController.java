@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import managers.ImageFileOperationsManager;
 import managers.TagManager;
 import model.Tag;
@@ -16,8 +15,6 @@ import utils.Log;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * the {@code RevisionLogViewController} class is the controller of activities/revison_log_view.fxml
@@ -51,12 +48,6 @@ public class RevisionLogViewController implements Initializable {
     TableColumn<Log, String> timeStamp;
 
     /**
-     * the text field for user to search for revision history
-     */
-    @FXML
-    TextField revisionHistorySearchBar;
-
-    /**
      * Revert selected image to the selected old name
      */
     @FXML
@@ -71,7 +62,8 @@ public class RevisionLogViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         allLogsListView.clear();
-        allLogsListView = ConfigureJFXControl.populatedTableViewWithArrayList(revisionLog,browseController.selectedImageFile.getOldName(), currentName, oldName, timeStamp);
+        allLogsListView = ConfigureJFXControl.populatedTableViewWithArrayList(revisionLog,
+                browseController.selectedImageFile.getOldName(), currentName, oldName, timeStamp);
 
     }
 
@@ -122,14 +114,6 @@ public class RevisionLogViewController implements Initializable {
 
 
         }
-    }
-
-    public void revisionLogSearchBar() {
-        String input = revisionHistorySearchBar.getText().toLowerCase();
-        ObservableList<Log> searchResult = FXCollections.observableArrayList();
-        Pattern tagSearchPattern = Pattern.compile(input);
-        Matcher tagSearchMatcher;
-
     }
 
 }
