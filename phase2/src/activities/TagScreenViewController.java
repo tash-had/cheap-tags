@@ -220,7 +220,7 @@ public class TagScreenViewController implements Initializable {
     @FXML
     public void lastDirectoryButtonClicked(){
         String[] pathsVisited = StateManager.userData.getPreviousPathsVisited();
-        if (pathsVisited != null) {
+        if (pathsVisited != null && pathsVisited.length >0 ) {
             String lastDirectory = pathsVisited[pathsVisited.length - 1];
             File directoryPath = new File(lastDirectory);
             BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);

@@ -158,12 +158,8 @@ public class HomeScreenViewController implements Initializable {
      *
      * @param directoryPath The directory that is to be opened.
      */
-<<<<<<< HEAD
      private void switchToToBrowseImageFilesView(File directoryPath) {
         StateManager.userData.addPathToVisitedList(directoryPath.getPath());
-=======
-    private void switchToToBrowseImageFilesView(File directoryPath) {
->>>>>>> acd3ded5a9739282def4d86f1e4b2fc3352bb5e3
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
         if (StateManager.sessionData.getPathToImageFileMap().values().size() > 0) {
             getPrimaryStageManager().setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
