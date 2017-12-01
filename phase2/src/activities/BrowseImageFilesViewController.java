@@ -609,7 +609,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 }
                 StringBuilder sb = new StringBuilder();
                 for(Tag i : selectedImageFile.getTagList()){
-                    sb.append("@" + i.toString() + " ");
+                    sb.append("@").append(i.toString()).append(" ");
                 }
                 caption = caption + " " + sb.toString();
                 InstagramUploadPhotoRequest photoRequest = new
@@ -673,14 +673,6 @@ public class BrowseImageFilesViewController implements Initializable {
             directoryChooser.setInitialDirectory(file);
             directoryChooser.showDialog(getPrimaryStageManager().getStage());
         }
-
-
     }
 
 }
-
-
-
-
-
-
