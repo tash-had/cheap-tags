@@ -14,7 +14,7 @@ import static junit.framework.TestCase.assertTrue;
  */
 public class ImageFileTest {
     @Test
-    public void generalReName() throws Exception {
+    public void testgeneralReName2() throws Exception {
         File testFile = new File("src/tests/test.txt");
         ImageFile img = new ImageFile(testFile);
         img.generalReName("newName");
@@ -22,11 +22,11 @@ public class ImageFileTest {
     }
 
     @Test
-    public void updateTagHistory() throws Exception {
+    public void testupdateTagHistory() throws Exception {
     }
 
     @Test
-    public void equals() throws Exception {
+    public void testequals() throws Exception {
         File testFile = new File("src/test/tests.txt");
         ImageFile img = new ImageFile(testFile);
         File testFile2 = new File ("src/test/tests2/txt");
