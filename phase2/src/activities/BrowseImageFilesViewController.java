@@ -7,6 +7,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
@@ -26,6 +29,7 @@ import utils.ConfigureJFXControl;
 import utils.Dialogs;
 import utils.SearchBars;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -675,11 +679,18 @@ public class BrowseImageFilesViewController implements Initializable {
 
         }
         else{
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-            directoryChooser.setTitle("View Parent Directory");
-            File file = selectedImageFile.getThisFile().getParentFile();
-            directoryChooser.setInitialDirectory(file);
-            directoryChooser.showDialog(getPrimaryStageManager().getStage());
+            try{
+            File file = new File (selectedImageFile.getThisFile().getParentFile().toString());
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(file);}
+            catch (IOException e){
+                e.printStackTrace();
+            }
+//            DirectoryChooser directoryChooser = new DirectoryChooser();
+//            directoryChooser.setTitle("View Parent Directory");
+//            File file = selectedImageFile.getThisFile().getParentFile();
+//            directoryChooser.setInitialDirectory(file);
+//            directoryChooser.showDialog(getPrimaryStageManager().getStage());
         }
     }
 
