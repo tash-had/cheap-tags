@@ -1,0 +1,25 @@
+Renjie Li
+========
+· BrowseImageFileViewController (Debug)
+· TagScreenViewController  (Debug)
+· managers/ImageFileOperationsManager: (Debug)
+· managers/UserDataManager: (Debug)
+
+Caroline Ming
+========
+· activities/RevisionLogViewController (All)
+· activities/MasterLogViewController (ALL)
+· model/Log (ALL)
+· utils/SearchBar (All)
+· ConfigureJavaFxController (populateTableViewWithArrayList)
+· BrowseImageFileController (Debug)
+· TagScreenViewController (SearchBar)
+
+Tiffany
+=======
+·HomeScreenViewController: Instagram/Tumblr Import button
+·BrowseImagesScreenViewController: Tag Screen Button
+·TagScreenViewController: Last Viewed Directory Button, Tag search bar (part)
+·Dialogs.java Merge dialogs
+·Debugging, layout
+·ImageFiletest

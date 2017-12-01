@@ -122,7 +122,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
         }
     }
 
-    //override compareto method, let the image can be ordered in alphabetical order.
+    //overload compareto method, let the image can be ordered in alphabetical order.
     public int compareTo(ImageFile i) {
         if (this.originalName.charAt(0) < i.originalName.charAt(0)) {
             return -1;
