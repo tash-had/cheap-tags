@@ -627,9 +627,8 @@ public class BrowseImageFilesViewController implements Initializable {
                         InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                 instagram.sendRequest(photoRequest);
             } catch (IOException | RuntimeException e) {
-                Dialogs.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error "
-                        + "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
-                        "that your photo is of type JPEG.");
+                Dialogs.showErrorAlert("Upload Error", "Error", "Please ensure the photo is JPG and" +
+                        " the credentials are correct");
             }
         } catch (IOException e) {
             Dialogs.showErrorAlert("Invalid Credentials", "Invalid Creds",
