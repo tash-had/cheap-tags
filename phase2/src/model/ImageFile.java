@@ -131,6 +131,10 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
     public String getCurrentName() {
         return this.currentName.toString();
     }
+    public void setCurrentName(String newName){
+        this.currentName = new StringBuilder();
+        this.currentName.append(newName);
+    }
 
     public String getOriginalName() {
         return this.originalName;
