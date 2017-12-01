@@ -6,8 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,7 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import managers.ImageFileOperationsManager;
 import managers.StageManager;
@@ -686,11 +685,6 @@ public class BrowseImageFilesViewController implements Initializable {
             catch (IOException e){
                 e.printStackTrace();
             }
-//            DirectoryChooser directoryChooser = new DirectoryChooser();
-//            directoryChooser.setTitle("View Parent Directory");
-//            File file = selectedImageFile.getThisFile().getParentFile();
-//            directoryChooser.setInitialDirectory(file);
-//            directoryChooser.showDialog(getPrimaryStageManager().getStage());
         }
     }
 
