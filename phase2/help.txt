@@ -1,3 +1,8 @@
+TERMINAL INSTRUCTIONS ASSUMING YOU'RE IN THE PHASE2 FOLDER: 
+
+java -jar "final_jar/phase2.jar"
+
+
 NOTE: If importing the project into IntelliJ, follow these instructions:
 1 - Click the "File" menu
 2 - Hit "Project Structure"

@@ -320,6 +320,7 @@ public class BrowseImageFilesViewController implements Initializable {
                 imageNamesObservable.remove(selectedImageFile.getCurrentName());
             }
             selectedImageFile = ImageFileOperations.renameImageFile(selectedImageFile, sb.toString());
+
             unsavedChanges = false;
             rename.setDisable(true);
             if (existingTagsOnImageFile.size() != 0) {
