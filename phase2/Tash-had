@@ -1,0 +1,32 @@
+Tash-had 
+=========
+HomeScreenViewController.java  
+ openDirectoryClick, 
+ getHyperLinkArrayList, 
+ getHyperLinkWithPathName, 
+ switchToBrowseImageFilesView, 
+ importFromInstagram, 
+ getInstagramDirectUrls, 
+ getINstagramPhotoCodes
+
+
+BrowseImageFilesViewController.java
+setNewTargetDirectory, 
+prepImageSearchRegex, 
+populateImageTilePane, 
+addImageToTilePane, 
+imageClicked, 
+checkForUnsavedChanges,
+populateImageFileTagListViews, 
+ImageSearchTextChanged, 
+shareWithInstagram, 
+sendInstagramPostRequest, 
+
+StageManager.java (ALL)
+PrimaryStageManager.java (ALL)
+StateManager.java (ALL)
+exceptions/ (ALL)
+ImageFileOperations.java (ALL) 
+FileOperations.java (ALL) 
+ConfigureJFXControl.java (All but poopulatedTableViewWithArrayList)
+Dialogs.java (ALL)
