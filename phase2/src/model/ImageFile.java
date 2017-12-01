@@ -63,6 +63,9 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
      *
      * @param oneImageFile is the actual imagefile(eg.image.jpeg)
      */
+
+    public String origName;
+
     public ImageFile(File oneImageFile) {
         currentName = new StringBuilder();
         originalName = oneImageFile.getName();
@@ -75,6 +78,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
         imageType = ("." + split[split.length - 1]);
         tagList = new ArrayList<>();
         tagHistory = new ArrayList<>();
+        origName = oneImageFile.getName();
     }
 
     /**
@@ -134,8 +138,7 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
         return this.currentName.toString();
     }
     public void setCurrentName(String newName){
-        this.currentName = new StringBuilder();
-        this.currentName.append(newName);
+        this.currentName = new StringBuilder(newName);
     }
 
     public String getOriginalName() {

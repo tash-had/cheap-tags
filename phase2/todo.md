@@ -88,6 +88,7 @@ will discuss these features during the presentaiton
 ### Miscellaneous 
 * Everyone write their own entires in duties.txt
 * Add a dir of images that work with all our features
+
 * Make UML Diagram PDF
 * Add a help.txt with concise IntelliJ AND Terminal instructions
 * Run program in lab computers!

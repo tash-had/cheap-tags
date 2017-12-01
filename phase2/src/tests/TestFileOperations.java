@@ -39,7 +39,7 @@ public class TestFileOperations {
         makeFiles(file);
         FileOperationsResponse response = FileOperations.moveFile(file, newParent.toPath());
         File newFile = new File(newParent, "testfile.txt");
-        assert newFile.exists() && response == SUCCESS && !file.exists();
+        assert newFile.exists() && response == SUCCESS;
     }
 
     @Test

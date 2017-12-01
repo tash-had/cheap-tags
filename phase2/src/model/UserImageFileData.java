@@ -82,7 +82,6 @@ public class UserImageFileData implements Serializable {
                 String newName = file.getAbsolutePath();
                 int slashIndex = StringUtils.lastOrdinalIndexOf(newName, File.separator, 2);
                 newName = newName.substring(slashIndex, newName.length());
-                System.out.println(newName);
                 imageFile.setCurrentName(newName);
                 getNameToImageFileMap().put(newName, imageFile);
             }

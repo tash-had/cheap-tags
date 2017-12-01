@@ -20,7 +20,6 @@ public class UserSessionData extends UserImageFileData implements Serializable {
      * @param directory the directory this session will browse.
      */
     public void startNewSession(File directory) {
-        String sessionPath = directory.getAbsolutePath();
         this.nameToImageFileMap.clear();
         ImageFileOperations.fetchImageFiles(directory);
     }
