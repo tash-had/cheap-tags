@@ -1,6 +1,7 @@
-package managers;
+package gui;
 
 import javafx.stage.Stage;
+import model.StateManager;
 
 /**
  * This class consists exclusively of static methods, and delegates all communication with the

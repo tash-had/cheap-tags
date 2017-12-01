@@ -6,8 +6,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import managers.StateManager;
-import utils.ConfigureJFXControl;
+import model.StateManager;
+import gui.ConfigureJFXControl;
 import model.Log;
 
 import java.net.URL;

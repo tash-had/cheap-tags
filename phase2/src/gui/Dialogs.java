@@ -1,15 +1,16 @@
-package utils;
+package gui;
 
 import com.sun.istack.internal.Nullable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
-import managers.StateManager;
+import model.StateManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.brunocvcunha.instagram4j.Instagram4j;
+import utils.FileOperations;
 
 
 import java.io.File;
@@ -18,7 +19,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Optional;
 
-import static managers.PrimaryStageManager.getPrimaryStageManager;
+import static gui.PrimaryStageManager.getPrimaryStageManager;
 
 /**
  * A class containing methods behind all the popup dialogs in the program. Contains alerts and directory-choosing popups.
@@ -195,7 +196,7 @@ public class Dialogs {
     /**
      * A method to turn off all apache log4j loggers.
      */
-    private static void turnOffLog4J() {
+    public static void turnOffLog4J() {
         Enumeration loggers = LogManager.getCurrentLoggers();
         while (loggers.hasMoreElements()) {
             Logger logger = (Logger) loggers.nextElement();

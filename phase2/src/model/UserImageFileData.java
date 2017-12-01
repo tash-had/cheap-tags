@@ -111,10 +111,6 @@ public class UserImageFileData implements Serializable {
      * @return a collection of all names.
      */
     public Collection<String> getImageFileNames() {
-//        ArrayList<String> names = new ArrayList<>();
-//        for (ImageFile imageFile : nameToImageFileMap.values()){
-//            names.add(imageFile.getCurrentName());
-//        }
         return new ArrayList<>(nameToImageFileMap.keySet());
     }
 
@@ -134,13 +130,7 @@ public class UserImageFileData implements Serializable {
      * @return if it exists in the map
      */
     public boolean existsInMap(String imageName) {
-//        for (ImageFile imageFile : nameToImageFileMap.values()){
-//            if (imageFile.getThisFile().getAbsolutePath().equals(imagePath)){
-//                return true;
-//            }
-//        }
         return nameToImageFileMap.containsKey(imageName);
-//        return false;
     }
 
     /**

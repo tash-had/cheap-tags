@@ -14,16 +14,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import managers.ImageFileOperationsManager;
-import managers.StageManager;
-import managers.StateManager;
+import utils.ImageFileOperations;
+import gui.StageManager;
+import model.StateManager;
 import model.ImageFile;
 import model.Tag;
 import model.UserTagData;
 import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
-import utils.ConfigureJFXControl;
-import utils.Dialogs;
+import gui.ConfigureJFXControl;
+import gui.Dialogs;
 import utils.SearchBars;
 
 import java.io.File;
@@ -37,7 +37,8 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static managers.PrimaryStageManager.getPrimaryStageManager;
+import static gui.Dialogs.turnOffLog4J;
+import static gui.PrimaryStageManager.getPrimaryStageManager;
 
 /**
  * This class manages all activities when the user is on the Browse Images screen such as button clicks, populating
@@ -316,7 +317,7 @@ public class BrowseImageFilesViewController implements Initializable {
             if (imageNamesObservable != null) {
                 imageNamesObservable.remove(selectedImageFile.getCurrentName());
             }
-            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
+            selectedImageFile = ImageFileOperations.renameImageFile(selectedImageFile, sb.toString());
             unsavedChanges = false;
             rename.setDisable(true);
             if (existingTagsOnImageFile.size() != 0) {
@@ -371,7 +372,7 @@ public class BrowseImageFilesViewController implements Initializable {
                     "No image file has been selected yet. Please select a image file first.");
         } else {
             File newDirectory = Dialogs.getDirectoryWithChooser();
-            File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile, newDirectory);
+            File movedFile = ImageFileOperations.moveImageFile(selectedImageFile, newDirectory);
             if (movedFile != null) {
                 File newDirectoryLocation = movedFile.getParentFile();
                 ButtonType response = Dialogs.showYesNoAlert("Go To Directory", null, "Would you like to go " +
@@ -404,9 +405,7 @@ public class BrowseImageFilesViewController implements Initializable {
      *
      */
     static void setNewTargetDirectory(File directory) {
-        Path directoryPath = directory.toPath();
-        int numFolders = directoryPath.getNameCount();
-        StateManager.userData.addPathToVisitedList(directoryPath.subpath(numFolders-3, numFolders).toString());
+        StateManager.userData.addPathToVisitedList(directory.getAbsolutePath());
         StateManager.sessionData.startNewSession(directory);
         targetDirectory = directory;
     }
@@ -416,7 +415,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     private void prepImageSearchRegex() {
         imageSearchPatternEnd = new StringBuilder(".*\\b(");
-        for (String extension : ImageFileOperationsManager.ACCEPTED_EXTENSIONS) {
+        for (String extension : ImageFileOperations.ACCEPTED_EXTENSIONS) {
             imageSearchPatternEnd.append(extension);
             imageSearchPatternEnd.append("|");
         }
@@ -585,6 +584,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         Instagram4j instagram = StateManager.sessionData.instagramReference;
             if (instagram == null){
+                turnOffLog4J();
                 String[] instagramCreds = Dialogs.loginDialog("Instagram Login",
                         "Enter your Instagram credentials ...", null);
                 if (instagramCreds[0] != null && instagramCreds[1] != null

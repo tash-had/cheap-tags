@@ -1,4 +1,4 @@
-package managers;
+package model;
 
 import exceptions.DirectoryCreationException;
 import exceptions.FileNotCreatedException;
@@ -8,7 +8,7 @@ import model.UserTagData;
 
 import java.io.*;
 
-import static managers.PrimaryStageManager.getPrimaryStageManager;
+import static gui.PrimaryStageManager.getPrimaryStageManager;
 
 /**
  * A class to manage states for the program, including session state and user data state.
@@ -36,7 +36,7 @@ public class StateManager {
     /**
      * End a session
      */
-    static void endSession() {
+    public static void endSession() {
         userData.allTags = UserTagData.getTagList();
         saveState(userData);
     }

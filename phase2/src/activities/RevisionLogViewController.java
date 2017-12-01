@@ -7,10 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import managers.ImageFileOperationsManager;
+import utils.ImageFileOperations;
 import model.UserTagData;
 import model.Tag;
-import utils.ConfigureJFXControl;
+import gui.ConfigureJFXControl;
 import model.Log;
 
 import java.net.URL;
@@ -86,7 +86,7 @@ public class RevisionLogViewController implements Initializable {
         if (indexOfRevision != -1) {
             String specificRevision = revisionLog.getSelectionModel().getSelectedItem().getOldName();
             browseController.selectedImageFile.updateTagHistory(browseController.selectedImageFile.getTagList());
-            browseController.selectedImageFile = ImageFileOperationsManager.renameImageFile(browseController.selectedImageFile, specificRevision);
+            browseController.selectedImageFile = ImageFileOperations.renameImageFile(browseController.selectedImageFile, specificRevision);
 
             browseController.selectedImageFile.getTagList().clear();
 

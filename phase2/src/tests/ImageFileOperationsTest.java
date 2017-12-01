@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ImageFileOperationsManagerTest {
+public class ImageFileOperationsTest {
     @Test
     public void renameImageFile() throws Exception {
     }
