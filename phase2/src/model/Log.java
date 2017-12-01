@@ -35,7 +35,6 @@ public class Log implements Serializable{
         this.currentName = current;
         this.oldName = old;
         this.timeStamp = time;
-
     }
 
     /**
