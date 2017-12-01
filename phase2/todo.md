@@ -69,7 +69,8 @@ About goToDirectoryYesNo(), there's was already a showYesNoAlert() method in Ale
 * The user wants a log of all renaming ever done to all files (old name, new name, and timestamp), and this log should be viewable by the application.
 * [done] Have name of image under each image in tilepane 
 * Make sure the user knows they can add/delete multiple tags simultaneously 
-
+* fetch using directoryToImageFile map to avoid lag!
+* ImageFileOperations to extend FileOps
 ### Design 
 * Change home screen image
 * Style buttons 
@@ -122,5 +123,5 @@ You should each be aware of the basic responsibilities of each class, even the o
 
 #### Test-Instagram Credentials
 username: csc207
-password: Ce*Es*Ce TwoOhSeven##
+password: Ce-Es-Ce TwoOhSeven##
 gelurig@nezdiro.org

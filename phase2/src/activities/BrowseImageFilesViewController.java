@@ -6,37 +6,42 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import managers.ImageFileOperationsManager;
-import managers.StageManager;
-import managers.StateManager;
+import utils.ImageFileOperations;
+import gui.StageManager;
+import model.StateManager;
 import model.ImageFile;
 import model.Tag;
 import model.UserTagData;
 import org.brunocvcunha.instagram4j.Instagram4j;
 import org.brunocvcunha.instagram4j.requests.InstagramUploadPhotoRequest;
-import utils.ConfigureJFXControl;
-import utils.Dialogs;
+import gui.ConfigureJFXControl;
+import gui.Dialogs;
 import utils.SearchBars;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static managers.PrimaryStageManager.getPrimaryStageManager;
+import static gui.Dialogs.turnOffLog4J;
+import static gui.PrimaryStageManager.getPrimaryStageManager;
 
 /**
  * This class manages all activities when the user is on the Browse Images screen such as button clicks, populating
@@ -162,7 +167,7 @@ public class BrowseImageFilesViewController implements Initializable {
     /**
      * Store the image files names as an observable list
      */
-    private ObservableList<String> imageFileNames;
+    private ObservableList<String> imageNamesObservable;
 
     /**
      * Stores the selected directory File object.
@@ -312,10 +317,10 @@ public class BrowseImageFilesViewController implements Initializable {
             }
             sb.append(selectedImageFile.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
             imageNames.remove(selectedImageFile.getCurrentName());
-            if (imageFileNames != null) {
-                imageFileNames.remove(selectedImageFile.getCurrentName());
+            if (imageNamesObservable != null) {
+                imageNamesObservable.remove(selectedImageFile.getCurrentName());
             }
-            selectedImageFile = ImageFileOperationsManager.renameImageFile(selectedImageFile, sb.toString());
+            selectedImageFile = ImageFileOperations.renameImageFile(selectedImageFile, sb.toString());
             unsavedChanges = false;
             rename.setDisable(true);
             if (existingTagsOnImageFile.size() != 0) {
@@ -323,8 +328,8 @@ public class BrowseImageFilesViewController implements Initializable {
             }
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
             imageNames.add(selectedImageFile.getCurrentName());
-            if (imageFileNames != null) {
-                imageFileNames.add(selectedImageFile.getCurrentName());
+            if (imageNamesObservable != null) {
+                imageNamesObservable.add(selectedImageFile.getCurrentName());
             }
             for (Tag i : selectedImageFile.getTagList()) {
                 i.images.add(selectedImageFile);
@@ -346,10 +351,10 @@ public class BrowseImageFilesViewController implements Initializable {
             ArrayList<String> imageNamesArrayList = new ArrayList<>();
             imageNamesArrayList.addAll(imageNames);
             // set imageFileNames for the toggle that allows images to be viewed as text (file names)
-            if (imageFileNames != null) {
-                imageFileNames.clear();
+            if (imageNamesObservable != null) {
+                imageNamesObservable.clear();
             }
-            imageFileNames = ConfigureJFXControl.populateListViewWithArrayList(imageNamesListView, imageNamesArrayList);
+            imageNamesObservable = ConfigureJFXControl.populateListViewWithArrayList(imageNamesListView, imageNamesArrayList);
         } else {
             imageTilePane.setVisible(true);
             imageSearchBar.setVisible(true);
@@ -363,12 +368,14 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     @FXML
     public void moveImageButtonClick() {
+
         checkForUnsavedChanges();
         if (selectedImageFile == null) {
             Dialogs.showErrorAlert("Error", "Nothing selected",
                     "No image file has been selected yet. Please select a image file first.");
         } else {
-            File movedFile = ImageFileOperationsManager.moveImageFile(selectedImageFile);
+            File newDirectory = Dialogs.getDirectoryWithChooser();
+            File movedFile = ImageFileOperations.moveImageFile(selectedImageFile, newDirectory);
             if (movedFile != null) {
                 File newDirectoryLocation = movedFile.getParentFile();
                 ButtonType response = Dialogs.showYesNoAlert("Go To Directory", null, "Would you like to go " +
@@ -401,7 +408,7 @@ public class BrowseImageFilesViewController implements Initializable {
      *
      */
     static void setNewTargetDirectory(File directory) {
-        StateManager.userData.addPathToVisitedList(directory.getPath());
+        StateManager.userData.addPathToVisitedList(directory.getAbsolutePath());
         StateManager.sessionData.startNewSession(directory);
         targetDirectory = directory;
     }
@@ -411,7 +418,7 @@ public class BrowseImageFilesViewController implements Initializable {
      */
     private void prepImageSearchRegex() {
         imageSearchPatternEnd = new StringBuilder(".*\\b(");
-        for (String extension : ImageFileOperationsManager.ACCEPTED_EXTENSIONS) {
+        for (String extension : ImageFileOperations.ACCEPTED_EXTENSIONS) {
             imageSearchPatternEnd.append(extension);
             imageSearchPatternEnd.append("|");
         }
@@ -423,7 +430,7 @@ public class BrowseImageFilesViewController implements Initializable {
      * Populate the ImageTilePane with all the images in this session
      */
     private void populateImageTilePane() {
-        for (ImageFile imageFile : StateManager.sessionData.getPathToImageFileMap().values()) {
+        for (ImageFile imageFile : StateManager.sessionData.getNameToImageFileMap().values()) {
             addImageToTilePane(imageFile);
         }
     }
@@ -452,8 +459,7 @@ public class BrowseImageFilesViewController implements Initializable {
         VBox tilePaneVBox = new VBox();
 
         // Construct a BEAUTIFUL label
-        File file = imageFile.getThisFile();
-        Label imageNameLabel = new Label(file.getParentFile().getName() + "/" + imageFile.getCurrentName());
+        Label imageNameLabel = new Label(imageFile.getCurrentName());
         imageNameLabel.setPadding(new Insets(20, 0, 0, 0));
         imageNameLabel.setTextFill(Color.web("#000000"));
         ConfigureJFXControl.setFontOfLabeled("/resources/fonts/Roboto-Regular.ttf", 17, imageNameLabel);
@@ -479,6 +485,9 @@ public class BrowseImageFilesViewController implements Initializable {
             selectedImageView.setImage(new Image(selectedImageFile.getThisFile().toURI().toURL().toString(), true));
             nameOfSelectedFile.setText(selectedImageFile.getCurrentName());
             populateImageFileTagListViews();
+
+            String imagePath = selectedImageFile.getThisFile().getPath();
+            getPrimaryStageManager().setWindowTitle("Browse Images - [~" + imagePath + "]");
 
         } catch (MalformedURLException e) {
             Dialogs.showErrorAlert("Image Error", "Error", "There was an error fetching " +
@@ -578,6 +587,7 @@ public class BrowseImageFilesViewController implements Initializable {
 
         Instagram4j instagram = StateManager.sessionData.instagramReference;
             if (instagram == null){
+                turnOffLog4J();
                 String[] instagramCreds = Dialogs.loginDialog("Instagram Login",
                         "Enter your Instagram credentials ...", null);
                 if (instagramCreds[0] != null && instagramCreds[1] != null
@@ -609,16 +619,16 @@ public class BrowseImageFilesViewController implements Initializable {
                 }
                 StringBuilder sb = new StringBuilder();
                 for(Tag i : selectedImageFile.getTagList()){
-                    sb.append("@").append(i.toString()).append(" ");
+                    String tag = "@" + i.toString() + " ";
+                    sb.append(tag);
                 }
                 caption = caption + " " + sb.toString();
                 InstagramUploadPhotoRequest photoRequest = new
                         InstagramUploadPhotoRequest(selectedImageFile.getThisFile(), caption);
                 instagram.sendRequest(photoRequest);
             } catch (IOException | RuntimeException e) {
-                Dialogs.showErrorAlert("Upload Error", "Error", "Uh oh! There was an error "
-                        + "uploading your photo to Instagram. Make sure you've entered the right credentials and" +
-                        "that your photo is of type JPEG.");
+                Dialogs.showErrorAlert("Upload Error", "Error", "Please ensure the photo is JPG and" +
+                        " the credentials are correct");
             }
         } catch (IOException e) {
             Dialogs.showErrorAlert("Invalid Credentials", "Invalid Creds",
@@ -667,11 +677,13 @@ public class BrowseImageFilesViewController implements Initializable {
 
         }
         else{
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-            directoryChooser.setTitle("View Parent Directory");
-            File file = selectedImageFile.getThisFile().getParentFile();
-            directoryChooser.setInitialDirectory(file);
-            directoryChooser.showDialog(getPrimaryStageManager().getStage());
+            try{
+            File file = new File (selectedImageFile.getThisFile().getParentFile().toString());
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(file);}
+            catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 

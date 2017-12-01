@@ -1,8 +1,9 @@
+import gui.PrimaryStageManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import managers.*;
+import model.StateManager;
 
-import static managers.PrimaryStageManager.getPrimaryStageManager;
+import static gui.PrimaryStageManager.getPrimaryStageManager;
 
 import java.io.IOException;
 

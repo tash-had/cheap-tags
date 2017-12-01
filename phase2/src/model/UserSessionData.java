@@ -1,6 +1,6 @@
 package model;
 
-import managers.ImageFileOperationsManager;
+import utils.ImageFileOperations;
 import org.brunocvcunha.instagram4j.Instagram4j;
 
 import java.io.File;
@@ -11,7 +11,6 @@ import java.util.HashMap;
  * This class holds all user data for the duration of the ongoing session.
  */
 public class UserSessionData extends UserImageFileData implements Serializable {
-    private String currentSessionPath;
     public Instagram4j instagramReference;
 
     /**
@@ -22,21 +21,17 @@ public class UserSessionData extends UserImageFileData implements Serializable {
      */
     public void startNewSession(File directory) {
         String sessionPath = directory.getAbsolutePath();
-
-        if (this.currentSessionPath == null || !this.currentSessionPath.equals(sessionPath)) {
-            this.pathToImageFileMap.clear();
-            this.currentSessionPath = sessionPath;
-            ImageFileOperationsManager.fetchImageFiles(directory);
-        }
+        this.nameToImageFileMap.clear();
+        ImageFileOperations.fetchImageFiles(directory);
     }
 
     /**
-     * Functions in exactly the same way as {@link UserImageFileData#getPathToImageFileMap() the parent's version}
+     * Functions in exactly the same way as {@link UserImageFileData#getNameToImageFileMap() the parent's version}
      * but has a <pre>public</pre> access modifier.
      */
     @Override
-    public HashMap<String, ImageFile> getPathToImageFileMap() {
-        return pathToImageFileMap;
+    public HashMap<String, ImageFile> getNameToImageFileMap() {
+        return nameToImageFileMap;
     }
 
 }

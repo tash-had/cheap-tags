@@ -9,8 +9,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import managers.StageManager;
-import managers.StateManager;
+import gui.StageManager;
+import model.StateManager;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -23,8 +23,8 @@ import org.brunocvcunha.instagram4j.requests.payload.InstagramFeedResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import utils.ConfigureJFXControl;
-import utils.Dialogs;
+import gui.ConfigureJFXControl;
+import gui.Dialogs;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -34,11 +34,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import java.util.ResourceBundle;
 
-import static managers.PrimaryStageManager.getPrimaryStageManager;
+import static gui.Dialogs.turnOffLog4J;
+import static gui.PrimaryStageManager.getPrimaryStageManager;
 
 /**
  * This class manages activities on the home screen.
@@ -161,7 +163,7 @@ public class HomeScreenViewController implements Initializable {
      private void switchToToBrowseImageFilesView(File directoryPath) {
         StateManager.userData.addPathToVisitedList(directoryPath.getPath());
         BrowseImageFilesViewController.setNewTargetDirectory(directoryPath);
-        if (StateManager.sessionData.getPathToImageFileMap().values().size() > 0) {
+        if (StateManager.sessionData.getNameToImageFileMap().values().size() > 0) {
             getPrimaryStageManager().setScreen("Browse Images - [~" + directoryPath.getAbsolutePath() + "]",
                     "/activities/browse_imagefiles_view.fxml");
         } else {
@@ -206,7 +208,8 @@ public class HomeScreenViewController implements Initializable {
                     directURL = json.getString("thumbnail_url");
                 }
                 CloseableHttpResponse directImageResponse = getHttpResponse(directURL);
-                if (directImageResponse != null && directImageResponse.getStatusLine().getStatusCode() == 200) { // check the direct link to the image works
+                // check the direct link to the image works
+                if (directImageResponse != null && directImageResponse.getStatusLine().getStatusCode() == 200) {
                     directUrls.add(directURL);
                 }
             } catch (JSONException e) {
@@ -225,6 +228,7 @@ public class HomeScreenViewController implements Initializable {
         ArrayList<String> instagramPhotoIds = new ArrayList<>();
         Instagram4j instagramRef = StateManager.sessionData.instagramReference;
         try {
+            turnOffLog4J();
             InstagramFeedResult feed = instagramRef.sendRequest(new InstagramUserFeedRequest(instagramRef.getUserId()));
             if (feed != null && feed.getItems() != null) {
                 for (InstagramFeedItem item : feed.getItems()) {

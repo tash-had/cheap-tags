@@ -7,13 +7,12 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import managers.ImageFileOperationsManager;
-import managers.StateManager;
-import model.UserImageFileData;
+import utils.ImageFileOperations;
+import model.StateManager;
 import model.UserTagData;
 import model.ImageFile;
 import model.Tag;
-import utils.Dialogs;
+import gui.Dialogs;
 import utils.SearchBars;
 
 import java.io.File;
@@ -21,7 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import static managers.PrimaryStageManager.getPrimaryStageManager;
+import static gui.PrimaryStageManager.getPrimaryStageManager;
 
 public class TagScreenViewController implements Initializable {
 
@@ -158,7 +157,7 @@ public class TagScreenViewController implements Initializable {
                                 sb.append("@").append(tag).append(" ");
                             }
                             sb.append(j.getOriginalName()); //.getOriginalName returns a name with .jpg at the end
-                            ImageFileOperationsManager.renameImageFile(j, sb.toString());
+                            ImageFileOperations.renameImageFile(j, sb.toString());
                         }
                         tagView.getItems().remove(i - deleteNum);
                         UserTagData.getTagList().remove(thisTag);

@@ -1,4 +1,4 @@
-package managers;
+package gui;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -129,5 +129,14 @@ public class StageManager {
 
     static ArrayList<StageManager> getStageManagers() {
         return stageManagers;
+    }
+
+    /**
+     * Set the window title of this stage.
+     *
+     * @param title the title to set
+     */
+    public void setWindowTitle(String title){
+        getStage().setTitle(title);
     }
 }

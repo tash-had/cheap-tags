@@ -15,7 +15,7 @@ import static utils.FileOperations.FileOperationsResponse.*;
 /**
  * This class contains exclusively of static methods that operate on files or attributes of files.
  */
-public class FileOperations{
+public final class FileOperations{
 
     /**
      * Enum class to hold response types
@@ -55,21 +55,21 @@ public class FileOperations{
      * share the same name
      *
      * @param parentDirectory the parent directory
-     * @param existingFileName  the name to suffix
+     * @param existingFileName  the name to suffix with extension
      * @return a string of the new name with a numerical suffix.
      */
-    static String getSuffixedFileName(File parentDirectory, String existingFileName) {
+    public static String getSuffixedFileName(File parentDirectory, String existingFileName) {
         String fileExtension = getFileExtension(new File(parentDirectory, existingFileName), true);
         String nameWithoutExt = existingFileName.substring(0, existingFileName.length() - fileExtension.length());
 
         int suffix = 1;
-        String baseFilePath = parentDirectory.getAbsolutePath() + "/" + nameWithoutExt;
-        String newName = nameWithoutExt + "(" + Integer.toString(suffix) + ")" + fileExtension;
+        String baseFilePath = parentDirectory.getAbsolutePath() + "/";
+        String newName = nameWithoutExt + " (" + Integer.toString(suffix) + ")" + fileExtension;
         File newFile = new File(baseFilePath + newName);
 
         // Loop to ensure suffixed file name does not exist.
         while (newFile.exists()) {
-            newName = nameWithoutExt + "(" + Integer.toString(suffix) + ")" + fileExtension;
+            newName = nameWithoutExt + " (" + Integer.toString(suffix) + ")" + fileExtension;
             newFile = new File(baseFilePath + newName);
             suffix++;
         }

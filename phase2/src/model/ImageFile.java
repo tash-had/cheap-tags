@@ -1,5 +1,7 @@
 package model;
 
+import utils.ImageFileOperations;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
  * Any operations inside this class will not manipulate the actual file, but the data inside the userdata.
  *
  * @author Renjie Li
- * @see managers.ImageFileOperationsManager
+ * @see ImageFileOperations
  * @see Tag
  * @since 1.0
  */
@@ -130,6 +132,10 @@ public class ImageFile implements Serializable, Comparable<ImageFile> {
     //some getters
     public String getCurrentName() {
         return this.currentName.toString();
+    }
+    public void setCurrentName(String newName){
+        this.currentName = new StringBuilder();
+        this.currentName.append(newName);
     }
 
     public String getOriginalName() {
