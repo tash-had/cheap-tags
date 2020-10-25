@@ -3,7 +3,7 @@ This program was done as part of an assignment for [CSC207](https://archive.is/1
 
 Since this was a group project, below, I've linked the code that I wrote.
 
-## Code that I wrote
+## Contributions
 ### src/activities
 * [src/activities/HomeScreenViewController.java: Lines 103-241](https://github.com/tash-had/cheap-tags/blob/master/src/activities/HomeScreenViewController.java#L103-#L241)
 * [src/activities/BrowseImageFilesViewController.java Lines 205-248](https://github.com/tash-had/cheap-tags/blob/master/src/activities/BrowseImageFilesViewController.java#L206-#L248)
