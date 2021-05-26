@@ -1,4 +1,4 @@
-# Important
+# README
 This program was done as part of an assignment for [CSC207](https://archive.is/1TLvt). I did it in a group with three others, and we used a school-run git server for the project. To try it out yourself, download the jar file [here](https://github.com/tash-had/cheap-tags/tree/master/final_jar) and open it (you must have JDK installed). 
 
 Since this was a group project, below, I've linked the code that I wrote.
